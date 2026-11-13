@@ -34,6 +34,7 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 │   ├── plan-22body-superseded/          # 22 体计划书（未执行，历史存档；文件头有变更说明）
 │   │   └── segmentation-plan-v1.2.md
 │   ├── design-basis-w1-w2/              # W1 分段方案 + W2 质量分账（原件遗失，2026-11-13 复原）
+│   ├── w6-bemio/                        # W6 BEMIO 生成脚本（草稿，未运行；待 MATLAB 版本信息回传后在 Saber 本地运行）
 │   └── gate-a-verification/             # 19 体合成验证（GATE-A 口径）+ 符号裁决记录
 │       ├── 19body-synthesis-verification.md
 │       ├── verify_19body.py             # 验证脚本（与被验 .AH1 同目录运行时使用）

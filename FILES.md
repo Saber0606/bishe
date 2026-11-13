@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 34 个文件，另有 1 个大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 35 个文件，另有 1 个大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -58,6 +58,7 @@
 | `03-multibody-19body/gate-a-verification/output/FUTI_19BODY.MES` | AQWA 原始消息文件（1,265 条全部为 WARNING，0 ERROR / FATAL） |
 | `03-multibody-19body/gate-a-verification/output/futi_19body.AH1` | AQWA 水动力数据库原件（21,146,564 B，2026-11-13 经网页上传补入；BEMIO 的输入） |
 | `03-multibody-19body/gate-a-verification/output/futi-19body-run-bundle.zip` | 本次运行的原始打包件（21,638,174 B，内含 `FUTI_19BODY.LIS` + `futi_19body.AH1`，2026-11-13 经网页上传补入） |
+| `03-multibody-19body/w6-bemio/bemio_futi_19body.m` | W6 BEMIO 生成脚本（草稿，未运行，2026-11-13 备妥）：readAQWA → radiationIRF → excitationIRF → writeBEMIOH5，产出 `futi_19body.h5`；体序以 W1 编号表为准（19 体、361 耦合块、47 频点 0.02–2.10 rad/s、25 浪向）；含 Nbodies/频点/输出文件名 fail-fast 检查与 Ainf 记录点；须在 Saber 本地 MATLAB 运行（本环境无 MATLAB），运行后凭 corr+ 对照锚做 GATE-B 复核。文件名用下划线是 MATLAB 可运行名的例外（见脚本头注释） |
 
 ## references（参考文献与规范原件）
 
