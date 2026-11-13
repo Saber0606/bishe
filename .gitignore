@@ -1,0 +1,12 @@
+# AQWA large / binary outputs (kept locally, see FILES.md)
+*.AH1
+*.AH2
+*.LIS
+*.zip
+*.pdf
+*.doc
+*.docx
+
+# Sync metadata
+*.muse-github-snapshot-sync.json
+*.muse-github-snapshot-sync.json.tmp-*
