@@ -19,7 +19,7 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 ## 2026-11-13：阶段 3 的 19 体验证
 
 - 输入：`FUTI_19BODY.LIS` + `futi_19body.AH1`（2026-11-11 20:32–20:49 运行，AQWA-Line 2022 R1，正常结束）
-- 体数口径：阶段 3 计划书原定 22 体，因 AQWA 多体数量上限约 20 个结构超限，改为 19 体执行（2026-11-13 Saber 确认）；计划书的 W1–W7 / GATE-A·B·C 框架沿用
+- 体数口径：阶段 3 计划书原定 22 体，改为 19 体执行（2026-11-13 Saber 确认；Saber 所述理由是 AQWA 多体数量上限约 20 个结构、22 体超限，此上限数值尚未独立核实）；计划书的 W1–W7 / GATE-A·B·C 框架沿用
 - 切分：Body 1 中央柱 + 3 根浮筒（180° / 60° / 300°）各切 5 段并含其外柱 = 19 体
 - 合成验证（变换到整体重心后合成）：**通过一级合成验收口径**
   - 总质量 17,854.1 t，排水量 20,157.9 m³，重心 z = -14.940 m
@@ -29,8 +29,8 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
   - 垂荡固有频率 0.3143 rad/s（-0.2%）；纵摇 / 横摇 0.4622 rad/s（-0.8%）
   - 惯量 Ixx / Iyy -0.35%，Izz -1.42%（均 <2%）
 - `.MES` 清点：1,265 条消息全部为 WARNING，ERROR / FATAL 为 0，去重后 6 类，均为预期警告（干截面自由边未连接占 1,204 条）
-- 验证记录：`stage3-multibody-check/19BODY-synthesis-verification.md`
-- 验证脚本：`stage3-multibody-check/verify_19body.py`（结果 `synthesis_results.json` / `synthesis_log.txt`）
+- 验证记录：`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`
+- 验证脚本：`03-multibody-19body/gate-a-verification/verify_19body.py`（结果同目录 `synthesis_results.json` / `synthesis_log.txt`，AQWA 原始消息文件在同目录 `output/FUTI_19BODY.MES`）
 
 ## 后续待办（非失败项）
 
