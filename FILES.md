@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 28 个文件，另有 1 个大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 34 个文件，另有 1 个大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -26,6 +26,8 @@
 |---|---|
 | `01-single-body-validation/gate1a-verification-report-brief.md` | 《浮体模型验证报告（简明版）》（2026-11-08，GATE 1A 验证报告）的文本转存版：15 项可比指标全过，几何/静水最大偏差 0.51%、固有频率最大 1.8% |
 | `01-single-body-validation/gate1a-verification-report-brief.docx` | 上条报告的 `.docx` 原件（132,150 B，2026-11-13 经网页上传补入，与 `.md` 转存版同目录并存） |
+| `01-single-body-validation/output/FUTI_LOWFREQ.LIS` | 整体单体模型（阶段 1A）AQWA 实跑输出原件（5,095,547 B，AQWA-Line 2022 R1，2026-11-08 运行；2026-11-13 由 Saber 补交）：5,454 面元、排水量 20,157.8 m³、K33 4.46027×10⁶，与 GATE 1A 基准逐项吻合；含 FK / 绕射 / 合并三套激励力表，是 GATE-A 相位修正符号裁决的外部基准（见 `03-multibody-19body/gate-a-verification/sign-adjudication-record.md`） |
+| `01-single-body-validation/output/futi_lowfreq.dat` | 上条运行的 AQWA 输入 Deck 原件（927,444 B，2026-11-13 由 Saber 补交） |
 
 ## 02-two-body-segmentation（阶段 2：二体切分）
 
@@ -40,11 +42,15 @@
 | 仓库路径 | 来源 / 说明 |
 |---|---|
 | `03-multibody-19body/plan-22body-superseded/segmentation-plan-v1.2.md` | 《阶段3_22体分段与多体链路计划书》V1.2（2026-11-11）：W1–W7 工作包与 GATE-A/B/C 验收门。**口径已确认（2026-11-13，Saber）**：计划原为 22 体（3 浮筒 × 6 段 + 中心柱 + 3 外柱、21 截面），实际改为 **19 体**执行（每筒 5 段 + 外柱）；Saber 所述理由是 AQWA 多体数量上限约 20 个结构、22 体超限（此上限数值尚未独立核实）。计划书文件头已加变更说明，按历史计划存档；执行口径以 19 体为准，其 W1–W7 / GATE-A·B·C 框架沿用 |
+| `03-multibody-19body/design-basis-w1-w2/w1-segmentation-scheme-19body.md` | W1 分段方案（复原版，2026-11-13）：W1 原件遗失后据实跑 AH1/LIS 复原——三浮筒各均分 5 段（段长 7.6014 m，段界径向 7.409–45.416 m）+ 四立柱各一体 = 19 体编号表、18 道界面清单（W7 约束对应表） |
+| `03-multibody-19body/design-basis-w1-w2/w2-mass-accounting-19body.md` | W2 质量分账（复原版，2026-11-13）：W2 原件遗失后复原——质量要求结合 NREL/TP-5000-76773 浮体参数（总 17,854 t = 钢 3,914 + 固定压载 2,540 三等分置外柱柱底 + 流体压载 11,300 灌浮筒 + 接口 100 t）与浮体验证报告；实跑分账取自 AH1 全精度（每体质量/重心/惯量），三笔账核对通过（总质量 +0.0003%、惯量 −0.35%/−1.42%） |
 | `03-multibody-19body/gate-a-verification/19body-synthesis-verification.md` | 19 体合成验证记录（原文文件名为 `19BODY_合成验证记录.md`，2026-11-13 验证通过一级合成验收口径） |
+| `03-multibody-19body/gate-a-verification/sign-adjudication-record.md` | GATE-A 相位修正符号裁决记录（2026-11-13）：以整体单体 LIS 为外部基准全谱比对，裁定 corr+（计划书公式）正确、corr− 排除（中位复数误差 0.102% 对 96.6%）；`verify_19body.py` 的 corr− 抽查列作废；附低频（ω≤0.15）力矩残差带观察项（≤峰值约 5%，W6 同频段复查） |
+| `03-multibody-19body/gate-a-verification/adjudicate_sign.py` | 符号裁决脚本（解析 LIS 合并激励力表与 `.npz` 三变体全谱比对） |
 | `03-multibody-19body/gate-a-verification/verify_19body.py` | 19 体合成验证脚本（运行时需与被验 `futi_19body.AH1` 同目录） |
 | `03-multibody-19body/gate-a-verification/synthesis_log.txt` | 合成验证运行日志 |
 | `03-multibody-19body/gate-a-verification/synthesis_results.json` | 合成验证结果数据 |
-| `03-multibody-19body/gate-a-verification/excitation-full-spectrum-note.md` | 激励力全谱合成参考记录（2026-11-13，W5 / GATE-A 最后一项）：25 浪向 × 47 频点 × 6 自由度全谱合成，长波极限通过；计划书（corr+）与验收脚本（corr−）的符号矛盾未决，最不利点 My 相差约 13 倍；AQWA“约 20 体上限”经核查无官方出处（公开资料称上限 50 结构）；含复核记录与 W6 预飞检查单 |
+| `03-multibody-19body/gate-a-verification/excitation-full-spectrum-note.md` | 激励力全谱合成参考记录（2026-11-13，W5 / GATE-A 最后一项）：25 浪向 × 47 频点 × 6 自由度全谱合成，长波极限通过；计划书（corr+）与验收脚本（corr−）的符号矛盾已由 `sign-adjudication-record.md` 裁决为 corr+（裁决前状态：最不利点 My 相差约 13 倍）；AQWA“约 20 体上限”经核查无官方出处（公开资料称上限 50 结构）；含复核记录与 W6 预飞检查单 |
 | `03-multibody-19body/gate-a-verification/excitation-full-spectrum.py` | 全谱合成脚本（可重复运行；与 `verify_19body.py` 抽查点逐位一致） |
 | `03-multibody-19body/gate-a-verification/excitation-full-spectrum.csv` | 全谱合成参考数据表（1,175 行：逐浪向/频点的 corr+ / corr− 幅值与相位 + naive 幅值） |
 | `03-multibody-19body/gate-a-verification/excitation-full-spectrum.json` | 全谱合成汇总指标（RMS、最不利点、长波极限、120° 对称性检验） |

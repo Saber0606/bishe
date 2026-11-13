@@ -30,7 +30,7 @@
 | 0 | 准备与基准确立 | 已完成 |
 | 1（1A） | AQWA 整体纯浮体建模与验证（GATE 1A） | 已通过 |
 | 2 | 180° 浮筒二体切分，一级验收 | 已通过一级 |
-| 3 | 多体链路：AQWA 多体 → BEMIO → WEC-Sim（W1–W7，GATE-A/B/C） | 进行中，W5 收尾（见第 2 节） |
+| 3 | 多体链路：AQWA 多体 → BEMIO → WEC-Sim（W1–W7，GATE-A/B/C） | 进行中：GATE-A 已关门，待 W6（见第 2 节） |
 | 4 | 横撑截面内力提取 | 未开始 |
 | 5 | 外柱 WEC 阻抗控制与风浪互馈增益（**正式题目的核心章**） | 未开始 |
 
@@ -48,12 +48,12 @@
 
 | 工作包 | 状态 | 依据 |
 |---|---|---|
-| W1 分段设计 | 已执行 | 19 体编号/段界/界面节点已落入实跑模型（验证记录的模型构成表） |
-| W2 质量分账 | 已执行 | 合成三笔账对上：总质量 17,854.1 t、重心 z = −14.940、惯量偏差 <1.5%（验证记录） |
+| W1 分段设计 | 已执行，方案文件已复原入仓 | 编号/段界/界面已落入实跑模型；原件遗失，2026-11-13 据实跑 AH1 复原（3 浮筒各均分 5 段、段长 7.6014 m + 4 立柱各一体、18 道界面）：`03-multibody-19body/design-basis-w1-w2/w1-segmentation-scheme-19body.md` |
+| W2 质量分账 | 已执行，分账文件已复原入仓 | 三笔账对上（总质量 +0.0003%、重心 z = −14.940、惯量 −0.35%/−1.42%）；原件遗失，2026-11-13 复原：质量要求结合 NREL 浮体参数（钢 3,914 + 固定压载 2,540 + 流体压载 11,300 + 接口 100 = 17,854 t），实跑分账取自 AH1 全精度：`design-basis-w1-w2/w2-mass-accounting-19body.md` |
 | W3 dat 组装 | 已完成（推断） | 本次 AQWA 运行存在，组装是其前提；但 `.dat` 原件未随本次输入提供，未做 Deck 级核查（验证记录注意事项 6） |
 | W4 AQWA 求解 | 已完成 | 2026-11-11 20:32–20:49 跑完，正常结束；`.MES` 1,265 条消息已清点：全部 WARNING，0 ERROR/FATAL，去重 6 类，均已判定为预期警告（验证记录附节） |
-| W5 / GATE-A | 主体达标，**未正式关门** | 合成指标全过（下表）；激励力全谱已计算（2026-11-13，双符号变体，长波极限通过），但计划书 corr+ 与验收脚本 corr− 的相位修正符号矛盾未决，定符号需外部基准（整体单体 FORCERAO 或阶段 2 GATE2 一级验收记录，均不在工作区）。证据：`03-multibody-19body/gate-a-verification/excitation-full-spectrum-note.md` |
-| W6 / GATE-B | 未开始 | 入口条件：GATE-A 通过 + MATLAB 版本信息回传（见第 4 节） |
+| W5 / GATE-A | **已正式关门（2026-11-13）** | 合成指标全过（下表）；相位修正符号已由外部基准裁决：整体单体 LIS（2026-11-13 补交入仓）全谱比对，corr+ 中位复数误差 0.102%、corr− 96.6%——**corr+（计划书公式）正确，corr− 排除**，激励力全谱复核以 corr+ 通过。附遗留观察项：ω ≤ 0.15 低频力矩残差带（≤峰值约 5%，变体无关），W6 同频段复查、论文局限性注明。证据：`03-multibody-19body/gate-a-verification/sign-adjudication-record.md` |
+| W6 / GATE-B | 未开始（入口条件已满足一半） | GATE-A 已通过；尚待 MATLAB 版本信息回传（见第 4 节） |
 | W7 / GATE-C | 未开始 | 入口条件：GATE-B 通过 + 表 5 粘性阻尼拆分口径拍板（见第 4 节） |
 
 19 体合成验证核心结果（证据：`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`，脚本与结果同目录）：
@@ -75,11 +75,12 @@
 .
 ├── AGENTS.md（本文件）/ README.md / PROGRESS.md / FILES.md / .gitignore
 ├── 00-route/                        # 全程执行路线：technical-route-v2.5.md = 执行依据（现行版）
-├── 01-single-body-validation/       # 阶段 1 证据：GATE 1A 验证报告简明版 + .docx 原件
+├── 01-single-body-validation/       # 阶段 1 证据：GATE 1A 验证报告简明版 + .docx 原件 + output/（整体单体实跑 .LIS / .dat，符号裁决基准）
 ├── 02-two-body-segmentation/        # 阶段 2 方案与数据：切分方案 V2（定稿版）、跨 AI 复核包、界面节点 CSV
 ├── 03-multibody-19body/             # 阶段 3
 │   ├── plan-22body-superseded/      # 22 体计划书 V1.2：未执行的历史计划，仅 W1–W7/GATE 框架沿用，勿按其体数执行
-│   └── gate-a-verification/         # 19 体实跑的验证证据（现行口径）：验证记录 + 脚本 + 日志 + 结果 JSON + 激励力全谱合成一套（.md/.py/.csv/.json/.npz）
+│   ├── design-basis-w1-w2/          # W1 分段方案 + W2 质量分账（原件遗失，2026-11-13 据实跑数据复原）
+│   └── gate-a-verification/         # 19 体实跑的验证证据（现行口径）：验证记录 + 脚本 + 日志 + 结果 JSON + 激励力全谱合成一套（.md/.py/.csv/.json/.npz）+ 符号裁决记录与脚本
 │       └── output/                  # 原始求解器输出（.MES / .AH1）与原始打包 zip；原始输出不改字，分析结论看验证记录
 └── references/                      # 参考文献与规范原件：NREL 两份报告 PDF、学校撰写规范 .doc、SOURCES.md 索引
 ```
@@ -90,13 +91,13 @@
 - **证据记录**：各验证报告/记录、脚本运行的日志与 JSON（数字以这些为准，不要引用 README/PROGRESS 的转述）
 - **原始输出**：`output/` 内文件，只读引用，不做编辑
 
-仓库里**没有**的文件（不要假设存在）：19 体版《分段方案》文档、W2 质量分账表原件、本次运行的 `.dat`、整体单体模型（阶段 1A）的 FORCERAO 数据、阶段 2《GATE2 一级验收记录》原件——这些需要时向 Saber / Nicholas 索取。注意存放位置易错点：`.AH1` 原件在 `output/`；`.LIS`（约 90 MB）超过网页上传上限，不在文件树里，存于 Release `stage3-19body-aqwa-output` 的附件（链接与 SHA-256 见 `FILES.md` 末节）；两份 NREL 报告 PDF 与撰写规范 `.doc` 在 `references/`。
+仓库里**没有**的文件（不要假设存在）：19 体运行的 `.dat`、阶段 2《GATE2 一级验收记录》原件——这些需要时向 Saber / Nicholas 索取。（W1 分段方案与 W2 质量分账的**原件**已遗失，复原版已入仓 `design-basis-w1-w2/`；整体单体模型的实跑输出已于 2026-11-13 补交入仓 `01-single-body-validation/output/`。）注意存放位置易错点：`.AH1` 原件在 `output/`；`.LIS`（约 90 MB）超过网页上传上限，不在文件树里，存于 Release `stage3-19body-aqwa-output` 的附件（链接与 SHA-256 见 `FILES.md` 末节）；两份 NREL 报告 PDF 与撰写规范 `.doc` 在 `references/`。
 
 ## 4. 下一步要干什么（按依赖顺序）
 
-1. **裁决相位修正符号（GATE-A 关门条件）**：全谱合成已按双符号变体算完（长波点 ω=0.02 的 |Fz| 偏差 +0.1% 只证明幅值账；中高频 corr+ 与 corr− 差异巨大，最不利点 ω=1.15、180° 向 My 相差约 13 倍）。长波极限与 120° 对称性检验都判别不了符号，必须拿到外部基准二选一：(a) 整体单体模型（阶段 1A）的 FORCERAO（`.AH1` / `.LIS`）；(b) 阶段 2《GATE2 一级验收记录》的已验证相位方法。两者目前都不在工作区，需向 Saber / Nicholas 索取。依据：`excitation-full-spectrum-note.md` 未决项 1。
-2. **回传 MATLAB 版本信息（W6 前置）**：`ver` 与 `which readAQWA -all` 的输出，确认本地 WEC-Sim 版本与 radiationIRF 逻辑。依据：计划书 W6 前置待办。此项需要 Saber 在本地 MATLAB 执行。
-3. **W6：BEMIO 生成 .h5 + GATE-B 复核**：readAQWA（AH1+LIS）→ IRF → writeBEMIOH5；body 顺序以 W1 编号表为唯一依据；产出文件名按 19 体口径为 `futi_19body.h5`（计划书写的 `futi_22body.h5` 是 22 体口径，勿沿用）。GATE-B 判据：合成激励力幅值偏差 <1%、相位 <1°；Ainf 与 body 顺序确认。.h5 激励力须同时对照 corr+ 与 corr− 两个变体（数据在 `excitation-full-spectrum.csv` / `.npz`），报告与哪一个吻合——这只能说明 BEMIO 的约定，不能证明该约定物理正确，符号最终仍需第 1 项的外部基准裁决。另注意 LHFR 目前关闭，须确认 BEMIO 的 Ainf 处理方式。依据：计划书 W6、§五验收门表；验证记录注意事项 2；全谱参考记录 W6 预飞检查单。
+1. ~~**裁决相位修正符号（GATE-A 关门条件）**~~ **已完成（2026-11-13）**：整体单体 LIS 补交后全谱比对裁定 corr+ 正确、corr− 排除，GATE-A 已关门。依据：`sign-adjudication-record.md`。
+2. **回传 MATLAB 版本信息（W6 前置，当前第一顺位）**：`ver` 与 `which readAQWA -all` 的输出，确认本地 WEC-Sim 版本与 radiationIRF 逻辑。依据：计划书 W6 前置待办。此项需要 Saber 在本地 MATLAB 执行。
+3. **W6：BEMIO 生成 .h5 + GATE-B 复核**：readAQWA（AH1+LIS）→ IRF → writeBEMIOH5；body 顺序以 W1 编号表为唯一依据；产出文件名按 19 体口径为 `futi_19body.h5`（计划书写的 `futi_22body.h5` 是 22 体口径，勿沿用）。GATE-B 判据：合成激励力幅值偏差 <1%、相位 <1°；Ainf 与 body 顺序确认。.h5 激励力以 **corr+ 变体**为对照锚（数据在 `excitation-full-spectrum.csv` / `.npz` 的 `Fsyn_corr_plus`）；符号已由外部基准裁定（见第 1 项），.h5 与 corr+ 不符即为 BEMIO 侧问题，不再做双变体识别。另：同频段（ω ≤ 0.15）复查低频力矩残差带（裁决记录第 4 节）；LHFR 目前关闭，须确认 BEMIO 的 Ainf 处理方式。依据：计划书 W6、§五验收门表；验证记录注意事项 2；全谱参考记录 W6 预飞检查单。
 4. **拍板表 5 粘性阻尼拆分口径（W7 前置决策）**：论文表 5 是整体口径，拆到 19 体的方式须先定并记录（计划书建议按各体迎流投影面积与运动方向拆分、总量守恒，拆后整体等效须与表 5 对上）。此项由 Saber 拍板，不要自行选定后直接执行。依据：计划书 W7、决策点清单。
 5. **W7：WEC-Sim 刚接装配 + GATE-C**：入口 = GATE-B 通过 + 阻尼口径已定。GATE-C 判据：衰减周期与单刚体一致、规则波 RAO 叠合、约束反力时程无异常、敏感性结论成文。产出接口阶段 4：各截面约束反力时程（19 体链结构下可测截面为 18 个——每筒 6 道界面 ×3 筒，按结构推算；计划书的 21 个是 22 体口径，勿混用）。
 6. **阶段 4 / 5**：阶段 3 关门后才开始，内容见路线 V2.5。
