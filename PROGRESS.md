@@ -32,9 +32,20 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 - 验证记录：`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`
 - 验证脚本：`03-multibody-19body/gate-a-verification/verify_19body.py`（结果同目录 `synthesis_results.json` / `synthesis_log.txt`，AQWA 原始消息文件在同目录 `output/FUTI_19BODY.MES`）
 
+## 2026-11-13：激励力全谱合成参考（W5 / GATE-A 最后一项）
+
+- 方法：`futi_19body.AH1` 全精度 FORCERAO，19 体逐体相位修正后合成至合成重心；全部 25 浪向 × 47 频点 × 6 自由度。脚本 / 数据 / 记录：`03-multibody-19body/gate-a-verification/excitation-full-spectrum.py`、`.csv`、`.json`、`excitation-full-spectrum-note.md`
+- 长波极限通过：ω = 0.02 rad/s 时 |Fz| = 4.4426×10⁶ N/m（目标 4.44×10⁶），0° / 90° / 180° 一致
+- 相位修正是量级问题：naive 与修正后全谱 RMS 相对差异中位数 105–128%；**符号歧义本身（corr+ vs corr−）RMS 相对差异中位数 133%，最不利点 1,274%**——ω = 1.15 rad/s、180° 浪向、My：corr+ 6.68×10⁷ vs corr− 5.17×10⁶ N·m/m
+- 合成机理复核通过：120° 对称性——Fz 最大相对误差 0.46–1.18%，(Fx,Fy) 最佳拟合旋转 −120°、RMS 误差 0.33–0.52%；FORCERAO 区段 22,325 条恰好读到文件末尾；重复运行输出一致；与 `verify_19body.py` 抽查点逐位一致
+- **未决（GATE-A 仍未正式关门）**：
+  1. 符号矛盾：计划书 V1.2 §W5 写 `exp(+ik·…)`，验收脚本实现 `exp(−ik·…)`；对称性检验判别不了符号（符号翻转等价于浪向平移 180°）。定符号需整体单体模型 FORCERAO（工作区内没有）或阶段 2《GATE2 一级验收记录》中的已验证方法（工作区内也未找到）
+  2. AQWA“约 20 体上限”无官方出处：公开的 Ansys Aqwa 资料称上限为 50 个结构/铰接，专项检索未找到 ~20 的限值；19 体结果本身不受影响，但论文/仓库中引用该上限须标注“据 Saber 所述、尚未独立核实”
+- Mz 不作为判据：Mz 是相消残差，相对 120° 误差在 ω≈1.95 处可达 360–760%，三种变体皆然
+
 ## 后续待办（非失败项）
 
-1. BEMIO 读取多体 `.AH1` 生成 `.h5` 后，复核合成激励力的重心相位（GATE 3 必查项，不得默认 BEMIO 处理正确）
+1. 定激励力相位修正符号（见上节未决项 1），再做 BEMIO `.h5` 复核：`.h5` 合成激励力同时对照 corr+ 与 corr− 两个变体（幅值 <1%、相位 <1°），确认 BEMIO 用了哪种约定；该对照不能代替整体单体模型的最终裁决
 2. LHFR 目前仍关闭：确认 BEMIO 对 Ainf（无穷频率附加质量）的处理方式
 3. 频段仍为 0.02–2.10 rad/s，网格可用上限约 2.158 rad/s；扩频前需细化网格
 4. 本次未提供 `.dat` 输入文件，故未做 Deck 级原始赋值核查

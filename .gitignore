@@ -1,12 +1,11 @@
-# AQWA large / binary outputs (kept locally, see FILES.md)
-*.AH1
-*.AH2
-*.LIS
-*.zip
-*.pdf
-*.doc
-*.docx
+# OS / archive junk only.
+# Since 2026-11-13 ALL thesis files belong in this repository, binaries included
+# (web upload for <=25 MB files, Release assets for larger) - do NOT ignore
+# *.AH1/*.LIS/*.zip/*.pdf/*.doc(x) here; see FILES.md for where each is stored.
+.DS_Store
+__MACOSX/
+Thumbs.db
 
-# Sync metadata
+# Local sync bookkeeping (not project content)
 *.muse-github-snapshot-sync.json
 *.muse-github-snapshot-sync.json.tmp-*

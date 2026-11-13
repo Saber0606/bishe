@@ -29,14 +29,16 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 │   ├── pontoon-splitting-plan-v2.md     # 切分方案 V2（含操作手册）
 │   ├── cross-ai-review-package.md       # 跨 AI 复核包
 │   └── interface-nodes.csv              # 界面节点清单
-└── 03-multibody-19body/                 # 阶段 3：19 体多体链路（执行口径）
-    ├── plan-22body-superseded/          # 22 体计划书（未执行，历史存档；文件头有变更说明）
-    │   └── segmentation-plan-v1.2.md
-    └── gate-a-verification/             # 19 体合成验证（GATE-A 口径）
-        ├── 19body-synthesis-verification.md
-        ├── verify_19body.py             # 验证脚本（与被验 .AH1 同目录运行时使用）
-        ├── synthesis_log.txt / synthesis_results.json
-        └── output/FUTI_19BODY.MES       # AQWA 原始消息输出
+├── 03-multibody-19body/                 # 阶段 3：19 体多体链路（执行口径）
+│   ├── plan-22body-superseded/          # 22 体计划书（未执行，历史存档；文件头有变更说明）
+│   │   └── segmentation-plan-v1.2.md
+│   └── gate-a-verification/             # 19 体合成验证（GATE-A 口径）
+│       ├── 19body-synthesis-verification.md
+│       ├── verify_19body.py             # 验证脚本（与被验 .AH1 同目录运行时使用）
+│       ├── synthesis_log.txt / synthesis_results.json
+│       ├── excitation-full-spectrum-note.md / .py / .csv / .json / .npz   # 激励力全谱合成（W5 最后一项）
+│       └── output/                      # AQWA 原始输出：.MES / .AH1 / 原始打包 zip（.LIS 在 Release，见 FILES.md）
+└── references/                          # 参考文献与规范原件：NREL 两份报告 PDF + 学校撰写规范 .doc + SOURCES.md 索引
 ```
 
 2026-11-13 之前的旧路径与新路径的对照表见 `FILES.md` 的「结构整理」一节。
@@ -50,7 +52,8 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
   - 19 体 AQWA 仿真已完成（2026-11-11 运行，AQWA-Line 2022 R1）
   - 19 体合成验证已通过一级验收口径（2026-11-13）：总质量 17,854.1 t、排水量 20,157.9 m³、DIFF 面元合计 5,454 与整体模型一致、K33 +0.01%、垂荡固有频率 0.3143 rad/s（-0.2%）、纵摇/横摇 0.4622 rad/s（-0.8%），各项偏差均 <2%。详见 [`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`](03-multibody-19body/gate-a-verification/19body-synthesis-verification.md)
   - `.MES` 报错清点完成：1,265 条消息全部为 WARNING，ERROR / FATAL 为 0；去重后 6 类，均为切分模型的预期警告
-  - 下一步：BEMIO 读取 `.AH1` 生成 `.h5`，随后复核激励力相位合成（GATE 3 必查项）
+  - 激励力全谱合成已计算（2026-11-13）：长波极限通过，但相位修正符号存在矛盾（计划书 corr+ 与验收脚本 corr−，最不利点 My 相差约 13 倍），GATE-A 待外部基准裁决后才能正式关门，详见 `03-multibody-19body/gate-a-verification/excitation-full-spectrum-note.md`
+  - 下一步（W6）：BEMIO 读取 `.AH1` 生成 `.h5`，并对照 corr+ / corr− 双符号变体复核（判据幅值 <1%、相位 <1°）
 
 全程进度与待办见 [`PROGRESS.md`](PROGRESS.md)。
 
@@ -59,8 +62,8 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 1. Allen et al., *Definition of the UMaine VolturnUS-S Reference Platform for IEA Wind 15-MW Offshore Reference Wind Turbine*, NREL/TP-5000-76773, July 2020.
 2. Gaertner et al., *Definition of the IEA Wind 15-MW Offshore Reference Wind Turbine*, NREL/TP-5000-75698, March 2020.
 
-注：以上为公开的 NREL 技术报告，本仓库仅作引用，不存其 PDF 原件。
+注：以上为公开的 NREL 技术报告；其 PDF 原件已存入本仓库 `references/` 目录（私有仓内查阅用），《中国海洋大学本科毕业论文（设计）撰写规范》原件同在该目录。
 
-## 文件说明与未同步文件
+## 文件说明
 
-本仓库的文件清单、以及因体积 / 格式限制未在本次同步的大文件清单，见 [`FILES.md`](FILES.md)。
+本仓库的完整文件清单（含以 Release 附件存放的大文件说明），见 [`FILES.md`](FILES.md)。

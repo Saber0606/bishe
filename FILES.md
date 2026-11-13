@@ -1,6 +1,8 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记全部 16 个文件。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 28 个文件，另有 1 个大文件以 Release 附件存放（见文末）。
+
+入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
 ## 根目录（总览）
 
@@ -10,7 +12,7 @@
 | `README.md` | 仓库总览（题目、技术主线、仓库结构、当前进度、参考基准） |
 | `PROGRESS.md` | 进度记录（阶段进度、19 体验证结论、后续待办、易混口径备忘） |
 | `FILES.md` | 本文件 |
-| `.gitignore` | 大文件与二进制输出的忽略规则 |
+| `.gitignore` | 仅忽略系统垃圾与本地同步元数据（二进制成果文件自 2026-11-13 起正常入仓，不再排除） |
 
 ## 00-route（全程执行路线）
 
@@ -22,7 +24,8 @@
 
 | 仓库路径 | 来源 / 说明 |
 |---|---|
-| `01-single-body-validation/gate1a-verification-report-brief.md` | 《浮体模型验证报告（简明版）》（2026-11-08，GATE 1A 验证报告）的文本转存版：15 项可比指标全过，几何/静水最大偏差 0.51%、固有频率最大 1.8%。`.docx` 原件为二进制，不在连接器文本快照通道内（且 `.gitignore` 排除 `*.docx`），故以同内容 `.md` 上仓，原件本地存档于 `~/workspace/graduation-design/new_uploads_1113/`；如需原件上仓，需走网页上传另行处理 |
+| `01-single-body-validation/gate1a-verification-report-brief.md` | 《浮体模型验证报告（简明版）》（2026-11-08，GATE 1A 验证报告）的文本转存版：15 项可比指标全过，几何/静水最大偏差 0.51%、固有频率最大 1.8% |
+| `01-single-body-validation/gate1a-verification-report-brief.docx` | 上条报告的 `.docx` 原件（132,150 B，2026-11-13 经网页上传补入，与 `.md` 转存版同目录并存） |
 
 ## 02-two-body-segmentation（阶段 2：二体切分）
 
@@ -41,7 +44,23 @@
 | `03-multibody-19body/gate-a-verification/verify_19body.py` | 19 体合成验证脚本（运行时需与被验 `futi_19body.AH1` 同目录） |
 | `03-multibody-19body/gate-a-verification/synthesis_log.txt` | 合成验证运行日志 |
 | `03-multibody-19body/gate-a-verification/synthesis_results.json` | 合成验证结果数据 |
+| `03-multibody-19body/gate-a-verification/excitation-full-spectrum-note.md` | 激励力全谱合成参考记录（2026-11-13，W5 / GATE-A 最后一项）：25 浪向 × 47 频点 × 6 自由度全谱合成，长波极限通过；计划书（corr+）与验收脚本（corr−）的符号矛盾未决，最不利点 My 相差约 13 倍；AQWA“约 20 体上限”经核查无官方出处（公开资料称上限 50 结构）；含复核记录与 W6 预飞检查单 |
+| `03-multibody-19body/gate-a-verification/excitation-full-spectrum.py` | 全谱合成脚本（可重复运行；与 `verify_19body.py` 抽查点逐位一致） |
+| `03-multibody-19body/gate-a-verification/excitation-full-spectrum.csv` | 全谱合成参考数据表（1,175 行：逐浪向/频点的 corr+ / corr− 幅值与相位 + naive 幅值） |
+| `03-multibody-19body/gate-a-verification/excitation-full-spectrum.json` | 全谱合成汇总指标（RMS、最不利点、长波极限、120° 对称性检验） |
+| `03-multibody-19body/gate-a-verification/excitation_full_spectrum.npz` | 全谱合成的复数数据存档（340,528 B：naive / corr+ / corr− 三变体复数合成力，形状 25×47×6；与上表 `.csv` 为同一数据的二进制版，2026-11-13 按“毕设文件一律入仓”的新政策经网页上传补入） |
 | `03-multibody-19body/gate-a-verification/output/FUTI_19BODY.MES` | AQWA 原始消息文件（1,265 条全部为 WARNING，0 ERROR / FATAL） |
+| `03-multibody-19body/gate-a-verification/output/futi_19body.AH1` | AQWA 水动力数据库原件（21,146,564 B，2026-11-13 经网页上传补入；BEMIO 的输入） |
+| `03-multibody-19body/gate-a-verification/output/futi-19body-run-bundle.zip` | 本次运行的原始打包件（21,638,174 B，内含 `FUTI_19BODY.LIS` + `futi_19body.AH1`，2026-11-13 经网页上传补入） |
+
+## references（参考文献与规范原件）
+
+| 仓库路径 | 来源 / 说明 |
+|---|---|
+| `references/SOURCES.md` | 本目录索引（出处对照表） |
+| `references/nrel-tp-5000-76773-volturnus-s-platform.pdf` | NREL/TP-5000-76773（2020-07）原件 PDF，2,327,676 B：UMaine VolturnUS-S 平台定义 |
+| `references/nrel-tp-5000-75698-iea-15mw-turbine.pdf` | NREL/TP-5000-75698（2020-03）原件 PDF，6,290,390 B：IEA 15 MW 参考风机定义 |
+| `references/ouc-undergraduate-thesis-spec.doc` | 《中国海洋大学本科毕业论文（设计）撰写规范》，273,689 B |
 
 ## 结构整理（2026-11-13，旧路径 → 新路径）
 
@@ -61,16 +80,14 @@
 | `stage3-multibody-check/synthesis_results.json` | `03-multibody-19body/gate-a-verification/synthesis_results.json` |
 | `stage3-multibody-check/FUTI_19BODY.MES` | `03-multibody-19body/gate-a-verification/output/FUTI_19BODY.MES` |
 
-## 未同步到仓库的文件（仅本地存档）
+## 大文件：以 Release 附件存放（仓库文件树之外、本项目之内）
 
-以下文件是二进制或体积超出同步通道的上限（文本快照总上限 16 MiB，单个大文件亦不适合），未上传到 GitHub：
-
-| 文件 | 大小 | 原因 |
+| 文件 | 大小 | 存放与校验 |
 |---|---|---|
-| `FUTI_19BODY.LIS` | 89,926,233 B（约 90 MB） | 体积过大 |
-| `futi_19body.AH1` | 21,146,564 B（约 21 MB） | 二进制且体积过大 |
-| `___0 / ___1 / ___2.zip`（3 个，内容 MD5 相同，为同一文件） | 各 21,638,174 B | 与上两项重复的压缩包，二进制 |
-| NREL 参考报告 PDF 2 份（NREL/TP-5000-76773、NREL/TP-5000-75698） | 约 2.3 MB / 6.3 MB | 第三方公开发表文献，本仓库仅作引用（见 README 参考基准） |
-| 《中国海洋大学本科毕业论文（设计）撰写规范》`.doc` | 273,689 B | 学校规范文件（格式模板类），非毕设成果内容 |
+| `FUTI_19BODY.LIS` | 89,926,233 B | 超过 GitHub 网页上传的单文件 25 MB 上限，存于 Release `stage3-19body-aqwa-output` 的附件：https://github.com/Saber0606/bishe/releases/tag/stage3-19body-aqwa-output ；SHA-256 `3a7c566f8646eb204b323a38531e516339897756ebe8e6e2eed21c8f5b99d16b`，与本地原件一致（2026-11-13 核验） |
 
-如需把 `.LIS` / `.AH1` 等大文件也纳入版本管理，建议改用 Git LFS 或其他大文件存档方式，另行商定。
+## 未单独入仓的副本
+
+| 文件 | 说明 |
+|---|---|
+| 原始打包的另两份副本（与已入仓打包件共 3 份） | 三份 MD5 完全相同（`c5cb8e5a144d19cec202296e1077ed4f`），为字节级重复副本，不重复入仓；其内容已由入仓的 `futi-19body-run-bundle.zip` 及 `.LIS` / `.AH1` 单件完整代表 |
