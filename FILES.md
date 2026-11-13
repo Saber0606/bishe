@@ -22,7 +22,7 @@
 | `stage2-segmentation/stage2-pontoon-splitting-plan-v2.md` | 《阶段2_浮筒切分划分方案_V2》（2026-11-08）：180° 浮筒盒选规则、Body 2 = 1,507 面元、m₂ = 3,870 t、CoG₂ (−42.8, 0, −14.1)，含 dat 改法操作手册与 GATE 2 一级验收表 |
 | `stage2-segmentation/stage2-cross-ai-review-package.md` | 《阶段2_分段方案_跨AI复核包》（2026-11-08）：供独立复核的背景、参数出处与 10 个复核问题 |
 | `stage2-segmentation/stage2-interface-nodes.csv` | 阶段 2 界面节点清单：32 个界面节点坐标与 Body 2 侧新编号 20001–20032 映射 |
-| `stage3-plan/stage3-22body-segmentation-plan-v1.2.md` | 《阶段3_22体分段与多体链路计划书》V1.2（2026-11-11）：W1–W7 工作包与 GATE-A/B/C 验收门。**注意与实跑不一致**：计划口径为 22 体（3 浮筒 × 6 段 + 中心柱 + 3 外柱、21 截面），而 2026-11-11 实跑并已验证的是 19 体（每筒 5 段 + 外柱）。该计划书按历史计划文档存档，体数口径以哪版为准待用户确认后再改 README/PROGRESS 表述 |
+| `stage3-plan/stage3-22body-segmentation-plan-v1.2.md` | 《阶段3_22体分段与多体链路计划书》V1.2（2026-11-11）：W1–W7 工作包与 GATE-A/B/C 验收门。**口径已确认（2026-11-13，Saber）**：计划原为 22 体（3 浮筒 × 6 段 + 中心柱 + 3 外柱、21 截面），但 AQWA 多体数量上限约 20 个结构，故改为 **19 体**实际执行（每筒 5 段 + 外柱），计划书文件头已加变更说明，按历史计划存档；执行口径以 19 体为准 |
 
 ## 未在本次同步的文件
 
