@@ -54,7 +54,7 @@
 | W4 AQWA 求解 | 已完成 | 2026-11-11 20:32–20:49 跑完，正常结束；`.MES` 1,265 条消息已清点：全部 WARNING，0 ERROR/FATAL，去重 6 类，均已判定为预期警告（验证记录附节） |
 | W5 / GATE-A | **已正式关门（2026-11-13）** | 合成指标全过（下表）；相位修正符号已由外部基准裁决：整体单体 LIS（2026-11-13 补交入仓）全谱比对，corr+ 中位复数误差 0.102%、corr− 96.6%——**corr+（计划书公式）正确，corr− 排除**，激励力全谱复核以 corr+ 通过。附遗留观察项：ω ≤ 0.15 低频力矩残差带（≤峰值约 5%，变体无关），W6 同频段复查、论文局限性注明。证据：`03-multibody-19body/gate-a-verification/sign-adjudication-record.md` |
 | W6 / GATE-B | **已通过（2026-11-15）** | REV 1 于 2026-11-15 14:27 跑通（readAQWA 255.6 s、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s），产出 `futi_19body.h5`（155,612,740 B）与完整 hydro.mat，两者打包为 `futi_19body.zip` 存于 Release `W6-output`（SHA-256 登记见 FILES.md 末节）。复核结论：合成激励力对 corr+ 锚幅值最大偏差 0.357%、相位最大 0.168°（判据 <1% / <1°）；A/B 矩阵与 AH1 逐元素一致；Ainf 由 radiationIRF 重算确认、对 NREL 表 4 偏差 ≤2.24%；body 顺序与 cg 逐位一致；GATE-A 低频残差带在 .h5 侧不复现（源于分体口径）。注意 `.h5` 激励力是 BEMIO 约定（共轭 + 相位参考点换算），与 FORCERAO 直接比对前须逆变换。证据：`03-multibody-19body/gate-b-verification/gate-b-verification-record.md` |
-| W7 / GATE-C | 未开始 | 入口条件：~~GATE-B 通过~~（已满足）+ 表 5 粘性阻尼拆分口径拍板（见第 4 节） |
+| W7 / GATE-C | 未开始 | 入口条件：~~GATE-B 通过~~（已满足）+ 表 5 粘性阻尼拆分口径拍板（见第 4 节）；三选项已备案入仓（2026-11-15，`w7-wecsim-assembly/`），Saber 暂缓拍板 |
 
 19 体合成验证核心结果（证据：`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`，脚本与结果同目录）：
 
@@ -83,7 +83,8 @@
 │   ├── gate-a-verification/         # 19 体实跑的验证证据（现行口径）：验证记录 + 脚本 + 日志 + 结果 JSON + 激励力全谱合成一套（.md/.py/.csv/.json/.npz）+ 符号裁决记录与脚本
 │   │   └── output/                  # 原始求解器输出（.MES / .AH1）与原始打包 zip；原始输出不改字，分析结论看验证记录
 │   ├── w6-bemio/                    # W6 BEMIO 脚本（REV 1）与运行产出说明/日志（output/）；大产出（.h5 / hydro.mat）在 Release W6-output 的 ZIP 内
-│   └── gate-b-verification/         # GATE-B 复核证据：复核记录 + 脚本 + 结果 JSON（2026-11-15，GATE-B 已通过）
+│   ├── gate-b-verification/         # GATE-B 复核证据：复核记录 + 脚本 + 结果 JSON（2026-11-15，GATE-B 已通过）
+│   └── w7-wecsim-assembly/          # W7 前置决策备案：表 5 粘性阻尼拆分三选项（2026-11-15 入仓，待 Saber 拍板，W7 未启动）
 └── references/                      # 参考文献与规范原件：NREL 两份报告 PDF、学校撰写规范 .doc、SOURCES.md 索引
 ```
 
@@ -100,7 +101,7 @@
 1. ~~**裁决相位修正符号（GATE-A 关门条件）**~~ **已完成（2026-11-13）**：整体单体 LIS 补交后全谱比对裁定 corr+ 正确、corr− 排除，GATE-A 已关门。依据：`sign-adjudication-record.md`。
 2. ~~**回传 MATLAB 版本信息（W6 前置）**~~ **已完成（2026-11-15）**：MATLAB/Simscape/Simscape Multibody 均为 R2025a（Update 1）；BEMIO 函数可解析，readAQWA 已实跑通过（见第 2 节 W6 行）。
 3. ~~**W6：BEMIO 生成 .h5 + GATE-B 复核**~~ **已完成（2026-11-15）：GATE-B 通过，W6 关闭**。产出 `.h5` 与 hydro.mat 打包存于 Release `W6-output`；复核证据见 `03-multibody-19body/gate-b-verification/`（含 BEMIO 激励力约定说明：与 FORCERAO 比对前须做共轭 + 相位参考点逆变换）。
-4. **拍板表 5 粘性阻尼拆分口径（W7 前置决策，当前第一顺位）**：论文表 5 是整体口径，拆到 19 体的方式须先定并记录（计划书建议按各体迎流投影面积与运动方向拆分、总量守恒，拆后整体等效须与表 5 对上）。此项由 Saber 拍板，不要自行选定后直接执行。依据：计划书 W7、决策点清单。
+4. **拍板表 5 粘性阻尼拆分口径（W7 前置决策，当前第一顺位）**：论文表 5 是整体口径，拆到 19 体的方式须先定并记录（计划书建议按各体迎流投影面积与运动方向拆分、总量守恒，拆后整体等效须与表 5 对上）。此项由 Saber 拍板，不要自行选定后直接执行。依据：计划书 W7、决策点清单。**三选项已于 2026-11-15 整理备案入仓**（`03-multibody-19body/w7-wecsim-assembly/w7-damping-split-options-pending.md`：A 面积拆分 / B 整体等效 / C Morison 标定，含逐体定量表），Saber 决定暂缓拍板，W7 未启动。
 5. **W7：WEC-Sim 刚接装配 + GATE-C**：入口 = GATE-B 通过 + 阻尼口径已定。GATE-C 判据：衰减周期与单刚体一致、规则波 RAO 叠合、约束反力时程无异常、敏感性结论成文。产出接口阶段 4：各截面约束反力时程（19 体链结构下可测截面为 18 个——每筒 6 道界面 ×3 筒，按结构推算；计划书的 21 个是 22 体口径，勿混用）。
 6. **阶段 4 / 5**：阶段 3 关门后才开始，内容见路线 V2.5。
 7. 远期备忘（非当前阻塞项）：频段仍为 0.02–2.10 rad/s，网格可用上限约 2.158 rad/s，扩频到 3.00 前须先细化网格；论文中若要写“AQWA 多体上限约 20 个结构”作为改 19 体的理由，须补 ANSYS 官方出处或一次超限运行的报错证据（见第 5 节）。

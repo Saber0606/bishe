@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 38 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 39 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -63,6 +63,7 @@
 | `03-multibody-19body/gate-b-verification/gate-b-results.json` | GATE-B 复核结果数据（激励力两级比对、A/B 矩阵、Ainf、结构项汇总指标） |
 | `03-multibody-19body/w6-bemio/bemio_futi_19body.m` | W6 BEMIO 生成脚本（REV 1，2026-11-15）：readAQWA → radiationIRF → excitationIRF → writeBEMIOH5，产出 `futi_19body.h5`；体序以 W1 编号表为准（19 体、361 耦合块、47 频点 0.02–2.10 rad/s、25 浪向）；含 hydro.Nb 体数/频点检查、hydro.file 基名断言（writeBEMIOH5 写出 `[hydro.file '.h5']`，已据 WEC-Sim 源码核实）、读入后检查点保存与 Ainf 记录点。2026-11-15 首次运行：readAQWA 成功（252.8 s，R2025a Update 1），IRF/写出未跑；REV 1 于当日 14:27 重跑完成并产出 `futi_19body.h5`，GATE-B 复核已通过（2026-11-15，见 `../gate-b-verification/`）。文件名用下划线是 MATLAB 可运行名的例外（见脚本头注释） |
 | `03-multibody-19body/w6-bemio/output/README.md` | W6 运行产出存放说明（2026-11-15 建）：登记各产出文件的存放位置与状态；大文件（.h5 / 完整 hydro.mat）以 ZIP 形式存于 Release（实际标签 `W6-output`），SHA-256 已登记在本文件末节；GATE-B 复核记录在 `../../gate-b-verification/` |
+| `03-multibody-19body/w7-wecsim-assembly/w7-damping-split-options-pending.md` | W7 前置决策备案（2026-11-15 入仓，**待 Saber 拍板、未定口径**）：表 5 二次粘性阻尼拆到 19 体的三选项——A 按迎流投影面积拆分（草稿推荐：平动对角逐体值已算清、全精度加总与表 5 精确一致，转动/交叉项由刚体输运产生）/ B 表 5 整体等效不拆（退路）/ C 逐体 Morison Cd 标定；含表 5 原值回源（NREL 76773 p. 12）、参考点在 SWL 塔轴与四工况出处的核实、GATE-C 验证集与入仓复核记录。源稿为 2026-11-13 本地决策草稿，入仓版已按 GATE-B 通过后的状态更新 |
 | `03-multibody-19body/w6-bemio/output/bemio_futi_19body_log.txt` | W6 BEMIO 运行日志（2026-11-15，Saber 网页上传，5,023 B）：含初版脚本失败运行（文件名断言）与 REV 1 成功运行两段记录；REV 1 段为运行证据——readAQWA 255.6 s、Nb = 19、DOF = 114、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s、产出 `futi_19body.h5` 155,612,740 B；含 Ainf 在 readAQWA 后与 radiationIRF 后的两组打印值（GATE-B 核查材料） |
 
 ## references（参考文献与规范原件）
