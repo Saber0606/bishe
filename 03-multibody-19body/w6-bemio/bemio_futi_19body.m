@@ -1,11 +1,18 @@
 % bemio_futi_19body.m — W6: BEMIO generation of futi_19body.h5 (19-body, GATE-B)
 %
-% STATUS: DRAFT, UNRUN (2026-11-13). Prepared in advance so that, once Saber
-% returns the MATLAB `ver` / `which readAQWA -all` output, W6 can start
-% without another round-trip. It has NOT been executed: this environment has
-% no MATLAB, so the script must be run on Saber's local MATLAB and its
-% console log + .h5 returned for GATE-B review. Do NOT treat this file as
-% evidence that W6 has started.
+% STATUS: REV 1 (2026-11-15). First run on Saber's MATLAB R2025a Update 1
+% (25.1.0.2973910): readAQWA SUCCEEDED in 252.8 s; frequency grid (47 pts,
+% 0.02–2.10 rad/s) and headings (25) checks passed; the run then stopped at
+% this script's own filename assert BEFORE any IRF work. Root cause was a
+% wrong assumption in the original draft: in the local BEMIO, hydro.file is
+% the BASE name without extension (readAQWA set it to 'futi_19body') and
+% writeBEMIOH5 writes to [hydro.file '.h5'] — verified against the WEC-Sim
+% source of writeBEMIOH5.m (filename = [hydro.file '.h5']; body-count field
+% is hydro.Nb, not hydro.Nbodies). REV 1 fixes the filename handling and
+% the body-count check (hydro.Nb), and adds an after-read checkpoint save.
+% The IRF and write stages are still UNRUN. This environment has no MATLAB,
+% so the script must be run on Saber's local MATLAB and its console log +
+% .h5 returned for GATE-B review.
 %
 % INPUTS (put this script in the same folder as the two files, or edit §0):
 %   futi_19body.AH1   (21,146,564 B, AQWA-Line 2022 R1, run 2026-11-11)
@@ -17,6 +24,8 @@
 %                         口径 and must NOT be used)
 %   futi_19body_hydro.mat (the `hydro` struct, saved before writing the .h5,
 %                          so GATE-B review can re-run without re-doing IRFs)
+%   futi_19body_hydro_after_read.mat (checkpoint right after readAQWA, so a
+%                          later failure does not force a blind re-read)
 %   bemio_futi_19body_log.txt (diary of the console output)
 %
 % CHAIN (plan book §W6, 22-body wording adapted to the executed 19-body
@@ -33,10 +42,10 @@
 %   * radiationIRFSS is deliberately NOT called: the plan-book chain has no
 %     state-space step, and WEC-Sim defaults to convolution (stateSpace = 0).
 %     Add it only as a separate, recorded decision if W7 needs it.
-%   * writeBEMIOH5(hydro) writes to `hydro.file`. The assignment below only
-%     fills that field in if readAQWA did not already set it; if the local
-%     WEC-Sim version behaves differently, the script stops with an error
-%     before any IRF work is wasted — check `which writeBEMIOH5 -all`.
+%   * writeBEMIOH5(hydro) writes to [hydro.file '.h5'] (WEC-Sim source,
+%     verified 2026-11-15). readAQWA sets hydro.file to the AH1 base name
+%     ('futi_19body'); the script asserts that base name and derives the
+%     final .h5 filename from it. Body count field is hydro.Nb.
 %
 % BODY ORDER (W1,复原版 — the single authority; do NOT reorder):
 %   1 central column; then per chain 180° -> 60° -> 300°, five pontoon
@@ -71,10 +80,13 @@
 %   - Body count, frequency/heading grid, file names and sizes re-checked
 %     against futi_19body.AH1 / FUTI_19BODY.LIS and synthesis_results.json
 %     (Mtot 17,854.06 t, 47 freqs, 25 headings).
-%   - NOT verified by execution (no MATLAB here): `hydro.file` handling,
-%     exact `hydro` field names, and runtime/memory for 361 coupling
-%     blocks. The script therefore uses isfield-guarded checks and fails
-%     loudly instead of silently assuming. Record the actual runtime.
+%   - REV 1 (2026-11-15): `hydro.file` / `hydro.Nb` conventions verified
+%     against the WEC-Sim source (writeBEMIOH5.m) and the first local run
+%     (readAQWA 252.8 s on R2025a Update 1; grid/headings checks passed).
+%     Still NOT verified by execution: the radiationIRF / excitationIRF /
+%     writeBEMIOH5 stages and runtime/memory for 361 coupling blocks. The
+%     script therefore uses isfield-guarded checks and fails loudly
+%     instead of silently assuming. Record the actual runtime.
 %   - Filename uses underscores because a MATLAB script file with hyphens
 %     cannot be run by name; this is the one exception to the repo's
 %     kebab-case naming rule (AGENTS.md §6).
@@ -82,7 +94,8 @@
 %% 0. Paths — edit only these three lines if the files live elsewhere
 ah1File = 'futi_19body.AH1';
 lisFile = 'FUTI_19BODY.LIS';
-h5File  = 'futi_19body.h5';
+h5Base  = 'futi_19body';        % hydro.file base name (no extension)
+h5File  = 'futi_19body.h5';     % final file written by writeBEMIOH5
 
 diary('bemio_futi_19body_log.txt');
 fprintf('=== W6 BEMIO: futi_19body.h5 — 19-body, GATE-B ===\n');
@@ -101,13 +114,23 @@ hydro = struct();
 hydro = readAQWA(hydro, ah1File, lisFile);
 fprintf('readAQWA done in %.1f s.\n', toc(tRead));
 
-% Body count / grid — hard-check where the field is known, warn otherwise.
-if isfield(hydro, 'Nbodies')
+% Body count / grid — the local BEMIO uses hydro.Nb (writeBEMIOH5 loops
+% over 1:hydro.Nb); fall back to Nbodies, then to counting hydro.body.
+if isfield(hydro, 'Nb')
+    fprintf('Nb = %d (expected 19)\n', hydro.Nb);
+    assert(hydro.Nb == 19, 'Nb is %d, expected 19 — body order/count mismatch. STOP.', hydro.Nb);
+elseif isfield(hydro, 'Nbodies')
     fprintf('Nbodies = %d (expected 19)\n', hydro.Nbodies);
     assert(hydro.Nbodies == 19, 'Nbodies is %d, expected 19 — body order/count mismatch. STOP.', hydro.Nbodies);
+elseif isfield(hydro, 'body')
+    fprintf('hydro.body count = %d (expected 19)\n', numel(hydro.body));
+    assert(numel(hydro.body) == 19, 'hydro.body count is %d, expected 19. STOP.', numel(hydro.body));
 else
-    warning('hydro.Nbodies field not found — verify body count (19) manually from the printed struct.');
+    warning('No Nb/Nbodies/body field found — verify body count (19) manually from the printed struct.');
     disp(fieldnames(hydro));
+end
+if isfield(hydro, 'dof')
+    fprintf('Total DOF = %d (expected 114 = 19 x 6)\n', sum(hydro.dof));
 end
 if isfield(hydro, 'w')
     fprintf('Frequency grid: %d points, %.4g to %.4g rad/s (expected 47, 0.02–2.10)\n', ...
@@ -118,7 +141,8 @@ if isfield(hydro, 'theta')
     fprintf('Headings: %d (expected 25)\n', numel(hydro.theta));
 end
 if isfield(hydro, 'Ainf')
-    fprintf('Ainf present after readAQWA (note its values for the GATE-B record; LHFR was OFF).\n');
+    fprintf('Ainf present after readAQWA (size below; note its values for the GATE-B record; LHFR was OFF).\n');
+    fprintf('size(hydro.Ainf) = %s\n', mat2str(size(hydro.Ainf)));
     if numel(hydro.Ainf) >= 36
         disp(hydro.Ainf(1:6, 1:6));
     else
@@ -126,14 +150,22 @@ if isfield(hydro, 'Ainf')
     end
 end
 
-% Output filename: settle it NOW (before the long IRF steps), so a local
-% BEMIO version that sets hydro.file differently fails here, not after
-% the IRF computation. writeBEMIOH5 writes to hydro.file.
+% Output filename: settle it NOW (before the long IRF steps). In this
+% BEMIO version hydro.file is the BASE name and writeBEMIOH5 writes to
+% [hydro.file '.h5'] (source-verified 2026-11-15). readAQWA set it from
+% the AH1 name; assert the base name, not the full .h5 filename.
 if ~isfield(hydro, 'file') || isempty(hydro.file)
-    hydro.file = h5File;
+    hydro.file = h5Base;
 end
-fprintf('Output .h5 will be: %s\n', hydro.file);
-assert(strcmp(hydro.file, h5File), 'hydro.file is %s, expected %s — check the local BEMIO version before continuing. STOP.', hydro.file, h5File);
+fprintf('hydro.file (base name) = %s -> output .h5 will be: %s\n', hydro.file, [hydro.file '.h5']);
+assert(strcmp(hydro.file, h5Base), 'hydro.file is %s, expected base name %s — check the local BEMIO version before continuing. STOP.', hydro.file, h5Base);
+assert(strcmp([hydro.file '.h5'], h5File), 'Derived output name %s ~= expected %s. STOP.', [hydro.file '.h5'], h5File);
+
+% Checkpoint: save the post-read hydro struct so that if an IRF/write step
+% fails, the 4-minute readAQWA does not have to be repeated blindly —
+% keep this file and report the failure first.
+save('futi_19body_hydro_after_read.mat', 'hydro', '-v7.3');
+fprintf('Checkpoint saved: futi_19body_hydro_after_read.mat\n');
 
 %% 2. Radiation + excitation IRFs (BEMIO defaults: [] = 100 s / 1001 / 1001 / data limits)
 % 19 bodies = 361 coupling blocks; this step is the long one — record the time.
@@ -145,6 +177,7 @@ hydro = excitationIRF(hydro, [], [], [], [], []);
 fprintf('excitationIRF done in %.1f s.\n', toc(tIrf));
 if isfield(hydro, 'Ainf')
     fprintf('Ainf after radiationIRF (for the GATE-B record):\n');
+    fprintf('size(hydro.Ainf) = %s\n', mat2str(size(hydro.Ainf)));
     if numel(hydro.Ainf) >= 36
         disp(hydro.Ainf(1:6, 1:6));
     else
@@ -156,7 +189,7 @@ end
 save('futi_19body_hydro.mat', 'hydro', '-v7.3');
 fprintf('Saved hydro struct to futi_19body_hydro.mat\n');
 
-fprintf('Writing .h5 to: %s\n', hydro.file);
+fprintf('Writing .h5 to: %s\n', h5File);
 tWrite = tic;
 writeBEMIOH5(hydro);
 fprintf('writeBEMIOH5 done in %.1f s.\n', toc(tWrite));

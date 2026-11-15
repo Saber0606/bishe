@@ -48,8 +48,8 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 - **符号裁决**：Saber 补交整体单体模型实跑输出 `FUTI_LOWFREQ.LIS` + `futi_lowfreq.dat`（阶段 1A，2026-11-08 运行；身份核验：单结构、5,454 面元、排水量 20,157.8 m³、K33 4.46027×10⁶、频率/浪向网格与 19 体运行完全相同），已入仓 `01-single-body-validation/output/`。以之为外部基准与 19 体三变体全谱（25×47×6，5% 掩膜 5,745 点）逐点比对：**corr+ 中位复数误差 0.102%、相位中位 0.004°，与基准在 LIS 印刷精度内一致；corr− 中位 96.6%，排除**。裁定：计划书公式 exp(+ik·r) 正确，`verify_19body.py` 的 corr− 抽查列作废。记录：`03-multibody-19body/gate-a-verification/sign-adjudication-record.md`，脚本 `adjudicate_sign.py`
 - **GATE-A 至此正式关门**（合成指标全过 + 激励力全谱复核以 corr+ 通过）。附遗留观察项：ω ≤ 0.15 低频力矩残差带（变体无关，绝对差 ≤5.95×10⁶ N·m/m ≈ 峰值 5%），W6 生成 .h5 后同频段复查，论文局限性须注明
 - **W1/W2 文件复原**：原件遗失，据实跑数据复原入仓 `03-multibody-19body/design-basis-w1-w2/`——W1 分段方案（3 浮筒各均分 5 段、段长 7.6014 m、段界径向 7.409–45.416 m + 4 立柱各一体 = 19 体，18 道界面清单）；W2 质量分账（质量要求结合 NREL 浮体参数：17,854 t = 钢 3,914 + 固定压载 2,540 + 流体压载 11,300 + 接口 100；实跑分账取自 AH1 全精度，三笔账通过：总质量 +0.0003%、重心 z −14.940、惯量 −0.35%/−1.42%）
-- 下一步回到 W6 前置：等 Saber 回传 MATLAB `ver` 与 `which readAQWA -all` 输出；.h5 复核以 corr+ 为对照锚（判据幅值 <1%、相位 <1°），并同频段（ω ≤ 0.15）复查力矩残差带
-- W6 脚本已备妥（草稿，未运行，2026-11-13）：`03-multibody-19body/w6-bemio/bemio_futi_19body.m`（readAQWA → radiationIRF → excitationIRF → writeBEMIOH5，体序按 W1，产出 `futi_19body.h5`）；待版本信息回传后由 Saber 在本地 MATLAB 运行，运行日志 + `.h5` + `hydro` struct 回传后做 GATE-B 复核。脚本未运行不等于 W6 已开始
+- W6 前置已完成（2026-11-15）：Saber 回传 MATLAB、Simscape、Simscape Multibody 均为 R2025a（Update 1，25.1.0.2973910）；.h5 复核以 corr+ 为对照锚（判据幅值 <1%、相位 <1°），并同频段（ω ≤ 0.15）复查力矩残差带
+- W6 已启动（2026-11-15）：脚本 `03-multibody-19body/w6-bemio/bemio_futi_19body.m` 首次在 Saber 本地运行——readAQWA 成功（252.8 s），频点 47（0.02–2.10 rad/s）、浪向 25 检查通过；随后停在脚本初版自设的文件名断言（误以为 hydro.file 应含 `.h5`）。已据 WEC-Sim 源码（writeBEMIOH5.m：`filename = [hydro.file '.h5']`，体数字段为 hydro.Nb）核实并修正为 REV 1（文件名基名断言 + hydro.Nb 体数检查 + 读入后检查点保存）；IRF 与写出阶段尚未运行，.h5 未产出。待 Saber 用 REV 1 重跑后回传日志 + `.h5` + `hydro` struct，再做 GATE-B 复核
 
 ## 后续待办（非失败项）
 

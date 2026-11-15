@@ -58,7 +58,7 @@
 | `03-multibody-19body/gate-a-verification/output/FUTI_19BODY.MES` | AQWA 原始消息文件（1,265 条全部为 WARNING，0 ERROR / FATAL） |
 | `03-multibody-19body/gate-a-verification/output/futi_19body.AH1` | AQWA 水动力数据库原件（21,146,564 B，2026-11-13 经网页上传补入；BEMIO 的输入） |
 | `03-multibody-19body/gate-a-verification/output/futi-19body-run-bundle.zip` | 本次运行的原始打包件（21,638,174 B，内含 `FUTI_19BODY.LIS` + `futi_19body.AH1`，2026-11-13 经网页上传补入） |
-| `03-multibody-19body/w6-bemio/bemio_futi_19body.m` | W6 BEMIO 生成脚本（草稿，未运行，2026-11-13 备妥）：readAQWA → radiationIRF → excitationIRF → writeBEMIOH5，产出 `futi_19body.h5`；体序以 W1 编号表为准（19 体、361 耦合块、47 频点 0.02–2.10 rad/s、25 浪向）；含 Nbodies/频点/输出文件名 fail-fast 检查与 Ainf 记录点；须在 Saber 本地 MATLAB 运行（本环境无 MATLAB），运行后凭 corr+ 对照锚做 GATE-B 复核。文件名用下划线是 MATLAB 可运行名的例外（见脚本头注释） |
+| `03-multibody-19body/w6-bemio/bemio_futi_19body.m` | W6 BEMIO 生成脚本（REV 1，2026-11-15）：readAQWA → radiationIRF → excitationIRF → writeBEMIOH5，产出 `futi_19body.h5`；体序以 W1 编号表为准（19 体、361 耦合块、47 频点 0.02–2.10 rad/s、25 浪向）；含 hydro.Nb 体数/频点检查、hydro.file 基名断言（writeBEMIOH5 写出 `[hydro.file '.h5']`，已据 WEC-Sim 源码核实）、读入后检查点保存与 Ainf 记录点。2026-11-15 首次运行：readAQWA 成功（252.8 s，R2025a Update 1），IRF/写出未跑；须在 Saber 本地 MATLAB 运行（本环境无 MATLAB），运行后凭 corr+ 对照锚做 GATE-B 复核。文件名用下划线是 MATLAB 可运行名的例外（见脚本头注释） |
 
 ## references（参考文献与规范原件）
 
