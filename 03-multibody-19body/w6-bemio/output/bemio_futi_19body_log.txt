@@ -1,0 +1,113 @@
+=== W6 BEMIO: futi_19body.h5 — 19-body, GATE-B ===
+Run started: 2026-11-15 14:14:09
+MATLAB: 25.1.0.2973910 (R2025a) Update 1
+Inputs: futi_19body.AH1 / FUTI_19BODY.LIS
+Input files found. AH1 bytes: 21146564; LIS bytes: 89926233
+Reading AQWA output file...
+readAQWA done in 252.8 s.
+[警告: hydro.Nbodies field not found — verify body count (19) manually from the printed struct.] 
+[> 位置：<a href="matlab:matlab.lang.internal.introspective.errorDocCallback('bemio_futi_19body', 'E:\S\科研\毕设\模型\多体\bemio_futi_19body.m', 109)" style="font-weight:bold">bemio_futi_19body</a> (<a href="matlab: opentoline('E:\S\科研\毕设\模型\多体\bemio_futi_19body.m',109,0)">第 109 行</a>)] 
+    {'code'          }
+    {'file'          }
+    {'Nb'            }
+    {'body'          }
+    {'dof'           }
+    {'Nh'            }
+    {'Nf'            }
+    {'theta'         }
+    {'A'             }
+    {'B'             }
+    {'w'             }
+    {'T'             }
+    {'h'             }
+    {'rho'           }
+    {'g'             }
+    {'cg'            }
+    {'Khs'           }
+    {'ex_ma'         }
+    {'ex_ph'         }
+    {'ex_re'         }
+    {'ex_im'         }
+    {'Vo'            }
+    {'cb'            }
+    {'sc_ma'         }
+    {'sc_ph'         }
+    {'sc_re'         }
+    {'sc_im'         }
+    {'fk_ma'         }
+    {'fk_ph'         }
+    {'fk_re'         }
+    {'fk_im'         }
+    {'Ainf'          }
+    {'plotDofs'      }
+    {'plotBodies'    }
+    {'plotDirections'}
+
+Frequency grid: 47 points, 0.02 to 2.1 rad/s (expected 47, 0.02–2.10)
+Headings: 25 (expected 25)
+Ainf present after readAQWA (note its values for the GATE-B record; LHFR was OFF).
+   1.0e+04 *
+
+    0.0764   -0.0000   -0.0001    0.0003    0.0245    0.0002
+   -0.0000    0.0764    0.0002   -0.0228   -0.0007   -0.0001
+   -0.0001    0.0002    0.1436    0.0067   -0.0018    0.0003
+    0.0001   -0.0208    0.0067    2.8068   -0.0130    0.0005
+    0.0226   -0.0008   -0.0018   -0.0135    2.8030    0.0000
+    0.0002   -0.0001    0.0001    0.0004   -0.0000    0.5992
+
+Output .h5 will be: futi_19body
+{错误使用 <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('assert')" style="font-weight:bold">assert</a>
+hydro.file is futi_19body, expected futi_19body.h5 — check the local BEMIO version before continuing.
+STOP.
+
+出错 <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('bemio_futi_19body', 'E:\S\科研\毕设\模型\多体\bemio_futi_19body.m', 136)" style="font-weight:bold">bemio_futi_19body</a> (<a href="matlab: opentoline('E:\S\科研\毕设\模型\多体\bemio_futi_19body.m',136,0)">第 136 行</a>)
+assert(strcmp(hydro.file, h5File), 'hydro.file is %s, expected %s — check the local BEMIO version before continuing. STOP.', hydro.file, h5File);
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+bemio_futi_19body
+=== W6 BEMIO: futi_19body.h5 — 19-body, GATE-B ===
+Run started: 2026-11-15 14:27:07
+MATLAB: 25.1.0.2973910 (R2025a) Update 1
+Inputs: futi_19body.AH1 / FUTI_19BODY.LIS
+Input files found. AH1 bytes: 21146564; LIS bytes: 89926233
+Reading AQWA output file...
+readAQWA done in 255.6 s.
+Nb = 19 (expected 19)
+Total DOF = 114 (expected 114 = 19 x 6)
+Frequency grid: 47 points, 0.02 to 2.1 rad/s (expected 47, 0.02–2.10)
+Headings: 25 (expected 25)
+Ainf present after readAQWA (size below; note its values for the GATE-B record; LHFR was OFF).
+size(hydro.Ainf) = [114 114]
+   1.0e+04 *
+
+    0.0764   -0.0000   -0.0001    0.0003    0.0245    0.0002
+   -0.0000    0.0764    0.0002   -0.0228   -0.0007   -0.0001
+   -0.0001    0.0002    0.1436    0.0067   -0.0018    0.0003
+    0.0001   -0.0208    0.0067    2.8068   -0.0130    0.0005
+    0.0226   -0.0008   -0.0018   -0.0135    2.8030    0.0000
+    0.0002   -0.0001    0.0001    0.0004   -0.0000    0.5992
+
+hydro.file (base name) = futi_19body -> output .h5 will be: futi_19body.h5
+Checkpoint saved: futi_19body_hydro_after_read.mat
+Calculating radiation IRFs...
+radiationIRF done in 96.9 s.
+Calculating excitation IRFs...
+excitationIRF done in 32.5 s.
+Ainf after radiationIRF (for the GATE-B record):
+size(hydro.Ainf) = [114 114]
+   1.0e+04 *
+
+    0.0968   -0.0000   -0.0001    0.0003    0.1656    0.0003
+   -0.0000    0.0968    0.0003   -0.1636   -0.0008   -0.0001
+   -0.0001    0.0002    0.1443    0.0065   -0.0019    0.0003
+    0.0002   -0.1563    0.0065    3.7335   -0.0120    0.0006
+    0.1583   -0.0009   -0.0019   -0.0124    3.7328    0.0004
+    0.0003   -0.0001    0.0001    0.0006    0.0004    0.5992
+
+Saved hydro struct to futi_19body_hydro.mat
+Writing .h5 to: futi_19body.h5
+Writing data in h5 format...
+writeBEMIOH5 done in 13.5 s.
+.h5 created: futi_19body.h5 (155612740 bytes)
+=== DONE. Return futi_19body.h5 + this log + futi_19body_hydro.mat for GATE-B review. ===
+GATE-B anchor: corr+ reference, excitation-full-spectrum.csv/.npz (Fsyn_corr_plus); criteria amplitude <1%, phase <1%.
