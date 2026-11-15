@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 39 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 43 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -55,6 +55,10 @@
 | `03-multibody-19body/gate-a-verification/excitation-full-spectrum.csv` | 全谱合成参考数据表（1,175 行：逐浪向/频点的 corr+ / corr− 幅值与相位 + naive 幅值） |
 | `03-multibody-19body/gate-a-verification/excitation-full-spectrum.json` | 全谱合成汇总指标（RMS、最不利点、长波极限、120° 对称性检验） |
 | `03-multibody-19body/gate-a-verification/excitation_full_spectrum.npz` | 全谱合成的复数数据存档（340,528 B：naive / corr+ / corr− 三变体复数合成力，形状 25×47×6；与上表 `.csv` 为同一数据的二进制版，2026-11-13 按“毕设文件一律入仓”的新政策经网页上传补入） |
+| `03-multibody-19body/gate-a-verification/dat-deck-check-record.md` | 19 体 dat Deck 级核查记录（2026-11-16，W3 关闭件）：Saber 补交 `futi_19body.dat` 后逐 Deck 核查——Deck 01 节点集与整体 dat 对照（新增 602 个界面复制节点 + 18 个 PMAS 节点、99999 复用）、Deck 02 逐块面元数与 LIS 逐结构计数逐个相等、Deck 03 质量与 Deck 04 惯量与 AH1 实跑分账在 dat 精度内逐个相等、仅用 dat 重算三笔账与 AH1 口径一致；**Deck 级核查通过**。附更正：合成验证记录与 W1 表中体 17 的 DIFF 面元 196 为转录笔误，正确值 198（dat 与 LIS 两处一致，逐体相加 5,452≠5,454 的矛盾由此消除；不影响任何计算结论）。附实证结论：dat 全文无单体内钢/压载成分分拆，W2 原始分配过程仍不可复原 |
+| `03-multibody-19body/gate-a-verification/dat-deck-check.py` | 上条核查的解析脚本（解析 Deck 01–06 并与 W2 分账 / W1 分段表 / 整体 dat / LIS 计数对照，可重复运行） |
+| `03-multibody-19body/gate-a-verification/dat-deck-check-results.json` | 上条核查的结果数据（逐体对照、逐块面元、三笔账重算值） |
+| `03-multibody-19body/gate-a-verification/output/futi_19body.dat` | 19 体运行的 AQWA 输入 Deck 原件（976,953 B，2026-11-15 由 Saber 补交；ANSYS 2022 R1 于 2026-11-03 导出底稿 + W3 组装，SHA-256 `a1f87ca0…`；Deck 级核查见 `../dat-deck-check-record.md`） |
 | `03-multibody-19body/gate-a-verification/output/FUTI_19BODY.MES` | AQWA 原始消息文件（1,265 条全部为 WARNING，0 ERROR / FATAL） |
 | `03-multibody-19body/gate-a-verification/output/futi_19body.AH1` | AQWA 水动力数据库原件（21,146,564 B，2026-11-13 经网页上传补入；BEMIO 的输入） |
 | `03-multibody-19body/gate-a-verification/output/futi-19body-run-bundle.zip` | 本次运行的原始打包件（21,638,174 B，内含 `FUTI_19BODY.LIS` + `futi_19body.AH1`，2026-11-13 经网页上传补入） |

@@ -2,7 +2,7 @@
 
 本文件是本仓库的入口说明：项目内容、当前进度（带证据出处）、文件分类、下一步工作、口径红线、工作规则都在这里。读完本文件，再按第 0 节的顺序读其余文件，不要跳过口径部分直接引用数字。
 
-进度快照日期：2026-11-15。本文件与仓库内容冲突时，以被引用的原始记录文件为准，并把冲突报给仓库所有者 Saber，不要自行改口径。
+进度快照日期：2026-11-16。本文件与仓库内容冲突时，以被引用的原始记录文件为准，并把冲突报给仓库所有者 Saber，不要自行改口径。
 
 ## 0. 阅读顺序
 
@@ -50,7 +50,7 @@
 |---|---|---|
 | W1 分段设计 | 已执行，方案文件已复原入仓 | 编号/段界/界面已落入实跑模型；原件遗失，2026-11-13 据实跑 AH1 复原（3 浮筒各均分 5 段、段长 7.6014 m + 4 立柱各一体、18 道界面）：`03-multibody-19body/design-basis-w1-w2/w1-segmentation-scheme-19body.md` |
 | W2 质量分账 | 已执行，分账文件已复原入仓 | 三笔账对上（总质量 +0.0003%、重心 z = −14.940、惯量 −0.35%/−1.42%）；原件遗失，2026-11-13 复原：质量要求结合 NREL 浮体参数（钢 3,914 + 固定压载 2,540 + 流体压载 11,300 + 接口 100 = 17,854 t），实跑分账取自 AH1 全精度：`design-basis-w1-w2/w2-mass-accounting-19body.md` |
-| W3 dat 组装 | 已完成（推断） | 本次 AQWA 运行存在，组装是其前提；但 `.dat` 原件未随本次输入提供，未做 Deck 级核查（验证记录注意事项 6） |
+| W3 dat 组装 | **已完成（Deck 级核查通过，2026-11-16）** | `.dat` 原件已由 Saber 补交入仓（`gate-a-verification/output/futi_19body.dat`，976,953 B，SHA-256 `a1f87ca0…`）；逐 Deck 核查通过：节点集与整体 dat 对照一致（新增 602 个界面复制节点 + 18 个 PMAS 节点、99999 复用）、逐块面元数与 LIS 逐结构计数逐个相等、Deck 03 质量 / Deck 04 惯量与 AH1 实跑分账在 dat 精度内逐个相等、仅用 dat 重算三笔账与 AH1 口径一致。附更正：合成验证记录与 W1 表中体 17 的 DIFF 面元 196 为转录笔误，正确值 198（dat 与 LIS 一致；不影响计算结论）。证据：`03-multibody-19body/gate-a-verification/dat-deck-check-record.md` |
 | W4 AQWA 求解 | 已完成 | 2026-11-11 20:32–20:49 跑完，正常结束；`.MES` 1,265 条消息已清点：全部 WARNING，0 ERROR/FATAL，去重 6 类，均已判定为预期警告（验证记录附节） |
 | W5 / GATE-A | **已正式关门（2026-11-13）** | 合成指标全过（下表）；相位修正符号已由外部基准裁决：整体单体 LIS（2026-11-13 补交入仓）全谱比对，corr+ 中位复数误差 0.102%、corr− 96.6%——**corr+（计划书公式）正确，corr− 排除**，激励力全谱复核以 corr+ 通过。附遗留观察项：ω ≤ 0.15 低频力矩残差带（≤峰值约 5%，变体无关），W6 同频段复查、论文局限性注明。证据：`03-multibody-19body/gate-a-verification/sign-adjudication-record.md` |
 | W6 / GATE-B | **已通过（2026-11-15）** | REV 1 于 2026-11-15 14:27 跑通（readAQWA 255.6 s、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s），产出 `futi_19body.h5`（155,612,740 B）与完整 hydro.mat，两者打包为 `futi_19body.zip` 存于 Release `W6-output`（SHA-256 登记见 FILES.md 末节）。复核结论：合成激励力对 corr+ 锚幅值最大偏差 0.357%、相位最大 0.168°（判据 <1% / <1°）；A/B 矩阵与 AH1 逐元素一致；Ainf 由 radiationIRF 重算确认、对 NREL 表 4 偏差 ≤2.24%；body 顺序与 cg 逐位一致；GATE-A 低频残差带在 .h5 侧不复现（源于分体口径）。注意 `.h5` 激励力是 BEMIO 约定（共轭 + 相位参考点换算），与 FORCERAO 直接比对前须逆变换。证据：`03-multibody-19body/gate-b-verification/gate-b-verification-record.md` |
@@ -80,8 +80,8 @@
 ├── 03-multibody-19body/             # 阶段 3
 │   ├── plan-22body-superseded/      # 22 体计划书 V1.2：未执行的历史计划，仅 W1–W7/GATE 框架沿用，勿按其体数执行
 │   ├── design-basis-w1-w2/          # W1 分段方案 + W2 质量分账（原件遗失，2026-11-13 据实跑数据复原）
-│   ├── gate-a-verification/         # 19 体实跑的验证证据（现行口径）：验证记录 + 脚本 + 日志 + 结果 JSON + 激励力全谱合成一套（.md/.py/.csv/.json/.npz）+ 符号裁决记录与脚本
-│   │   └── output/                  # 原始求解器输出（.MES / .AH1）与原始打包 zip；原始输出不改字，分析结论看验证记录
+│   ├── gate-a-verification/         # 19 体实跑的验证证据（现行口径）：验证记录 + 脚本 + 日志 + 结果 JSON + 激励力全谱合成一套（.md/.py/.csv/.json/.npz）+ 符号裁决记录与脚本 + dat Deck 级核查记录与脚本（2026-11-16）
+│   │   └── output/                  # 原始求解器输出（.MES / .AH1）、输入 Deck 原件（futi_19body.dat）与原始打包 zip；原始文件不改字，分析结论看验证记录
 │   ├── w6-bemio/                    # W6 BEMIO 脚本（REV 1）与运行产出说明/日志（output/）；大产出（.h5 / hydro.mat）在 Release W6-output 的 ZIP 内
 │   ├── gate-b-verification/         # GATE-B 复核证据：复核记录 + 脚本 + 结果 JSON（2026-11-15，GATE-B 已通过）
 │   └── w7-wecsim-assembly/          # W7 前置决策备案：表 5 粘性阻尼拆分三选项（2026-11-15 入仓，待 Saber 拍板，W7 未启动）
@@ -94,7 +94,7 @@
 - **证据记录**：各验证报告/记录、脚本运行的日志与 JSON（数字以这些为准，不要引用 README/PROGRESS 的转述）
 - **原始输出**：`output/` 内文件，只读引用，不做编辑
 
-仓库里**没有**的文件（不要假设存在）：19 体运行的 `.dat`、阶段 2《GATE2 一级验收记录》原件——这些需要时向 Saber / Nicholas 索取。（W1 分段方案与 W2 质量分账的**原件**已遗失，复原版已入仓 `design-basis-w1-w2/`；整体单体模型的实跑输出已于 2026-11-13 补交入仓 `01-single-body-validation/output/`。）注意存放位置易错点：`.AH1` 原件在 `output/`；`.LIS`（约 90 MB）超过网页上传上限，不在文件树里，存于 Release `stage3-19body-aqwa-output` 的附件（链接与 SHA-256 见 `FILES.md` 末节）；两份 NREL 报告 PDF 与撰写规范 `.doc` 在 `references/`。
+仓库里**没有**的文件（不要假设存在）：阶段 2《GATE2 一级验收记录》原件——需要时向 Saber / Nicholas 索取。（W1 分段方案与 W2 质量分账的**原件**已遗失，复原版已入仓 `design-basis-w1-w2/`；整体单体模型的实跑输出已于 2026-11-13 补交入仓 `01-single-body-validation/output/`；19 体运行的 `.dat` 已于 2026-11-15 补交、2026-11-16 通过 Deck 级核查入仓 `03-multibody-19body/gate-a-verification/output/`。）注意存放位置易错点：`.AH1` 原件在 `output/`；`.LIS`（约 90 MB）超过网页上传上限，不在文件树里，存于 Release `stage3-19body-aqwa-output` 的附件（链接与 SHA-256 见 `FILES.md` 末节）；两份 NREL 报告 PDF 与撰写规范 `.doc` 在 `references/`。
 
 ## 4. 下一步要干什么（按依赖顺序）
 
