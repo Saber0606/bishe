@@ -34,7 +34,8 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 │   ├── plan-22body-superseded/          # 22 体计划书（未执行，历史存档；文件头有变更说明）
 │   │   └── segmentation-plan-v1.2.md
 │   ├── design-basis-w1-w2/              # W1 分段方案 + W2 质量分账（原件遗失，2026-11-13 复原）
-│   ├── w6-bemio/                        # W6 BEMIO 生成脚本（草稿，未运行；待 MATLAB 版本信息回传后在 Saber 本地运行）
+│   ├── w6-bemio/                        # W6 BEMIO 生成脚本（REV 1，已跑通）+ 运行日志（大产出在 Release W6-output）
+│   ├── gate-b-verification/             # GATE-B 复核记录 + 脚本 + 结果（2026-11-15 通过）
 │   └── gate-a-verification/             # 19 体合成验证（GATE-A 口径）+ 符号裁决记录
 │       ├── 19body-synthesis-verification.md
 │       ├── verify_19body.py             # 验证脚本（与被验 .AH1 同目录运行时使用）
@@ -46,7 +47,7 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 
 2026-11-13 之前的旧路径与新路径的对照表见 `FILES.md` 的「结构整理」一节。
 
-## 当前进度（截至 2026-11-13）
+## 当前进度（截至 2026-11-15）
 
 - 阶段 0：已完成
 - 阶段 1A：已通过（GATE 1A）
@@ -57,7 +58,8 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
   - `.MES` 报错清点完成：1,265 条消息全部为 WARNING，ERROR / FATAL 为 0；去重后 6 类，均为切分模型的预期警告
   - 激励力相位修正符号已裁决（2026-11-13）：以整体单体实跑 LIS 为外部基准全谱比对，corr+（计划书公式）中位误差 0.102%、corr− 96.6%，**corr+ 正确，GATE-A 已正式关门**，详见 `03-multibody-19body/gate-a-verification/sign-adjudication-record.md`
   - W1 分段方案与 W2 质量分账已复原入仓（`design-basis-w1-w2/`，原件遗失后据实跑数据复原）
-  - 下一步（W6）：等 MATLAB 版本信息回传后，BEMIO 读取 `.AH1` 生成 `.h5`，对照 corr+ 变体复核（判据幅值 <1%、相位 <1°）
+  - W6 已完成（2026-11-15）：BEMIO 生成 `futi_19body.h5`（存于 Release `W6-output` 的 ZIP 内），**GATE-B 复核通过**——合成激励力对 corr+ 锚幅值最大偏差 0.357%、相位最大 0.168°（判据 <1% / <1°），Ainf 处理与 body 顺序确认，详见 `03-multibody-19body/gate-b-verification/gate-b-verification-record.md`
+  - 下一步（W7）：表 5 粘性阻尼拆分口径由 Saber 拍板后，做 WEC-Sim 刚接装配与 GATE-C
 
 全程进度与待办见 [`PROGRESS.md`](PROGRESS.md)。
 

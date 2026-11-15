@@ -49,15 +49,25 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 - **GATE-A 至此正式关门**（合成指标全过 + 激励力全谱复核以 corr+ 通过）。附遗留观察项：ω ≤ 0.15 低频力矩残差带（变体无关，绝对差 ≤5.95×10⁶ N·m/m ≈ 峰值 5%），W6 生成 .h5 后同频段复查，论文局限性须注明
 - **W1/W2 文件复原**：原件遗失，据实跑数据复原入仓 `03-multibody-19body/design-basis-w1-w2/`——W1 分段方案（3 浮筒各均分 5 段、段长 7.6014 m、段界径向 7.409–45.416 m + 4 立柱各一体 = 19 体，18 道界面清单）；W2 质量分账（质量要求结合 NREL 浮体参数：17,854 t = 钢 3,914 + 固定压载 2,540 + 流体压载 11,300 + 接口 100；实跑分账取自 AH1 全精度，三笔账通过：总质量 +0.0003%、重心 z −14.940、惯量 −0.35%/−1.42%）
 - W6 前置已完成（2026-11-15）：Saber 回传 MATLAB、Simscape、Simscape Multibody 均为 R2025a（Update 1，25.1.0.2973910）；.h5 复核以 corr+ 为对照锚（判据幅值 <1%、相位 <1°），并同频段（ω ≤ 0.15）复查力矩残差带
-- W6 已启动（2026-11-15）：脚本 `03-multibody-19body/w6-bemio/bemio_futi_19body.m` 首次在 Saber 本地运行——readAQWA 成功（252.8 s），频点 47（0.02–2.10 rad/s）、浪向 25 检查通过；随后停在脚本初版自设的文件名断言（误以为 hydro.file 应含 `.h5`）。已据 WEC-Sim 源码（writeBEMIOH5.m：`filename = [hydro.file '.h5']`，体数字段为 hydro.Nb）核实并修正为 REV 1（文件名基名断言 + hydro.Nb 体数检查 + 读入后检查点保存）；REV 1 已于当日 14:27 重跑完成（readAQWA 255.6 s、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s），`futi_19body.h5` 已产出（155,612,740 B，日志为据）；运行日志已入仓 `w6-bemio/output/`；Release `W6-output` 已建，.h5 与完整 hydro.mat 附件待 Saber 补传，数据到齐后做 GATE-B 复核
+- W6 已启动（2026-11-15）：脚本 `03-multibody-19body/w6-bemio/bemio_futi_19body.m` 首次在 Saber 本地运行——readAQWA 成功（252.8 s），频点 47（0.02–2.10 rad/s）、浪向 25 检查通过；随后停在脚本初版自设的文件名断言（误以为 hydro.file 应含 `.h5`）。已据 WEC-Sim 源码（writeBEMIOH5.m：`filename = [hydro.file '.h5']`，体数字段为 hydro.Nb）核实并修正为 REV 1（文件名基名断言 + hydro.Nb 体数检查 + 读入后检查点保存）；REV 1 已于当日 14:27 重跑完成（readAQWA 255.6 s、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s），`futi_19body.h5` 已产出（155,612,740 B，日志为据）；运行日志已入仓 `w6-bemio/output/`
+
+## 2026-11-15：W6 完成（GATE-B 通过）
+
+- 产出归档：Saber 将 `futi_19body.h5`（155,612,740 B）与 `futi_19body_hydro.mat`（131,962,908 B）打包为 `futi_19body.zip`（261,904,581 B）上传至 Release `W6-output`，并决定保留压缩包形式（Release 说明已注明内含两文件）；助理下载后验 ZIP 的 SHA-256 与 GitHub 记录一致、解压后两文件分别验 SHA-256，登记于 `FILES.md` 末节
+- **约定识别（复核关键一步）**：`.h5` 激励力幅值与 AH1 FORCERAO 逐点一致（中位相对差 1.2×10⁻¹⁶），但相位为 BEMIO 约定：`F_h5 = conj(F_AH1)·exp(−ik·r_b)`（k = ω²/g 深水，r_b 为各体重心）——共轭 + 相位参考点由各体重心换算至全局原点；残差拟合 92,718 点最大 4.6×10⁻⁶ rad，有限水深色散被排除。直接拿 `.h5` 相位与 FORCERAO 比对会得到约 124% 的伪误差，后续引用须先逆变换（记录第 2 节）
+- **GATE-B 判据结果**（5% 峰值掩膜，与 GATE-A 裁决同口径）：合成激励力对 corr+ 锚——幅值偏差中位 2.2×10⁻¹⁶、最大 0.357%（<1%）；相位中位约 0°、最大 0.168°（<1°）；两最大值均在 Mz 相消区（浪向 120°，|F| 约为通道峰值 5.6%）。逐体一级比对（逆变换后 vs FORCERAO）最大复数相对误差 4.6×10⁻⁶
+- 低频残差带复查：ω ≤ 0.15 段幅值最大误差 0.0018%、相位最大 0.0004°——GATE-A 的残差带在 `.h5` ↔ AH1 间不复现，证实其源于 19 体分体模型 vs 整体单体模型的口径差异，非 BEMIO 引入；论文局限性仍按 GATE-A 记录注明
+- Ainf 闭合：日志两组打印值证实 radiationIRF 重算 Ainf（非沿用 AQWA 读入值）；`.h5` 与 hydro.mat 的 Ainf 逐元素一致；刚体合成至静水面原点对 NREL 表 4：A11 +1.30%、A33 −0.80%、A44 −0.99%、A55 −0.99%、A66 +2.24%、A15 +0.35%；对称性残差 1.58×10⁻³ 已记录（个别耦合项不对称约 4.5%，WEC-Sim 按原样读取）
+- 其余项：A / B 矩阵与 AH1 逐频比对最大相对差 6.6×10⁻²⁰ / 4.8×10⁻⁸；19 体 cg 与 AH1 COG 逐位一致；K33 合成偏差 +0.001%；排水量合计偏差 −0.0005%
+- **GATE-B 通过，W6 关闭**。记录与脚本：`03-multibody-19body/gate-b-verification/`。W7 入口只剩表 5 粘性阻尼拆分口径待 Saber 拍板（备选方案稿已备：面积拆分 / 整体等效 / Morison 标定三案）
 
 ## 后续待办（非失败项）
 
-1. BEMIO `.h5` 复核（W6 / GATE-B）：`.h5` 合成激励力对照 corr+ 变体（幅值 <1%、相位 <1°）；符号已由整体单体基准裁决（见上节），不再做双变体识别
-2. LHFR 目前仍关闭：确认 BEMIO 对 Ainf（无穷频率附加质量）的处理方式
+1. ~~BEMIO `.h5` 复核（W6 / GATE-B）~~ **已完成（2026-11-15）：GATE-B 通过**，见上节与 `03-multibody-19body/gate-b-verification/`
+2. ~~LHFR / Ainf 处理确认~~ **已完成（2026-11-15）**：radiationIRF 重算 Ainf 已证实（见上节）
 3. 频段仍为 0.02–2.10 rad/s，网格可用上限约 2.158 rad/s；扩频前需细化网格
 4. 本次未提供 `.dat` 输入文件，故未做 Deck 级原始赋值核查
-5. 推进 GATE 2 二级与 WEC-Sim 约束建模
+5. 表 5 粘性阻尼拆分口径拍板（Saber）后推进 W7 / GATE-C：WEC-Sim 刚接装配、约束反力时程产出
 
 ## 易混口径备忘
 

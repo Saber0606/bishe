@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 35 个文件，另有 1 个大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 38 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -58,8 +58,11 @@
 | `03-multibody-19body/gate-a-verification/output/FUTI_19BODY.MES` | AQWA 原始消息文件（1,265 条全部为 WARNING，0 ERROR / FATAL） |
 | `03-multibody-19body/gate-a-verification/output/futi_19body.AH1` | AQWA 水动力数据库原件（21,146,564 B，2026-11-13 经网页上传补入；BEMIO 的输入） |
 | `03-multibody-19body/gate-a-verification/output/futi-19body-run-bundle.zip` | 本次运行的原始打包件（21,638,174 B，内含 `FUTI_19BODY.LIS` + `futi_19body.AH1`，2026-11-13 经网页上传补入） |
-| `03-multibody-19body/w6-bemio/bemio_futi_19body.m` | W6 BEMIO 生成脚本（REV 1，2026-11-15）：readAQWA → radiationIRF → excitationIRF → writeBEMIOH5，产出 `futi_19body.h5`；体序以 W1 编号表为准（19 体、361 耦合块、47 频点 0.02–2.10 rad/s、25 浪向）；含 hydro.Nb 体数/频点检查、hydro.file 基名断言（writeBEMIOH5 写出 `[hydro.file '.h5']`，已据 WEC-Sim 源码核实）、读入后检查点保存与 Ainf 记录点。2026-11-15 首次运行：readAQWA 成功（252.8 s，R2025a Update 1），IRF/写出未跑；须在 Saber 本地 MATLAB 运行（本环境无 MATLAB），运行后凭 corr+ 对照锚做 GATE-B 复核。文件名用下划线是 MATLAB 可运行名的例外（见脚本头注释） |
-| `03-multibody-19body/w6-bemio/output/README.md` | W6 运行产出存放说明（2026-11-15 建）：登记各产出文件的存放分流与上传状态；大文件（.h5 / 完整 hydro.mat）走 Release（实际标签 `W6-output`），附件 SHA-256 上传后登记在本文件末节 |
+| `03-multibody-19body/gate-b-verification/gate-b-verification-record.md` | GATE-B 复核记录（2026-11-15）：W6 产出 `.h5` / hydro.mat 经 SHA-256 校验链下载复核——合成激励力对 corr+ 锚幅值最大偏差 0.357%、相位最大 0.168°（判据 <1% / <1°），A/B 矩阵与 AH1 逐元素一致，Ainf 由 radiationIRF 重算确认、与 NREL 表 4 偏差 ≤2.24%，body 顺序/重心逐位一致；**GATE-B 通过**。含 BEMIO 激励力相位约定（共轭 + 参考点换算）的识别与逆变换说明、GATE-A 低频残差带复查结论（不复现，源于分体口径而非 BEMIO） |
+| `03-multibody-19body/gate-b-verification/gate-b-check.py` | GATE-B 复核脚本（计算部分与实跑脚本逐字相同，输入来源对应关系见脚本头注） |
+| `03-multibody-19body/gate-b-verification/gate-b-results.json` | GATE-B 复核结果数据（激励力两级比对、A/B 矩阵、Ainf、结构项汇总指标） |
+| `03-multibody-19body/w6-bemio/bemio_futi_19body.m` | W6 BEMIO 生成脚本（REV 1，2026-11-15）：readAQWA → radiationIRF → excitationIRF → writeBEMIOH5，产出 `futi_19body.h5`；体序以 W1 编号表为准（19 体、361 耦合块、47 频点 0.02–2.10 rad/s、25 浪向）；含 hydro.Nb 体数/频点检查、hydro.file 基名断言（writeBEMIOH5 写出 `[hydro.file '.h5']`，已据 WEC-Sim 源码核实）、读入后检查点保存与 Ainf 记录点。2026-11-15 首次运行：readAQWA 成功（252.8 s，R2025a Update 1），IRF/写出未跑；REV 1 于当日 14:27 重跑完成并产出 `futi_19body.h5`，GATE-B 复核已通过（2026-11-15，见 `../gate-b-verification/`）。文件名用下划线是 MATLAB 可运行名的例外（见脚本头注释） |
+| `03-multibody-19body/w6-bemio/output/README.md` | W6 运行产出存放说明（2026-11-15 建）：登记各产出文件的存放位置与状态；大文件（.h5 / 完整 hydro.mat）以 ZIP 形式存于 Release（实际标签 `W6-output`），SHA-256 已登记在本文件末节；GATE-B 复核记录在 `../../gate-b-verification/` |
 | `03-multibody-19body/w6-bemio/output/bemio_futi_19body_log.txt` | W6 BEMIO 运行日志（2026-11-15，Saber 网页上传，5,023 B）：含初版脚本失败运行（文件名断言）与 REV 1 成功运行两段记录；REV 1 段为运行证据——readAQWA 255.6 s、Nb = 19、DOF = 114、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s、产出 `futi_19body.h5` 155,612,740 B；含 Ainf 在 readAQWA 后与 radiationIRF 后的两组打印值（GATE-B 核查材料） |
 
 ## references（参考文献与规范原件）
@@ -94,6 +97,9 @@
 | 文件 | 大小 | 存放与校验 |
 |---|---|---|
 | `FUTI_19BODY.LIS` | 89,926,233 B | 超过 GitHub 网页上传的单文件 25 MB 上限，存于 Release `stage3-19body-aqwa-output` 的附件：https://github.com/Saber0606/bishe/releases/tag/stage3-19body-aqwa-output ；SHA-256 `3a7c566f8646eb204b323a38531e516339897756ebe8e6e2eed21c8f5b99d16b`，与本地原件一致（2026-11-13 核验） |
+| `futi_19body.zip`（内含下两行文件） | 261,904,581 B | W6 BEMIO 产出的打包件（Saber 2026-11-15 上传并决定以压缩包形式存放，不拆单独附件；Release 说明中已注明内含文件），存于 Release `W6-output` 的附件：https://github.com/Saber0606/bishe/releases/tag/W6-output ；SHA-256 `f7c4d7800c807a66d6c027cbd737ff4f65b43faadc07c75523f6aae9440f39b9`，与 GitHub 记录的附件摘要一致（2026-11-15 核验） |
+| └ `futi_19body.h5` | 155,612,740 B | 上行 ZIP 内文件：BEMIO 生成的 19 体水动力数据库（WEC-Sim 输入）；SHA-256 `5d2cf6520e53f5af9db701a2bbe785987228d2914cc74db2df186d1077c7c612`（解压后核验，大小与运行日志记录一致）；GATE-B 复核已通过（见 `03-multibody-19body/gate-b-verification/`） |
+| └ `futi_19body_hydro.mat` | 131,962,908 B | 上行 ZIP 内文件：同一次运行的完整 MATLAB hydro 结构体；SHA-256 `39cedbfa87d1c0a0c998764e9609d60505a73b061e77c971e013ca24632280f1`（解压后核验） |
 
 ## 未单独入仓的副本
 
