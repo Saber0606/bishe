@@ -53,7 +53,7 @@
 | W3 dat 组装 | 已完成（推断） | 本次 AQWA 运行存在，组装是其前提；但 `.dat` 原件未随本次输入提供，未做 Deck 级核查（验证记录注意事项 6） |
 | W4 AQWA 求解 | 已完成 | 2026-11-11 20:32–20:49 跑完，正常结束；`.MES` 1,265 条消息已清点：全部 WARNING，0 ERROR/FATAL，去重 6 类，均已判定为预期警告（验证记录附节） |
 | W5 / GATE-A | **已正式关门（2026-11-13）** | 合成指标全过（下表）；相位修正符号已由外部基准裁决：整体单体 LIS（2026-11-13 补交入仓）全谱比对，corr+ 中位复数误差 0.102%、corr− 96.6%——**corr+（计划书公式）正确，corr− 排除**，激励力全谱复核以 corr+ 通过。附遗留观察项：ω ≤ 0.15 低频力矩残差带（≤峰值约 5%，变体无关），W6 同频段复查、论文局限性注明。证据：`03-multibody-19body/gate-a-verification/sign-adjudication-record.md` |
-| W6 / GATE-B | 进行中（2026-11-15 启动） | GATE-A 已通过；MATLAB/Simscape/Simscape Multibody 均为 R2025a（Update 1，25.1.0.2973910，Saber 2026-11-15 回传）。BEMIO 首次运行：readAQWA 成功（252.8 s），频点 47（0.02–2.10 rad/s）/浪向 25 检查通过；脚本初版的文件名断言误设（hydro.file 实为无扩展名基名，writeBEMIOH5 写出 [hydro.file '.h5']，已据 WEC-Sim 源码核实），REV 1 已修正并改用 hydro.Nb 体数检查；radiationIRF/excitationIRF/writeBEMIOH5 尚未运行，.h5 未产出。脚本：`03-multibody-19body/w6-bemio/bemio_futi_19body.m`（REV 1） |
+| W6 / GATE-B | 进行中（2026-11-15 启动） | GATE-A 已通过；MATLAB/Simscape/Simscape Multibody 均为 R2025a（Update 1，25.1.0.2973910，Saber 2026-11-15 回传）。BEMIO 首次运行：readAQWA 成功（252.8 s），频点 47（0.02–2.10 rad/s）/浪向 25 检查通过；脚本初版的文件名断言误设（hydro.file 实为无扩展名基名，writeBEMIOH5 写出 [hydro.file '.h5']，已据 WEC-Sim 源码核实），REV 1 已修正并改用 hydro.Nb 体数检查；REV 1 重跑已完成（2026-11-15 14:27：radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s），.h5 已产出（155,612,740 B），运行日志已入仓 `w6-bemio/output/bemio_futi_19body_log.txt`；Release `W6-output` 已建、.h5 与完整 hydro.mat 附件待传，GATE-B 复核待数据到齐。脚本：`03-multibody-19body/w6-bemio/bemio_futi_19body.m`（REV 1） |
 | W7 / GATE-C | 未开始 | 入口条件：GATE-B 通过 + 表 5 粘性阻尼拆分口径拍板（见第 4 节） |
 
 19 体合成验证核心结果（证据：`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`，脚本与结果同目录）：
