@@ -42,9 +42,10 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 │       ├── synthesis_log.txt / synthesis_results.json
 │       ├── excitation-full-spectrum-note.md / .py / .csv / .json / .npz   # 激励力全谱合成（W5 最后一项）
 │       └── output/                      # AQWA 原始输出：.MES / .AH1 / 原始打包 zip（.LIS 在 Release，见 FILES.md）
-├── 03-multibody-16body/                 # 阶段 3 更正：16 体链路（2026-11-16，每筒 4 段；W1/W2 设计 v2、W3 已组装待试运行）
+├── 03-multibody-16body/                 # 阶段 3 更正：16 体链路（2026-11-16，每筒 4 段；W1/W2 设计 v2、W3 已关闭、W4 已求解）
 │   ├── design-basis-w1-w2/              # 更正 W1 分段方案 + W2 设计分账 + 推导脚本/结果（以整体单体 dat 独立推导）
-│   └── w3-dat-assembly/                 # 更正 W3 v2 组装核查记录 + 脚本（dat 本体待实跑成功后入仓）
+│   ├── w3-dat-assembly/                 # 更正 W3 组装核查记录（§6 附记：实跑定版与关门）+ 脚本 + output/（实跑定版 dat）
+│   └── w4-aqwa-run/                     # 更正 W4 求解与产物核查记录 + LIS 核查脚本 + output/（.MES；.AH1 待网页上传、.LIS 在 Release）
 └── references/                          # 参考文献与规范原件：NREL 两份报告 PDF + 学校撰写规范 .doc + SOURCES.md 索引
 ```
 

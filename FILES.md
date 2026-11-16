@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 70 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 84 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -89,10 +89,25 @@
 | `03-multibody-16body/design-basis-w1-w2/design-16body-from-singlebody-geometry-results.json` | W1 几何推导结果 v2（逐体面元/DIFF/精确面积/体积/浮心与总量核对；含 v1 质心口径面积备查） |
 | `03-multibody-16body/design-basis-w1-w2/design-16body-w2-allocation.py` | W2 分账脚本（v2：输入 W1 v2 几何）：构件放置规则 + 三笔账最小修正闭合求解、三笔账合成核对（输入为上条几何结果 JSON，可重复运行） |
 | `03-multibody-16body/design-basis-w1-w2/design-16body-w2-allocation-results.json` | W2 分账结果数据 v2（逐体质量/重心/惯量、构件份额与合成总量） |
-| `03-multibody-16body/w3-dat-assembly/w3-assembly-check-record-16body.md` | 更正 W3 组装与核查记录（v2 劈分版，2026-11-16 晚）：组装方法（整体单体 dat 切分 + I-1/I-3 六平面劈分 195 元 + EL10 式表头）、组装统计（面元 7,140、DIFF 碎片 5,651、复制节点 506）、独立核查 29/29、逐体体积残差归因、今晚试运行核对点。**dat 本体按 Saber 规矩本地暂存（984,333 B，MD5 `8c77dcf0153e619e872bdcdd8c119967`），运行成功后入仓本目录** |
+| `03-multibody-16body/w3-dat-assembly/w3-assembly-check-record-16body.md` | 更正 W3 组装与核查记录（v2 劈分版，2026-11-16 晚）：组装方法（整体单体 dat 切分 + I-1/I-3 六平面劈分 195 元 + EL10 式表头）、组装统计（面元 7,140、DIFF 碎片 5,651、复制节点 506）、独立核查 29/29、逐体体积残差归因、今晚试运行核对点。**2026-11-16 晚附记 §6（实跑与关门）**：v2/v3 两版试运行均死于 Deck 8 读入 EOF，Argon 修复版实跑成功并经 as-run 核查，**W3 关闭**；实跑 dat 已入仓 `w3-dat-assembly/output/`（见下行） |
 | `03-multibody-16body/w3-dat-assembly/assemble-16body-dat-v2.py` | W3 v2 组装脚本：在整体单体 dat 上切分 16 体、劈分跨 I-1/I-3 面元、按 W2 v2 填 Deck 03/04（可重复运行；内部路径为执行时本地路径） |
 | `03-multibody-16body/w3-dat-assembly/check-16body-dat-v2.py` | W3 v2 独立核查脚本：重解析写出的 dat，核对结构/计数/Deck 03-04/三笔账/逐体体积面积/劈分节点位置（29 项） |
 | `03-multibody-16body/w3-dat-assembly/assemble-16body-dat-v2-manifest.json` | W3 v2 组装清单（dat MD5、逐体片数、劈分统计） |
+| `03-multibody-16body/w3-dat-assembly/output/futi_16body.dat` | 更正 W3 **实跑定版** dat（2026-11-16 20:33 AQWA 实跑成功）：Muse v2 组装 → Argon 修复（Deck 05/06 表头尾注释去除、末尾补 Deck 09–18 NONE、全部单元行改 80 字符式等，血统与 as-run 核查见 W3 记录 §6）；987,594 B，MD5 `5cbc0e8475fb84f2acc553fca0b63bdd`，SHA-256 `128d27b111c33ebb6cdf2c05c530e619568e6ab0059e94026d650429aeafb8b8`；按 Saber 2026-11-16 指示统一命名（上传原名 `futi_16body_fixed.dat`）。v2/v3 两版（MD5 `8c77dcf0…` / `01dcdd8e…`）试运行死于 Deck 8 EOF、未入仓，本地保留 |
+| `03-multibody-16body/w4-aqwa-run/w4-run-check-record-16body.md` | 更正 W4 求解与运行产物核查记录（2026-11-16）：`.MES` 清点 1,064 条 WARNING 分 7 类、0 ERROR/FATAL；`.LIS` 逐结构核查——DIFF 计数 16/16 与 W3 清单一致（Σ 5,651）、逐体质量/重心对 W2 v2 设计、装配总量 Σ 排水 20,157.83 m³ / Σ K33 4.46024×10⁶ / 体积加权浮心 z −13.6393 与整体单体基准一致；含逐体网格排水体积的开口归属口径说明（−0.83%…+2.08%，总量精确，非网格错误） |
+| `03-multibody-16body/w4-aqwa-run/check-lis-w4.py` | W4 LIS 核查脚本：解析 16 个静水块与绕射建模检查块，逐体对 W1/W2 v2 设计表与 W3 清单、合成总量对整体单体 LIS 基准（可重复运行） |
+| `03-multibody-16body/w4-aqwa-run/output/futi_16body.MES` | 16 体实跑求解器消息原件（321,555 B，5,257 行，MD5 `eed20cbb0ec6c4d772e3757d5e7a9e35`，SHA-256 `5925f40171446275353d4e822f3ce71cdc1edabbf48f8200dd7dbbe745304776`）：0 ERROR/FATAL；按 Saber 指示统一命名（上传原名 `FUTI_16BODY_2.MES`） |
+| `03-multibody-16body/w4-aqwa-run/output/futi_16body.AH1` | 16 体实跑水动力数据原件（15,506,571 B，MD5 `cb2d1c4477df8bdfdb3c55804bb54206`，SHA-256 `a997f35c146f7919850bf84f2dc12db8490e019db19ed4f6b6f084a136b86616`）：**二进制 ≤25 MB，待网页上传入仓本目录**（本地原件已核验登记；上传原名 `futi_16body_3_i6na.AH1`）；W5/GATE-A 与 W6/BEMIO 的输入 |
+| `03-multibody-16body/gate-a-verification/gate-a-verification-record-16body.md` | 更正 W5 / **GATE-A 关门记录**（2026-11-16）：AH1 三笔账（逐体对 W2 v2 在印刷精度内一致；合成总量——质量 +0.0009%、重心 z +0.00003 m、Izz +0.001%、独立核查 Ixx/Iyy +0.698% <2%）；激励力 corr+ 全谱合成对整体单体基准（5,745 掩膜点）中位复数误差 **0.104%**、相位中位 0.004°，corr− 95.7% / naive 102.9% 排除；LIS 印刷版独立核查 0.172%；低频残差带复测（≤6.04×10⁶ N·m/m、约峰值 5.4%，与 19 体同量级，处置沿 19 体）；含 K44/K55 输运方法学更正（同余输运 −3.84% 为方法受限、直接水线面聚合 −0.165%/−0.055% 为准） |
+| `03-multibody-16body/gate-a-verification/verify-16body-ah1.py` | W5 三笔账脚本：解析 16 体 AH1 的 COG/COB/DISPLACEMENT/MASS/HYD，逐体对 W2 v2 分账 JSON、合成总量对单体 Deck 03/04 锚点，附静水刚度（两法）、附加质量抽查与固有频率（可重复运行；内部路径为执行时本地路径） |
+| `03-multibody-16body/gate-a-verification/ah1-three-accounts-results.json` | 三笔账结果数据（逐体质量/重心/惯量偏差、合成总量、K33/K44/K55 两法、附加质量抽查频点、固有频率） |
+| `03-multibody-16body/gate-a-verification/excitation-full-spectrum-16body.py` | W5 激励力全谱脚本：AH1 FORCERAO 三变体（naive/corr+/corr−）合成至总重心 + 与整体单体 LIS 合并表全谱裁决（5% 掩膜、逐自由度/分频段/低频带统计，可重复运行） |
+| `03-multibody-16body/gate-a-verification/gate-a-adjudication-results.json` | 激励力裁决结果数据（三变体统计、corr+ 逐自由度与分频段、最不利点、抽查点、低频带逐通道） |
+| `03-multibody-16body/gate-a-verification/excitation-full-spectrum-16body.npz` | 16 体激励力合成参考数据（25 浪向 × 47 频 × 6 自由度，三变体复数阵 + 合成重心）：**GATE-B 的 corr+ 对照锚**；二进制走网页上传 |
+| `03-multibody-16body/gate-a-verification/excitation-full-spectrum-16body.csv` | 同上数据的表格版（逐浪向/频点的 corr+/corr− 幅值相位与 naive 幅值） |
+| `03-multibody-16body/gate-a-verification/check-lis-waveforce-sum-16body.py` | LIS 印刷精度独立交叉核查脚本：16 体 LIS 逐结构 FK+绕射合并表（400 块）三法（plain/transfer/corr+）合成对整体单体 LIS（可重复运行） |
+| `03-multibody-16body/gate-a-verification/check-lis-waveforce-sum-16body-results.json` | LIS 交叉核查结果（corr+ 中位 0.172%、plain 99.99%、transfer 102.97%） |
+| `03-multibody-16body/w6-bemio/bemio_futi_16body.m` | 更正 W6 BEMIO 脚本（2026-11-16 备妥，**待 Saber 在本地 MATLAB 运行**）：由已实跑通过的 19 体 REV 1 脚本机械适配（Nb=16、DOF=96、256 耦合块；hydro.file 基名 / hydro.Nb / 读后检查点等 REV 1 经验全数沿袭）；输入 = 本地 `futi_16body.AH1` + `futi_16body.LIS`，输出 `futi_16body.h5` + hydro.mat + 日志，回传后做 GATE-B 复核 |
 
 ## references（参考文献与规范原件）
 
@@ -145,6 +160,7 @@
 | `futi_19body.zip`（内含下两行文件） | 261,904,581 B | W6 BEMIO 产出的打包件（Saber 2026-11-15 上传并决定以压缩包形式存放，不拆单独附件；Release 说明中已注明内含文件），存于 Release `W6-output` 的附件：https://github.com/Saber0606/bishe/releases/tag/W6-output ；SHA-256 `f7c4d7800c807a66d6c027cbd737ff4f65b43faadc07c75523f6aae9440f39b9`，与 GitHub 记录的附件摘要一致（2026-11-15 核验） |
 | └ `futi_19body.h5` | 155,612,740 B | 上行 ZIP 内文件：BEMIO 生成的 19 体水动力数据库（WEC-Sim 输入）；SHA-256 `5d2cf6520e53f5af9db701a2bbe785987228d2914cc74db2df186d1077c7c612`（解压后核验，大小与运行日志记录一致）；GATE-B 复核已通过（见 `03-multibody-19body/gate-b-verification/`） |
 | └ `futi_19body_hydro.mat` | 131,962,908 B | 上行 ZIP 内文件：同一次运行的完整 MATLAB hydro 结构体；SHA-256 `39cedbfa87d1c0a0c998764e9609d60505a73b061e77c971e013ca24632280f1`（解压后核验） |
+| `futi_16body.LIS` | 70,936,631 B | 16 体更正链实跑 LIS（2026-11-16）：超过 25 MB 上限，存于 Release `stage3-16body-aqwa-output`（**待上传**，上传后补链接）；SHA-256 `2b78ec2555c9e45929d224dda822cc1fbf63ae55e77ac31de5ce8b373b47b9e0`、MD5 `fb9bdf57ec16846400f742eed7df9645`（本地原件，2026-11-16 核验）；按 Saber 指示统一命名（回传原名 `FUTI_16BODY.LIS`，zip 传输） |
 
 ## 未单独入仓的副本
 
