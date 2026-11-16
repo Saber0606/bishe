@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 50 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 57 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -83,7 +83,17 @@
 | `references/SOURCES.md` | 本目录索引（出处对照表） |
 | `references/nrel-tp-5000-76773-volturnus-s-platform.pdf` | NREL/TP-5000-76773（2020-07）原件 PDF，2,327,676 B：UMaine VolturnUS-S 平台定义 |
 | `references/nrel-tp-5000-75698-iea-15mw-turbine.pdf` | NREL/TP-5000-75698（2020-03）原件 PDF，6,290,390 B：IEA 15 MW 参考风机定义 |
+| `references/nrel-tp-5000-76773-volturnus-s-platform-zh.md` | NREL/TP-5000-76773 中文版（2026-11-16 翻译）：自然中文（非直译），数字/单位/公式原样保留，表格译表头表题、数据照搬，图只译图题、图面未重绘，参考文献条目保留英文 |
+| `references/nrel-tp-5000-76773-volturnus-s-platform-zh.docx` / `.pdf` | 同上中文版的 Word / PDF 版（PDF 19 页） |
+| `references/nrel-tp-5000-75698-iea-15mw-turbine-zh.md` | NREL/TP-5000-75698 中文版（2026-11-16 翻译）：口径同 76773 中文版（含附录 A 叶片截面、附录 B 塔架与地基建模） |
+| `references/nrel-tp-5000-75698-iea-15mw-turbine-zh.docx` / `.pdf` | 同上中文版的 Word / PDF 版（PDF 34 页） |
 | `references/ouc-undergraduate-thesis-spec.doc` | 《中国海洋大学本科毕业论文（设计）撰写规范》，273,689 B |
+
+## bibliography（参考文献阅读清单，2026-11-16 新建）
+
+| 仓库路径 | 来源 / 说明 |
+|---|---|
+| `bibliography/reading-list.md` | 参考文献阅读清单（2026-11-16 编制）：18 篇，按"年份由老到新（1950–2025）+ 内容由广入深"的单一阅读顺序编排，分六个阅读阶段，每篇附定位说明与对应课题环节；出版信息逐条经公开检索核对，DOI 仅标注已核实者。其中 [14] Gaertner et al. 2020（NREL/TP-5000-75698）与 [15] Allen et al. 2020（NREL/TP-5000-76773）原件已在 `references/`，本目录只存清单、不重复存原件 |
 
 ## 结构整理（2026-11-13，旧路径 → 新路径）
 
