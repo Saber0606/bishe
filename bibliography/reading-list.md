@@ -53,13 +53,13 @@
 ## 第四阶段：参考机型方法论、混合概念与工具链（2009–2015）
 
 **[9]** JONKMAN J, BUTTERFIELD S, MUSIAL W, et al. Definition of a 5-MW reference wind turbine for offshore system development[R]. NREL/TP-500-38060. Golden: National Renewable Energy Laboratory, 2009.
-> 定位："参考机型"这一研究范式的源头文件：为什么要用公开定义的基准机型做研究、定义文件应包含什么。本课题用的两份 2020 基准（[14][15]）是它的直系后代；先读它，才知道 [14][15] 为什么长成那样。
+> 定位："参考机型"这一研究范式的源头文件：为什么要用公开定义的基准机型做研究、定义文件应包含什么。本课题用的两份 2020 基准（[14][15]）是它的直系后代；先读它，才知道 [14][15] 为什么长成那样。**原文 PDF 已入仓**：本目录 `09-jonkman-2009-5mw-reference-turbine.pdf`（NREL 公开报告，经 NREL 官方 FAST 仓库镜像取得）。
 
 **[10]** MULIAWAN M J, KARIMIRAD M, GAO Z, et al. Extreme responses of a combined spar-type floating wind turbine and floating wave energy converter (STC) system with survival modes[J]. Ocean Engineering, 2013, 65: 71-82.
 > 定位：风浪混合系统的早期代表作（Spar 平台+同轴环式 WEC 的 STC 概念）。它证明了"风机平台与 WEC 一体化"从概念变成可计算的对象；本课题的混合命题排在它这一代工作之后。
 
 **[11]** YU Y H, LAWSON M, RUEHL K, et al. Development and demonstration of the WEC-Sim wave energy converter simulation tool[C]//Proceedings of the 2nd Marine Energy Technology Symposium (METS 2014). Seattle: 2014.
-> 定位：本课题时域工具链的出处：WEC-Sim 的多体动力学+BEM 输入架构在此发表。本课题 BEMIO→WEC-Sim 的整条链路、bodyClass/constraintClass 的建模方式都源于此。方法章节引它。
+> 定位：本课题时域工具链的出处：WEC-Sim 的多体动力学+BEM 输入架构在此发表。本课题 BEMIO→WEC-Sim 的整条链路、bodyClass/constraintClass 的建模方式都源于此。方法章节引它。**原文 PDF 已入仓**：本目录 `11-yu-2014-wec-sim-tool.pdf`（OSTI 公开件 SAND2014-3013C）。
 
 **[12]** RINGWOOD J V, BACELLI G, FUSCO F. Energy-maximizing control of wave-energy converters: the development of control system technology to optimize their operation[J]. IEEE Control Systems Magazine, 2014, 34(5): 30-55. DOI: 10.1109/MCS.2014.2333253
 > 定位：能量最大化控制的权威综述：从复共轭/阻抗匹配到锁存、MPC 的控制技术谱系。[7] 给出理论最优，这篇给出"工程上怎么实现最优"的全景。阶段 5 选控制策略、说明为什么用阻抗（被动可实现）而非完全复共轭时引它。
@@ -78,10 +78,10 @@
 ## 第六阶段：同平台集成仿真与互馈前沿（2022–2025）
 
 **[16]** SIRIGU M, FARAGGIANA E, GHIGO A, et al. Development of MOST, a fast simulation model for optimisation of floating offshore wind turbines in Simscape Multibody[J]. Journal of Physics: Conference Series, 2022, 2257(1): 012003. DOI: 10.1088/1742-6596/2257/1/012003
-> 定位：与本课题工具链同源的集成仿真工作：MOST 在 Simscape Multibody 里建 15 MW + VolturnUS 平台模型并与 FAST 对标。它是路线 V2.5 里"MOST/BEMIO 边界"纠偏的直接对象，也是 WEC-Sim 应用生态里与本课题平台完全相同的一例。
+> 定位：与本课题工具链同源的集成仿真工作：MOST 在 Simscape Multibody 里建 15 MW + VolturnUS 平台模型并与 FAST 对标。它是路线 V2.5 里"MOST/BEMIO 边界"纠偏的直接对象，也是 WEC-Sim 应用生态里与本课题平台完全相同的一例。**原文 PDF 已入仓**：本目录 `16-sirigu-2022-most.pdf`（IOP 开放获取）。
 
 **[17]** PETRACCA E, FARAGGIANA E, GHIGO A, et al. Design and techno-economic analysis of a novel hybrid offshore wind and wave energy system[J]. Energies, 2022, 15(8): 2739. DOI: 10.3390/en15082739
-> 定位：[16] 同一团队（都灵理工大学）的应用层工作：用 MOST+WEC-Sim 工具链做风浪混合系统的设计与技术经济分析。读它是为了看集成仿真工具链在"设计一台混合装置"时实际怎么用，与本课题阶段 5 的建模组织方式可直接对照。
+> 定位：[16] 同一团队（都灵理工大学）的应用层工作：用 MOST+WEC-Sim 工具链做风浪混合系统的设计与技术经济分析。读它是为了看集成仿真工具链在"设计一台混合装置"时实际怎么用，与本课题阶段 5 的建模组织方式可直接对照。**原文 PDF 已入仓**：本目录 `17-petracca-2022-hybrid-wind-wave-design.pdf`（MDPI 开放获取）。
 
 **[18]** ZHOU B, HU J, JIN P, et al. Power performance and motion response of a floating wind platform and multiple heaving wave energy converters hybrid system[J]. Energy, 2023, 265: 126314. DOI: 10.1016/j.energy.2022.126314
 > 定位：方法与本课题最同构的一篇：半潜平台+多个垂荡点吸收 WEC，用高阶边界元+多体约束动力学求解（与 AQWA→WEC-Sim 约束装配是同一建模思想）；发现平台与 WEC 的"同步模式"下单 WEC 功率可提高 41.4%、总功率提高 26.7%——这是文献中对"互馈增益"最直接的量化先例之一，阶段 5 讨论增益机理时引它。
@@ -93,12 +93,12 @@
 > 定位：半潜平台+6 个环式点吸收 WEC 阵列，三维势流计算，系统考察 PTO 阻尼、WEC 浮子形状与季节变化（总功率较原系统高 2.5%–6.5%，PTO 阻尼主要影响垂荡与平均功率峰位）。与 [19] 互补：[19] 偏控制参数的影响，本篇偏阵列构型与阻尼的参数规律；本课题外柱多 WEC 布置与阻尼扫描可参照其参数组织。
 
 **[21]** GU X, LIN F, JIANG W, et al. Power performance and dynamic characteristics of a 15 MW floating wind turbine with wave energy converter combined concept[J]. Sustainable Horizons, 2025, 13: 100125. DOI: 10.1016/j.horiz.2024.100125
-> 定位：最新且平台完全相同的工作：UMaine VolturnUS-S + IEA 15 MW 平台立柱集成 4 个环式垂荡 WEC，全耦合时域分析（额定工况纵摇幅值降低 31.5%、波浪能约占年发电量 11.4%）。作为全表收尾：读完它，本课题与当前前沿的差距与差异点（本课题走 AQWA 多体截面力+阻抗控制路线、且关注横撑截面载荷）应当能自己说清。
+> 定位：最新且平台完全相同的工作：UMaine VolturnUS-S + IEA 15 MW 平台立柱集成 4 个环式垂荡 WEC，全耦合时域分析（额定工况纵摇幅值降低 31.5%、波浪能约占年发电量 11.4%）。作为全表收尾：读完它，本课题与当前前沿的差距与差异点（本课题走 AQWA 多体截面力+阻抗控制路线、且关注横撑截面载荷）应当能自己说清。**原文 PDF 已入仓**：本目录 `21-gu-2025-15mw-fowt-wec-combined.pdf`（CC 许可开放获取）。
 
 ---
 
 ## 使用说明
 
 1. 论文参考文献表若采用顺序编码制，编号顺序应与正文首次引用顺序一致；本清单的顺序是**阅读顺序**，写正文时让引用大体沿此顺序首次出现，即可两用。
-2. [14][15] 原件已在仓库 `references/`；其余期刊/会议文献按 DOI 或报告号检索获取；[4][6][7] 为专著，走图书馆渠道。
+2. [14][15] 原件已在仓库 `references/`；[9][11][16][17][21] 的开放获取原文 PDF 已入仓本目录（文件名以条目编号为前缀，见各条标注）；[13] 的作者稿在普利茅斯大学 PEARL 仓储（站点有 Cloudflare 拦截，2026-11-16 尚未取到，待补）；其余付费期刊文献按 DOI 或报告号经学校图书馆/数据库获取；[4][6][7] 为专著，走图书馆渠道。
 3. 本清单是"应读且可引"的精选，不是穷举。后续阶段（尤其阶段 5 动笔前）如需补控制理论或截面结构校核方向的文献，另行增补并在本文件留痕，不改动现有编号顺序。
