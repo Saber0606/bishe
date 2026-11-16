@@ -1,4 +1,4 @@
-# 16-body W2 allocation solver.
+# 16-body W2 allocation solver v2: identical rules to v1; inputs are the v2 geometry json (exact-clip areas/area centroids).
 # Inputs ONLY: single-body dat geometry (geometry json), dat Deck 03/04 totals,
 # NREL Table 2 components. Placement/shape RULES are fixed a priori (see doc);
 # the three accounts (mass / CoG-z / Izz, from dat Deck 03/04) close the system:
@@ -8,7 +8,7 @@ import json, math
 import numpy as np
 from scipy.optimize import minimize
 
-GEO = json.load(open('/home/hatch/workspace/graduation-design/stage3-correction-16body/design_16body_from_singlebody_geometry.json'))
+GEO = json.load(open('/home/hatch/workspace/graduation-design/stage3-correction-16body/design_16body_from_singlebody_geometry_v2.json'))
 P = GEO['parts']
 CHAINS = ['180', '60', '300']
 RHO = 1.025  # t/m3
@@ -150,5 +150,5 @@ json.dump({'phi': phi, 'fluid_per_segment_t': f_seg, 'fluid_per_column_t': f_col
            'steel': {b: steel[b] for b in steel},
            'bodies': {b: {'mass_t': bodies[b][0], 'cog': list(bodies[b][1]), 'inertia': list(bodies[b][2])} for b in bodies},
            'totals': {'mass_t': M, 'cog': list(G), 'inertia': It}},
-          open('/home/hatch/workspace/graduation-design/stage3-correction-16body/design_16body_w2_allocation_results.json', 'w'), indent=1)
+          open('/home/hatch/workspace/graduation-design/stage3-correction-16body/design_16body_w2_allocation_results_v2.json', 'w'), indent=1)
 print("saved allocation results json")

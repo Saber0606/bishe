@@ -1,0 +1,76 @@
+{
+ "dat_md5": "8c77dcf0153e619e872bdcdd8c119967",
+ "total_panels": 7140,
+ "total_diff_pieces": 5651,
+ "split_panels": 195,
+ "split_nodes": 195,
+ "extra_elements": 197,
+ "duplicates": 506,
+ "min_piece_area_m2": 0.027988469993139135,
+ "counts": {
+  "CEN": {
+   "panels": 1004,
+   "diff": 670
+  },
+  "180_S1": {
+   "panels": 255,
+   "diff": 255
+  },
+  "180_S2": {
+   "panels": 257,
+   "diff": 257
+  },
+  "180_S3": {
+   "panels": 256,
+   "diff": 256
+  },
+  "180_S4": {
+   "panels": 256,
+   "diff": 256
+  },
+  "180_COL": {
+   "panels": 995,
+   "diff": 616
+  },
+  "60_S1": {
+   "panels": 265,
+   "diff": 265
+  },
+  "60_S2": {
+   "panels": 263,
+   "diff": 263
+  },
+  "60_S3": {
+   "panels": 264,
+   "diff": 264
+  },
+  "60_S4": {
+   "panels": 253,
+   "diff": 253
+  },
+  "60_COL": {
+   "panels": 1017,
+   "diff": 629
+  },
+  "300_S1": {
+   "panels": 262,
+   "diff": 262
+  },
+  "300_S2": {
+   "panels": 264,
+   "diff": 264
+  },
+  "300_S3": {
+   "panels": 264,
+   "diff": 264
+  },
+  "300_S4": {
+   "panels": 262,
+   "diff": 262
+  },
+  "300_COL": {
+   "panels": 1003,
+   "diff": 615
+  }
+ }
+}

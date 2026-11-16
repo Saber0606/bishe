@@ -1,15 +1,13 @@
-# 16-body W1 geometry + W2 design, derived ONLY from the original single-body dat
-# (futi_lowfreq.dat, Stage 1A) + NREL/TP-5000-76773 Table 2 component totals.
-# No 19-body results are used anywhere in the derivation.
-# Method: parse Deck 01/02; classify panels to members; pontoon panels are CLIPPED
-# exactly at the 4-equal cut planes (7.409/16.91075/26.4125/35.91425/45.416) and
-# integrated piece by piece (divergence theorem); cut caps are the nominal pontoon
-# cross-section 12.5 x 7.0 = 87.5 m2 (paper geometry) and cancel pairwise in totals.
+# 16-body W1 geometry v2: same derivation as v1 (ONLY the original single-body dat
+# futi_lowfreq.dat + NREL Table 2), but per-body surface AREA and area centroid are now
+# EXACT-CLIP values (pontoon panels clipped at the cut planes, piece areas summed per
+# body) instead of v1's whole-panel centroid-rule bookkeeping. Volumes/CoB unchanged
+# from v1 (already exact-clip). v1 centroid-rule areas are kept in the output as
+# area_m2_v1_centroid_rule so the revision magnitude is on record.
 import re, math, json
 from collections import defaultdict
 
 DAT = '/home/hatch/workspace/user/files/futi_lowfreq.dat'
-RHO = 1025.0
 lines = open(DAT, errors='ignore').read().splitlines()
 nodes = {}
 node_re = re.compile(r'^\s*01\s*(\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s*$')
@@ -40,7 +38,6 @@ def panel_geom(groups):
     return pts, c, 0.5*nn, (nx/nn, ny/nn, nz/nn)
 
 def tri_integrals(p1, p2, p3, nrm):
-    # exact surface integrals over one triangle for (1/3)r.n dA and (1/2) coord^2 n_coord dA
     ax, ay, az = p2[0]-p1[0], p2[1]-p1[1], p2[2]-p1[2]
     bx, by, bz = p3[0]-p1[0], p3[1]-p1[1], p3[2]-p1[2]
     A = 0.5*math.sqrt((ay*bz-az*by)**2 + (az*bx-ax*bz)**2 + (ax*by-ay*bx)**2)
@@ -61,8 +58,21 @@ def poly_integrals(pts, nrm):
         for k in range(3): mom[k] += m[k]
     return vol, mom
 
+def poly_area_centroid(pts):
+    # exact area + centroid of a planar polygon via fan triangulation
+    A = 0.0; C = [0.0, 0.0, 0.0]
+    for i in range(1, len(pts)-1):
+        p1, p2, p3 = pts[0], pts[i], pts[i+1]
+        ux, uy, uz = p2[0]-p1[0], p2[1]-p1[1], p2[2]-p1[2]
+        vx, vy, vz = p3[0]-p1[0], p3[1]-p1[1], p3[2]-p1[2]
+        cx, cy, cz = uy*vz-uz*vy, uz*vx-ux*vz, ux*vy-uy*vx
+        a = 0.5*math.sqrt(cx*cx+cy*cy+cz*cz)
+        A += a
+        for k in range(3): C[k] += a*(p1[k]+p2[k]+p3[k])/3.0
+    if A == 0: return 0.0, None
+    return A, tuple(C[k]/A for k in range(3))
+
 def clip_s(poly_stz, lo, hi):
-    # clip polygon (list of (s,t,z)) by lo <= s <= hi (Sutherland-Hodgman, twice)
     def clip_one(poly, bound, keep_le):
         if not poly: return poly
         out = []
@@ -77,10 +87,10 @@ def clip_s(poly_stz, lo, hi):
         return out
     return clip_one(clip_one(poly_stz, lo, False), hi, True)
 
-# accumulators per body
 bodies = ['CEN'] + [f'{c}_S{i}' for c in CHAINS for i in range(1, 5)] + [f'{c}_COL' for c in CHAINS]
-cnt = defaultdict(int); dif = defaultdict(int); area = defaultdict(float)
-area_c = defaultdict(lambda: [0.0, 0.0, 0.0])
+cnt = defaultdict(int); dif = defaultdict(int)
+area1 = defaultdict(float); area1_c = defaultdict(lambda: [0.0, 0.0, 0.0])   # v1 centroid rule
+area2 = defaultdict(float); area2_c = defaultdict(lambda: [0.0, 0.0, 0.0])   # v2 exact clip
 vol = defaultdict(float); mom = defaultdict(lambda: [0.0, 0.0, 0.0])
 seg_of_slab = {}
 for c in CHAINS:
@@ -88,8 +98,10 @@ for c in CHAINS:
     for i in range(4): seg_of_slab[(c, i+1)] = f'{c}_S{i+1}'
 
 unclassified = 0
+total_panel_area = 0.0
 for diff, groups in panels:
     pts, c, a, nrm = panel_geom(groups)
+    total_panel_area += a
     x, y, z = c; rho = math.hypot(x, y)
     best = None
     for name, (ux, uy) in CHAINS.items():
@@ -100,7 +112,6 @@ for diff, groups in panels:
     in_band = -20.01 <= z <= -12.99
     is_pontoon = in_band and abs(t) <= 6.55 and 4.0 <= s <= 52.0 and rho > 5.35 and d_out > 6.35
     if is_pontoon:
-        # clip in chain frame, distribute pieces to bodies; counts/area by centroid rule separately
         poly = []
         for (px, py, pz) in pts:
             poly.append((px*ux + py*uy, -px*uy + py*ux, pz))
@@ -109,38 +120,43 @@ for diff, groups in panels:
             piece = clip_s(poly, edges[slab], edges[slab+1])
             if len(piece) < 3: continue
             body = seg_of_slab[(name, slab)]
+            gpts = [(ss*ux - tt*uy, ss*uy + tt*ux, zz) for (ss, tt, zz) in piece]
+            pa, pc = poly_area_centroid(gpts)
+            area2[body] += pa
+            if pc is not None:
+                for k in range(3): area2_c[body][k] += pa*pc[k]
             if diff:
-                gpts = [(ss*ux - tt*uy, ss*uy + tt*ux, zz) for (ss, tt, zz) in piece]
                 v, m = poly_integrals(gpts, nrm)
                 vol[body] += v
                 for k in range(3): mom[body][k] += m[k]
-        # whole-panel bookkeeping (centroid rule) for counts/areas
         body_c = seg_of_slab[(name, 0 if s <= BND[0] else 5 if s > BND[4] else 1 + sum(1 for b in BND[1:4] if s > b))]
-        cnt[body_c] += 1; area[body_c] += a
+        cnt[body_c] += 1; area1[body_c] += a
         if diff: dif[body_c] += 1
-        for k in range(3): area_c[body_c][k] += a*c[k]
+        for k in range(3): area1_c[body_c][k] += a*c[k]
     elif d_out <= 6.55:
         body = f'{name}_COL'
-        cnt[body] += 1; area[body] += a
+        cnt[body] += 1; area1[body] += a; area2[body] += a
+        for k in range(3):
+            area1_c[body][k] += a*c[k]; area2_c[body][k] += a*c[k]
         if diff:
             dif[body] += 1
             v, m = poly_integrals(pts, nrm); vol[body] += v
             for k in range(3): mom[body][k] += m[k]
-        for k in range(3): area_c[body][k] += a*c[k]
     elif rho <= 7.45:
         body = 'CEN'
-        cnt[body] += 1; area[body] += a
+        cnt[body] += 1; area1[body] += a; area2[body] += a
+        for k in range(3):
+            area1_c[body][k] += a*c[k]; area2_c[body][k] += a*c[k]
         if diff:
             dif[body] += 1
             v, m = poly_integrals(pts, nrm); vol[body] += v
             for k in range(3): mom[body][k] += m[k]
-        for k in range(3): area_c[body][k] += a*c[k]
     else:
         unclassified += 1
 
 print(f"unclassified: {unclassified}; panels counted: {sum(cnt.values())}; DIFF counted: {sum(dif.values())}")
+print(f"total panel area {total_panel_area:.2f}; sum exact areas {sum(area2.values()):.2f}; sum v1 areas {sum(area1.values()):.2f}")
 
-# caps (exact rectangles, pairwise cancelling)
 def cap_vol(chain, s, sign):
     return sign*(1/3.0)*s*A_CROSS
 def cap_mom(chain, s, sign):
@@ -162,18 +178,23 @@ for cname in CHAINS:
 
 V = {b: vol[b] for b in bodies}
 CoB = {b: tuple(mom[b][k]/V[b] for k in range(3)) for b in bodies}
-print("\nbody | panels | DIFF | area m2 | volume m3 | CoB")
+print("\nbody | area v1 | area v2 exact | d% | volume | CoB")
 for b in bodies:
-    print(f"{b:8s} {cnt[b]:5d} {dif[b]:5d} {area[b]:9.1f} {V[b]:10.2f}  ({CoB[b][0]:8.3f},{CoB[b][1]:8.3f},{CoB[b][2]:8.3f})")
+    d = (area2[b]-area1[b])/area1[b]*100
+    print(f"{b:8s} {area1[b]:9.1f} {area2[b]:9.1f} {d:+6.2f}  {V[b]:10.2f}  ({CoB[b][0]:8.3f},{CoB[b][1]:8.3f},{CoB[b][2]:8.3f})")
 Vt = sum(V.values())
 tc = tuple(sum(V[b]*CoB[b][k] for b in bodies)/Vt for k in range(3))
-print(f"TOTAL V = {Vt:.2f} (panel total 20157.84, LIS 20157.8); total CoB = ({tc[0]:.4f},{tc[1]:.4f},{tc[2]:.4f}) (LIS 0,0,-13.6393)")
+print(f"TOTAL V = {Vt:.2f}; total CoB = ({tc[0]:.4f},{tc[1]:.4f},{tc[2]:.4f})")
 
 out = {'source': 'futi_lowfreq.dat only (Deck 01/02) + NREL Table 2 for W2',
+       'revision': 'v2: area_m2 and area_centroid are exact-clip values; v1 centroid-rule areas kept as area_m2_v1_centroid_rule',
        'diff_total': int(sum(dif.values())), 'volume_total': Vt, 'total_cob': list(tc),
-       'parts': {b: {'panels': int(cnt[b]), 'diff': int(dif[b]), 'area_m2': area[b],
-                     'area_centroid': [area_c[b][k]/area[b] for k in range(3)],
+       'area_total': sum(area2.values()),
+       'parts': {b: {'panels': int(cnt[b]), 'diff': int(dif[b]),
+                     'area_m2': area2[b],
+                     'area_centroid': [area2_c[b][k]/area2[b] for k in range(3)],
+                     'area_m2_v1_centroid_rule': area1[b],
                      'volume_m3': V[b], 'cob': list(CoB[b])} for b in bodies}}
-with open('/home/hatch/workspace/graduation-design/stage3-correction-16body/design_16body_from_singlebody_geometry.json', 'w') as f:
+with open('/home/hatch/workspace/graduation-design/stage3-correction-16body/design_16body_from_singlebody_geometry_v2.json', 'w') as f:
     json.dump(out, f, indent=1, ensure_ascii=False)
-print("saved geometry json")
+print("saved geometry v2 json")
