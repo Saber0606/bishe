@@ -1,6 +1,6 @@
 # 参考文献阅读清单（按阅读顺序编排）
 
-> 课题：《基于阻抗控制的风浪融合机组互馈增益研究》。本清单共 18 篇，2026-11-16 编制。
+> 课题：《基于阻抗控制的风浪融合机组互馈增益研究》。本清单共 21 篇，2026-11-16 编制，同日按 Saber 要求补充 2020 年以来前沿文献 3 篇（[17][18][20]）。
 > 每条的出版信息（作者、题名、刊名/出版者、年份、卷期页码）均经公开检索逐条核对；DOI 只标注已核实者，未标注不等于不存在（专著与早期文献本无 DOI 或未逐字核到）。条目格式按 GB/T 7714 风格书写，可直接改编进论文参考文献表。
 
 ## 编排原则（为什么是这个顺序）
@@ -14,9 +14,9 @@
 5. 再落到本课题的两份基准定义（2020）；
 6. 最后是与本课题几乎同题的最新工作（同平台、同方法、同"发电+减载互馈"命题），读它们是为了对照与找差异，不是为了模仿。
 
-换序即乱的检验：把 [18] 提到最前面，读者没有阻抗最优的概念，无法判断其 PTO 设置的依据；把 [7] 放在 [3] 之前，最优吸收的效率上限从哪来就没有出处。按本顺序读，每一篇用到的概念都在前一篇里出现过。
+换序即乱的检验：把 [21] 提到最前面，读者没有阻抗最优的概念，无法判断其 PTO 设置的依据；把 [7] 放在 [3] 之前，最优吸收的效率上限从哪来就没有出处。按本顺序读，每一篇用到的概念都在前一篇里出现过。
 
-时间分布（避免扎堆）：1950s 1 篇、1970s 3 篇、1980s 1 篇、1990s 1 篇、2000s 3 篇、2010s 4 篇、2020s 5 篇。其中 2020s 的 5 篇里 2 篇是本课题的基准定义（不可替换）、3 篇是前沿对照，是内容需要而非凑数。
+时间分布：1950s 1 篇、1970s 3 篇、1980s 1 篇、1990s 1 篇、2000s 3 篇、2010s 4 篇、2020s 8 篇。前 13 篇（1950–2015）是经典与方法论骨架，分布均匀；2020s 的 8 篇里 2 篇是本课题基准定义（不可替换）、6 篇是前沿对照——这一段偏密是领域事实：半潜平台风浪混合的一体化研究本身主要出现在 2020 年以后，骨架段不受影响。
 
 ---
 
@@ -80,10 +80,19 @@
 **[16]** SIRIGU M, FARAGGIANA E, GHIGO A, et al. Development of MOST, a fast simulation model for optimisation of floating offshore wind turbines in Simscape Multibody[J]. Journal of Physics: Conference Series, 2022, 2257(1): 012003. DOI: 10.1088/1742-6596/2257/1/012003
 > 定位：与本课题工具链同源的集成仿真工作：MOST 在 Simscape Multibody 里建 15 MW + VolturnUS 平台模型并与 FAST 对标。它是路线 V2.5 里"MOST/BEMIO 边界"纠偏的直接对象，也是 WEC-Sim 应用生态里与本课题平台完全相同的一例。
 
-**[17]** CHEN Z, SUN J, YANG J, et al. Experimental and numerical analysis of power take-off control effects on the dynamic performance of a floating wind-wave combined system[J]. Renewable Energy, 2024, 226: 120353. DOI: 10.1016/j.renene.2024.120353
+**[17]** PETRACCA E, FARAGGIANA E, GHIGO A, et al. Design and techno-economic analysis of a novel hybrid offshore wind and wave energy system[J]. Energies, 2022, 15(8): 2739. DOI: 10.3390/en15082739
+> 定位：[16] 同一团队（都灵理工大学）的应用层工作：用 MOST+WEC-Sim 工具链做风浪混合系统的设计与技术经济分析。读它是为了看集成仿真工具链在"设计一台混合装置"时实际怎么用，与本课题阶段 5 的建模组织方式可直接对照。
+
+**[18]** ZHOU B, HU J, JIN P, et al. Power performance and motion response of a floating wind platform and multiple heaving wave energy converters hybrid system[J]. Energy, 2023, 265: 126314. DOI: 10.1016/j.energy.2022.126314
+> 定位：方法与本课题最同构的一篇：半潜平台+多个垂荡点吸收 WEC，用高阶边界元+多体约束动力学求解（与 AQWA→WEC-Sim 约束装配是同一建模思想）；发现平台与 WEC 的"同步模式"下单 WEC 功率可提高 41.4%、总功率提高 26.7%——这是文献中对"互馈增益"最直接的量化先例之一，阶段 5 讨论增益机理时引它。
+
+**[19]** CHEN Z, SUN J, YANG J, et al. Experimental and numerical analysis of power take-off control effects on the dynamic performance of a floating wind-wave combined system[J]. Renewable Energy, 2024, 226: 120353. DOI: 10.1016/j.renene.2024.120353
 > 定位：与本课题核心命题最接近的实证工作：半潜浮式风机集成 3 个垂荡 WEC，系统研究 PTO 控制参数对动力性能的影响，结论是恰当控制下发电增益、运动抑制与塔基载荷降低可以同时取得——正是本课题"互馈增益"要量化论证的三维指标。阶段 5 的对照与差异讨论以它为第一参照。
 
-**[18]** GU X, LIN F, JIANG W, et al. Power performance and dynamic characteristics of a 15 MW floating wind turbine with wave energy converter combined concept[J]. Sustainable Horizons, 2025, 13: 100125. DOI: 10.1016/j.horiz.2024.100125
+**[20]** XU S, JI B, XU F, et al. Dynamic response and power performance of a combined semi-submersible floating wind turbine and point absorber wave energy converter array[J]. Renewable Energy, 2024, 237: 121903. DOI: 10.1016/j.renene.2024.121903
+> 定位：半潜平台+6 个环式点吸收 WEC 阵列，三维势流计算，系统考察 PTO 阻尼、WEC 浮子形状与季节变化（总功率较原系统高 2.5%–6.5%，PTO 阻尼主要影响垂荡与平均功率峰位）。与 [19] 互补：[19] 偏控制参数的影响，本篇偏阵列构型与阻尼的参数规律；本课题外柱多 WEC 布置与阻尼扫描可参照其参数组织。
+
+**[21]** GU X, LIN F, JIANG W, et al. Power performance and dynamic characteristics of a 15 MW floating wind turbine with wave energy converter combined concept[J]. Sustainable Horizons, 2025, 13: 100125. DOI: 10.1016/j.horiz.2024.100125
 > 定位：最新且平台完全相同的工作：UMaine VolturnUS-S + IEA 15 MW 平台立柱集成 4 个环式垂荡 WEC，全耦合时域分析（额定工况纵摇幅值降低 31.5%、波浪能约占年发电量 11.4%）。作为全表收尾：读完它，本课题与当前前沿的差距与差异点（本课题走 AQWA 多体截面力+阻抗控制路线、且关注横撑截面载荷）应当能自己说清。
 
 ---

@@ -88,6 +88,7 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 
 - 新建 `bibliography/` 文件夹，存 `bibliography/reading-list.md`：为本课题精选 18 篇参考文献，编排原则为年份严格由老到新（1950–2025）且内容由广入深——波浪力/波浪能起源（Morison 1950、Budal & Falnes 1975、Evans 1976、Newman 1977）→ 多体相互作用与工程载荷（Kagemoto & Yue 1986、Faltinsen 1990）→ 阻抗与最优控制理论系统化（Falnes 2002 专著、Falnes 2007 综述）→ 参考机型方法论、混合概念与工具链（Jonkman 2009、Muliawan 2013、Yu et al. 2014 WEC-Sim、Ringwood 2014、Pérez-Collazo 2015）→ 本课题基准（Gaertner 2020、Allen 2020，即 `references/` 两份 NREL 原件）→ 同平台集成仿真与互馈前沿（Sirigu 2022 MOST、Chen et al. 2024、Gu et al. 2025）；每篇附定位说明，出版信息逐条检索核对
 - 本项为资料建设，不改变阶段状态；阶段 3 仍仅剩 W7 未启动
+- 同日补充：按 Saber 要求增补 2020 年以来前沿 3 篇，清单 18 → 21 篇——[17] Petracca et al. 2022（Energies，MOST/WEC-Sim 工具链的混合系统设计与技术经济分析）、[18] Zhou et al. 2023（Energy 265: 126314，半潜+多垂荡 WEC、多体约束动力学、同步模式下单 WEC 功率 +41.4%）、[20] Xu et al. 2024（Renewable Energy 237: 121903，半潜+6 环式点吸收阵列、PTO 阻尼规律）；插入后全表编号顺延、年份仍严格递增，第六阶段为 [16]–[21]（2022–2025）
 
 ## 后续待办（非失败项）
 
