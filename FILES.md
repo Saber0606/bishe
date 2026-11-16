@@ -96,6 +96,7 @@
 | `bibliography/reading-list.md` | 参考文献阅读清单（2026-11-16 编制，同日补充后共 21 篇）：按"年份由老到新（1950–2025）+ 内容由广入深"的单一阅读顺序编排，分六个阅读阶段，每篇附定位说明与对应课题环节；出版信息逐条经公开检索核对，DOI 仅标注已核实者。其中 [14] Gaertner et al. 2020（NREL/TP-5000-75698）与 [15] Allen et al. 2020（NREL/TP-5000-76773）原件已在 `references/`，本目录只存清单、不重复存原件 |
 | `bibliography/09-jonkman-2009-5mw-reference-turbine.pdf` | 清单 [9] 原文（852,209 B，75 页）：NREL/TP-500-38060 公开报告，经 NREL 官方 FAST 仓库镜像取得，2026-11-16 网页上传入仓（提交 949c32c） |
 | `bibliography/11-yu-2014-wec-sim-tool.pdf` | 清单 [11] 原文（903,883 B，8 页）：WEC-Sim METS 2014 论文，OSTI 公开件 SAND2014-3013C，同上入仓 |
+| `bibliography/13-perez-collazo-2015-combined-wave-wind-review.pdf` | 清单 [13] 原文（1,807,816 B，39 页含仓储封面）：风浪联合开发综述，普利茅斯大学 PEARL 仓储作者接受稿，2026-11-16 经浏览器通道下载、网页上传补入（提交 003af7a） |
 | `bibliography/16-sirigu-2022-most.pdf` | 清单 [16] 原文（1,171,765 B，10 页）：MOST，IOP 开放获取，同上入仓 |
 | `bibliography/17-petracca-2022-hybrid-wind-wave-design.pdf` | 清单 [17] 原文（4,219,855 B，28 页）：混合风浪系统设计与技术经济分析，MDPI 开放获取，同上入仓 |
 | `bibliography/21-gu-2025-15mw-fowt-wec-combined.pdf` | 清单 [21] 原文（6,843,520 B，15 页）：15 MW 浮式风机+WEC 组合概念，CC 许可开放获取（Tethys 托管出版社版），同上入仓 |
