@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 43 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 50 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -44,6 +44,12 @@
 | `03-multibody-19body/plan-22body-superseded/segmentation-plan-v1.2.md` | 《阶段3_22体分段与多体链路计划书》V1.2（2026-11-11）：W1–W7 工作包与 GATE-A/B/C 验收门。**口径已确认（2026-11-13，Saber）**：计划原为 22 体（3 浮筒 × 6 段 + 中心柱 + 3 外柱、21 截面），实际改为 **19 体**执行（每筒 5 段 + 外柱）；Saber 所述理由是 AQWA 多体数量上限约 20 个结构、22 体超限（此上限数值尚未独立核实）。计划书文件头已加变更说明，按历史计划存档；执行口径以 19 体为准，其 W1–W7 / GATE-A·B·C 框架沿用 |
 | `03-multibody-19body/design-basis-w1-w2/w1-segmentation-scheme-19body.md` | W1 分段方案（复原版，2026-11-13）：W1 原件遗失后据实跑 AH1/LIS 复原——三浮筒各均分 5 段（段长 7.6014 m，段界径向 7.409–45.416 m）+ 四立柱各一体 = 19 体编号表、18 道界面清单（W7 约束对应表） |
 | `03-multibody-19body/design-basis-w1-w2/w2-mass-accounting-19body.md` | W2 质量分账（复原版，2026-11-13）：W2 原件遗失后复原——质量要求结合 NREL/TP-5000-76773 浮体参数（总 17,854 t = 钢 3,914 + 固定压载 2,540 三等分置外柱柱底 + 流体压载 11,300 灌浮筒 + 接口 100 t）与浮体验证报告；实跑分账取自 AH1 全精度（每体质量/重心/惯量），三笔账核对通过（总质量 +0.0003%、惯量 −0.35%/−1.42%） |
+| `03-multibody-19body/design-basis-w1-w2/19body-property-allocation.md` | 19 体各物理性质分配说明（2026-11-16，AQWA 复盘产出）：性质分三类——人工分配（质量/重心/惯量：论文表 2 总量 + 构件布置规则 → 逐体点质量，三笔账验证）、求解器按几何算出（静水刚度/附加质量/激励力，只做合成验证，含 corr+ 相位修正与 A∞ 对论文表 4 比对）、尚未分配（表 5 粘性阻尼，待 W7 拍板）；含计算过程与论文比对总表，配图 4 张在同目录 `figs/` |
+| `03-multibody-19body/design-basis-w1-w2/19body-property-allocation.docx` / `.pdf` | 上条说明文档的 Word / PDF 版（图片内嵌于文件本体，便于离线阅读与论文摘录；内容与 .md 版一致） |
+| `03-multibody-19body/design-basis-w1-w2/figs/fig1-layout.png` | 配图 1：19 体切分布局俯视图（编号与 W1 编号表一致） |
+| `03-multibody-19body/design-basis-w1-w2/figs/fig2-composition.png` | 配图 2：质量构成双图（按成分=论文表 2 / 按部位=19 体实跑汇总） |
+| `03-multibody-19body/design-basis-w1-w2/figs/fig3-mass-by-body.png` | 配图 3：逐体质量分布柱状图（总计 17,854.06 t） |
+| `03-multibody-19body/design-basis-w1-w2/figs/fig4-paper-deviation.png` | 配图 4：与论文数据比对偏差汇总图 |
 | `03-multibody-19body/gate-a-verification/19body-synthesis-verification.md` | 19 体合成验证记录（原文文件名为 `19BODY_合成验证记录.md`，2026-11-13 验证通过一级合成验收口径） |
 | `03-multibody-19body/gate-a-verification/sign-adjudication-record.md` | GATE-A 相位修正符号裁决记录（2026-11-13）：以整体单体 LIS 为外部基准全谱比对，裁定 corr+（计划书公式）正确、corr− 排除（中位复数误差 0.102% 对 96.6%）；`verify_19body.py` 的 corr− 抽查列作废；附低频（ω≤0.15）力矩残差带观察项（≤峰值约 5%，W6 同频段复查） |
 | `03-multibody-19body/gate-a-verification/adjudicate_sign.py` | 符号裁决脚本（解析 LIS 合并激励力表与 `.npz` 三变体全谱比对） |
