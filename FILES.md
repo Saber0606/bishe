@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 57 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 66 个文件，另有 2 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -75,6 +75,20 @@
 | `03-multibody-19body/w6-bemio/output/README.md` | W6 运行产出存放说明（2026-11-15 建）：登记各产出文件的存放位置与状态；大文件（.h5 / 完整 hydro.mat）以 ZIP 形式存于 Release（实际标签 `W6-output`），SHA-256 已登记在本文件末节；GATE-B 复核记录在 `../../gate-b-verification/` |
 | `03-multibody-19body/w7-wecsim-assembly/w7-damping-split-options-pending.md` | W7 前置决策备案（2026-11-15 入仓，**待 Saber 拍板、未定口径**）：表 5 二次粘性阻尼拆到 19 体的三选项——A 按迎流投影面积拆分（草稿推荐：平动对角逐体值已算清、全精度加总与表 5 精确一致，转动/交叉项由刚体输运产生）/ B 表 5 整体等效不拆（退路）/ C 逐体 Morison Cd 标定；含表 5 原值回源（NREL 76773 p. 12）、参考点在 SWL 塔轴与四工况出处的核实、GATE-C 验证集与入仓复核记录。源稿为 2026-11-13 本地决策草稿，入仓版已按 GATE-B 通过后的状态更新 |
 | `03-multibody-19body/w6-bemio/output/bemio_futi_19body_log.txt` | W6 BEMIO 运行日志（2026-11-15，Saber 网页上传，5,023 B）：含初版脚本失败运行（文件名断言）与 REV 1 成功运行两段记录；REV 1 段为运行证据——readAQWA 255.6 s、Nb = 19、DOF = 114、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s、产出 `futi_19body.h5` 155,612,740 B；含 Ainf 在 readAQWA 后与 radiationIRF 后的两组打印值（GATE-B 核查材料） |
+| `03-multibody-19body/gate-a-verification/lis-waveforce-sum-check.md` | GATE-A 补充核查记录（2026-11-16）：Saber 提问"19 体 LIS 逐体波浪力复数相加应等于整体同频率值"——解析 19 体 LIS 全部 475 个 FK+绕射合并力表块与整体单体 LIS 25 个块、两端都用印刷值独立复现：字面直接相加全谱复数误差中位 99.99%（不成立），补每体相位修正 exp(+ik·r) 与力矩平移到总重心后（corr+ 口径）中位 0.168%，印刷精度内成立；含术语指认（力表可叠加、运动 RAO 表不可逐体求和）与小量相消通道的判读说明；与符号裁决记录（AH1 口径 0.102%）互为交叉验证 |
+| `03-multibody-19body/gate-a-verification/check-lis-waveforce-sum.py` | 上条核查的解析脚本（解析两份 LIS 的合并力表、三种求和口径全谱比对；输入路径为执行时本机路径，对应关系见记录文件） |
+| `03-multibody-19body/gate-a-verification/check-lis-waveforce-sum-results.json` | 上条核查的结果数据（抽查点逐通道复数误差 + 全谱掩膜统计） |
+
+## 03-multibody-16body（阶段 3 更正：16 体多体链路，2026-11-16 新建）
+
+| 仓库路径 | 来源 / 说明 |
+|---|---|
+| `03-multibody-16body/design-basis-w1-w2/w1-segmentation-scheme-16body.md` | 更正 W1 分段方案（设计版，2026-11-16）：Saber 与导师商定浮筒由均分 5 段改均分 **4 段**——5 段时浮筒 1/2 处（径向 26.4125 m）落在段内、无界面不可验证；4 段段长 9.50175 m、中点恰为段界（已核精确相等）。16 体编号表（中央柱 1、每链 4 段 + 外柱）、15 道界面清单；含相互作用组上限 20 的出处核查（16 ≤ 20 满足、22 体方案排除成立，2022 R1 原文待版本对齐）。**推导依据（同日晚修订版）**：逐体几何量（面元/DIFF/表面积/排水体积/浮心）全部由整体单体 dat `futi_lowfreq.dat` 的网格独立实测——浮筒面元按切平面逐片精确裁切积分，12 段体积同为 831.40 m³（等截面自证），总量对该 dat 的 LIS 核对：排水体积 20,157.85 vs 20,157.8 m³、总浮心 z −13.6394 vs −13.6393 m；不参照 19 体实跑结果 |
+| `03-multibody-16body/design-basis-w1-w2/w2-mass-accounting-16body.md` | 更正 W2 质量分账（设计版，2026-11-16，同日晚修订）：总账锚点 = 整体单体 dat 的 Deck 03/04（17,854 t、重心 −14.940、惯量 1.251×10¹⁰ / 2.367×10¹⁰），构成 = NREL 表 2（钢 3,914 + 固定压载 2,540 + 流体压载 11,300 + 接口 100）；按构件放置规则（固定压载柱底成块、流体灌满浮筒 φ=1 余量入柱底、钢按表面积比例为基准）分配，再以三笔账（质量/重心 z/Izz）做最小修正闭合；独立核查 Ixx +0.68%、Iyy +0.72%（判据 <2%）。逐体：段 962.3 t、外柱 1,730.5 t、中央柱 1,115.3 t；明示设计值待实跑、钢份额闭合不唯一的边界。不参照 19 体实跑分账（同日早先的重叠重组版未入仓、已被本版取代，见 PROGRESS 留痕） |
+| `03-multibody-16body/design-basis-w1-w2/design-16body-from-singlebody-geometry.py` | W1 几何推导脚本：解析整体单体 dat 的 Deck 01/02，逐面元归属构件、浮筒面元按切平面精确裁切后散度积分（可重复运行；输入路径为执行时本地路径，仓库对应文件见 W1 §2） |
+| `03-multibody-16body/design-basis-w1-w2/design-16body-from-singlebody-geometry-results.json` | W1 几何推导结果（逐体面元/DIFF/面积/体积/浮心与总量核对） |
+| `03-multibody-16body/design-basis-w1-w2/design-16body-w2-allocation.py` | W2 分账脚本：构件放置规则 + 三笔账最小修正闭合求解、三笔账合成核对（输入为上条几何结果 JSON，可重复运行） |
+| `03-multibody-16body/design-basis-w1-w2/design-16body-w2-allocation-results.json` | W2 分账结果数据（逐体质量/重心/惯量、构件份额与合成总量） |
 
 ## references（参考文献与规范原件）
 
