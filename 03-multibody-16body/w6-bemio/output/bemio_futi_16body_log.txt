@@ -1,0 +1,46 @@
+=== W6 BEMIO: futi_16body.h5 — 16-body, GATE-B ===
+Run started: 2026-11-16 23:11:06
+MATLAB: 25.1.0.2973910 (R2025a) Update 1
+Inputs: futi_16body.AH1 / futi_16body.LIS
+Input files found. AH1 bytes: 15506571; LIS bytes: 70936631
+Reading AQWA output file...
+readAQWA done in 162.7 s.
+Nb = 16 (expected 16)
+Total DOF = 96 (expected 96 = 16 x 6)
+Frequency grid: 47 points, 0.02 to 2.1 rad/s (expected 47, 0.02–2.10)
+Headings: 25 (expected 25)
+Ainf present after readAQWA (size below; note its values for the GATE-B record; LHFR was OFF).
+size(hydro.Ainf) = [96 96]
+   1.0e+04 *
+
+    0.0764   -0.0000   -0.0001    0.0001   -0.6258   -0.0000
+   -0.0000    0.0764    0.0002    0.6275   -0.0005   -0.0000
+   -0.0001    0.0002    0.1436    0.0089   -0.0015    0.0003
+   -0.0001    0.6295    0.0091    7.9735   -0.0182    0.0002
+   -0.6277   -0.0007   -0.0015   -0.0212    7.9401    0.0002
+    0.0000   -0.0000    0.0001    0.0002   -0.0001    0.5992
+
+hydro.file (base name) = futi_16body -> output .h5 will be: futi_16body.h5
+Checkpoint saved: futi_16body_hydro_after_read.mat
+Calculating radiation IRFs...
+radiationIRF done in 66.9 s.
+Calculating excitation IRFs...
+excitationIRF done in 28.3 s.
+Ainf after radiationIRF (for the GATE-B record):
+size(hydro.Ainf) = [96 96]
+   1.0e+04 *
+
+    0.0968   -0.0000   -0.0001    0.0002   -0.6586   -0.0000
+   -0.0000    0.0968    0.0003    0.6606   -0.0005   -0.0000
+   -0.0001    0.0002    0.1443    0.0090   -0.0015    0.0003
+   -0.0001    0.6679    0.0092    8.0281   -0.0184    0.0001
+   -0.6659   -0.0007   -0.0015   -0.0215    7.9930    0.0002
+   -0.0000   -0.0000    0.0001    0.0002   -0.0001    0.5992
+
+Saved hydro struct to futi_16body_hydro.mat
+Writing .h5 to: futi_16body.h5
+Writing data in h5 format...
+writeBEMIOH5 done in 11.9 s.
+.h5 created: futi_16body.h5 (115902180 bytes)
+=== DONE. Return futi_16body.h5 + this log + futi_16body_hydro.mat for GATE-B review. ===
+GATE-B anchor: corr+ reference, excitation-full-spectrum-16body.csv/.npz (Fsyn_corr_plus); criteria amplitude <1%, phase <1%.

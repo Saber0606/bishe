@@ -123,6 +123,12 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 - **方法学更正一条（K44/K55）**：19 体沿用的 S·H·Sᵀ 同余输运在 16 体给出 −3.84%——AH1 的 HYD 绕各体自身重心，中央柱重心 z=−3.731 距总重心 11.21 m、其 HYD K44=−2.08×10⁸（自身浮力项主导），同余输运不适用于此布置（19 体中央柱重心贴近浮心、仅 −0.64%，其结论不回改）；改用直接水线面聚合得 K44/K55 −0.165%/−0.055%，纵摇固有频率据此为 0.46235 rad/s（−0.78%）、垂荡 0.31431（−0.22%）。论文引用合成刚度须注明口径、勿引同余输运值。
 - **GATE-A（16 体）关门**。下一步：W6 / GATE-B——BEMIO（Nb=16、DOF=96）生成 .h5，对照锚 = 本节 npz 的 `Fsyn_corr_plus`（`03-multibody-16body/gate-a-verification/excitation-full-spectrum-16body.npz`），判据沿 19 体（合成幅值 <1%、相位 <1°；A/B 对 AH1；Ainf 对 NREL 表 4；BEMIO 激励约定先逆变换），附低频带同频段复查。**W6 脚本已备妥**（`03-multibody-16body/w6-bemio/bemio_futi_16body.m`，由 19 体已实跑脚本适配），待 Saber 在本地 MATLAB 运行并回传 .h5 / hydro.mat / 日志。
 
+## 2026-11-16 深夜：16 体 W6 运行完成 / GATE-B 关门
+
+- **W6 运行完成**：Saber 于 2026-11-16 23:11 在本地 MATLAB R2025a 运行入仓脚本，readAQWA 162.7 s（Nb = 16、DOF = 96、47 频 × 25 浪向断言全过）、radiationIRF 66.9 s、excitationIRF 28.3 s、writeBEMIOH5 11.9 s，产出 `futi_16body.h5`（115,902,180 B）与 `futi_16body_hydro.mat`（98,007,095 B）；打包 `futi_16body.zip`（194,391,226 B）已由 Saber 上传 Release `16-output`，助理下载实测：zip SHA-256 与 GitHub 登记 digest 一致，解压两文件大小/哈希与日志及登记吻合（校验值见 FILES.md 末节）。
+- **GATE-B 通过（W6 关闭）**（记录 `03-multibody-16body/gate-b-verification/gate-b-verification-record-16body.md`，脚本与结果 JSON 同目录）：逐体激励逆 BEMIO 约定后对 AH1 FORCERAO 中位 2.0×10⁻¹⁶（印刷/存储精度内恒等）；合成对 GATE-A corr+ 锚 **幅值 max 0.386%、相位 max 0.187°**（判据 <1%/<1°；最不利点全在 Mz 相消通道，其余点 ≤0.0003%；19 体同项 0.357%/0.168°）；**低频带（ω ≤ 0.15）幅值 max 0.0018%——GATE-A 残差带在 .h5↔AH1 不复现，判读闭环**；A/B 对 AH1（A 2.4×10⁻²⁰、B 4.8×10⁻⁸）；Ainf：.h5 与 hydro.mat 逐元差 0、对称残差 1.00×10⁻³、刚体合成对 NREL 表 4 为 +1.30/−0.80/−0.99/−0.99/+2.24/+0.34%（±2.5% 内，与 19 体逐项几乎重合）；结构项：cg 逐位一致、DOF 96、ΣK33 与 GATE-A 合成值一致到印刷精度、Σ 排水 20,157.834 m³（+0.0002%）。
+- **16 体更正链进度**：W1–W6 全部完成，GATE-A、GATE-B 双关门。仅剩 W7 / GATE-C：前置 = 表 5 粘性阻尼拆分口径待 Saber 拍板（A/B/C 三选项沿 19 体备案，届时先按 16 体重算逐体投影面积份额再定）。
+
 ## 后续待办（非失败项）
 
 1. ~~BEMIO `.h5` 复核（W6 / GATE-B）~~ **已完成（2026-11-15）：GATE-B 通过**，见上节与 `03-multibody-19body/gate-b-verification/`
@@ -130,7 +136,7 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 3. 频段仍为 0.02–2.10 rad/s，网格可用上限约 2.158 rad/s；扩频前需细化网格
 4. ~~19 体 `.dat` 未提供、未做 Deck 级核查~~ **已完成（2026-11-16）**：dat 已补交入仓并通过 Deck 级核查（见上节），W3 关闭
 5. 表 5 粘性阻尼拆分口径拍板（Saber）后推进 W7 / GATE-C：WEC-Sim 刚接装配、约束反力时程产出；三选项已备案于 `03-multibody-19body/w7-wecsim-assembly/w7-damping-split-options-pending.md`（2026-11-15 入仓，Saber 暂缓拍板）。**注（2026-11-16 更正后）**：W7 改在 16 体链路上进行，备案中的逐体面积份额须按 16 体重算，拍板时点顺延至 16 体 GATE-B 通过后
-6. **16 体更正链（当前第一顺位）**：W3 已关闭（实跑定版 = Argon 修复版，入仓 `03-multibody-16body/w3-dat-assembly/output/futi_16body.dat`）、W4 已通过、**W5/GATE-A 已关门**（2026-11-16 晚，见上节与 `03-multibody-16body/gate-a-verification/`）→ **W6/GATE-B**（BEMIO 生成 .h5 + 复核，附低频残差带同频段复查）；另有 `.AH1` 网页上传与 `.LIS` Release 上传两项存放动作待执行（校验值已登记 FILES.md）
+6. **16 体更正链（当前第一顺位）**：W3 已关闭（实跑定版 = Argon 修复版）、W4 已通过、**W5/GATE-A 已关门、W6/GATE-B 已关门**（2026-11-16，见上两节与 `03-multibody-16body/gate-a-verification/`、`03-multibody-16body/gate-b-verification/`）→ **W7/GATE-C**（前置：表 5 阻尼拆分口径待 Saber 拍板）；另有 `.AH1` 与两个 `.npz`（GATE-A 合成阵、GATE-B 合成阵）网页上传、`.LIS` Release 上传三项存放动作待执行（校验值已登记 FILES.md）
 
 ## 易混口径备忘
 

@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 84 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 90 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -107,7 +107,13 @@
 | `03-multibody-16body/gate-a-verification/excitation-full-spectrum-16body.csv` | 同上数据的表格版（逐浪向/频点的 corr+/corr− 幅值相位与 naive 幅值） |
 | `03-multibody-16body/gate-a-verification/check-lis-waveforce-sum-16body.py` | LIS 印刷精度独立交叉核查脚本：16 体 LIS 逐结构 FK+绕射合并表（400 块）三法（plain/transfer/corr+）合成对整体单体 LIS（可重复运行） |
 | `03-multibody-16body/gate-a-verification/check-lis-waveforce-sum-16body-results.json` | LIS 交叉核查结果（corr+ 中位 0.172%、plain 99.99%、transfer 102.97%） |
-| `03-multibody-16body/w6-bemio/bemio_futi_16body.m` | 更正 W6 BEMIO 脚本（2026-11-16 备妥，**待 Saber 在本地 MATLAB 运行**）：由已实跑通过的 19 体 REV 1 脚本机械适配（Nb=16、DOF=96、256 耦合块；hydro.file 基名 / hydro.Nb / 读后检查点等 REV 1 经验全数沿袭）；输入 = 本地 `futi_16body.AH1` + `futi_16body.LIS`，输出 `futi_16body.h5` + hydro.mat + 日志，回传后做 GATE-B 复核 |
+| `03-multibody-16body/w6-bemio/bemio_futi_16body.m` | 更正 W6 BEMIO 脚本（2026-11-16 备妥，**已于同日 23:11 由 Saber 在本地 MATLAB 运行成功**）：由已实跑通过的 19 体 REV 1 脚本机械适配（Nb=16、DOF=96、256 耦合块；hydro.file 基名 / hydro.Nb / 读后检查点等 REV 1 经验全数沿袭）；输入 = 本地 `futi_16body.AH1` + `futi_16body.LIS`，输出 `futi_16body.h5` + hydro.mat + 日志（产出存放见同目录 `output/README.md`） |
+| `03-multibody-16body/w6-bemio/output/README.md` | 更正 W6 运行产出存放说明（2026-11-16 建）：登记各产出文件的存放位置与校验值；大文件（.h5 / hydro.mat）以 ZIP 形式存于 Release `16-output`，SHA-256 已登记在本文件末节；GATE-B 复核记录在 `../../gate-b-verification/` |
+| `03-multibody-16body/w6-bemio/output/bemio_futi_16body_log.txt` | 更正 W6 BEMIO 运行日志（2026-11-16 23:11，Saber 回传，2,043 B，MD5 `0442effbbd6f992a6b070febeef24928`）：readAQWA 162.7 s、Nb = 16、DOF = 96、radiationIRF 66.9 s、excitationIRF 28.3 s、writeBEMIOH5 11.9 s、产出 `futi_16body.h5` 115,902,180 B；含 Ainf 在 readAQWA 后与 radiationIRF 后的两组打印值（GATE-B 核查材料） |
+| `03-multibody-16body/gate-b-verification/gate-b-verification-record-16body.md` | 更正 W6 / **GATE-B 关门记录**（2026-11-16）：被验文件校验链（zip 与 GitHub digest 一致、解压实测）；BEMIO 激励约定在 16 体再证；逐体激励逆变换后对 AH1 中位 2.0×10⁻¹⁶；合成对 GATE-A corr+ 锚**幅值 max 0.386%、相位 max 0.187°**（最不利点全在 Mz 相消通道）；**低频带（ω ≤ 0.15）幅值 max 0.0018%——GATE-A 残差带不复现**；A/B 对 AH1（B 最差 4.8×10⁻⁸）；Ainf 对 NREL 表 4（+1.30/−0.80/−0.99/−0.99/+2.24/+0.34%）、对称残差 1.00×10⁻³；结构项（cg 逐位一致、ΣK33 与 GATE-A 一致到印刷精度、Σ 排水 +0.0002%） |
+| `03-multibody-16body/gate-b-verification/gate-b-check-16body.py` | GATE-B 复核脚本：结构项 + 逐体激励逆约定比对 + corr+ 合成对锚（全谱与低频带）+ A/B 对 AH1 + Ainf 三项（可重复运行；内部路径为执行时本地路径） |
+| `03-multibody-16body/gate-b-verification/gate-b-results-16body.json` | GATE-B 复核结果数据（结构项、逐体/合成激励统计、A/B 最差值、Ainf 对表 4 逐项偏差） |
+| `03-multibody-16body/gate-b-verification/gate-b-synthesis-16body.npz` | GATE-B 合成数据（h5 口径合成阵 Fsyn_h5 + 逆变换逐体阵 Frec，25 浪向 × 47 频 × 6 自由度）：二进制，**待网页上传入仓本目录** |
 
 ## references（参考文献与规范原件）
 
@@ -161,6 +167,9 @@
 | └ `futi_19body.h5` | 155,612,740 B | 上行 ZIP 内文件：BEMIO 生成的 19 体水动力数据库（WEC-Sim 输入）；SHA-256 `5d2cf6520e53f5af9db701a2bbe785987228d2914cc74db2df186d1077c7c612`（解压后核验，大小与运行日志记录一致）；GATE-B 复核已通过（见 `03-multibody-19body/gate-b-verification/`） |
 | └ `futi_19body_hydro.mat` | 131,962,908 B | 上行 ZIP 内文件：同一次运行的完整 MATLAB hydro 结构体；SHA-256 `39cedbfa87d1c0a0c998764e9609d60505a73b061e77c971e013ca24632280f1`（解压后核验） |
 | `futi_16body.LIS` | 70,936,631 B | 16 体更正链实跑 LIS（2026-11-16）：超过 25 MB 上限，存于 Release `stage3-16body-aqwa-output`（**待上传**，上传后补链接）；SHA-256 `2b78ec2555c9e45929d224dda822cc1fbf63ae55e77ac31de5ce8b373b47b9e0`、MD5 `fb9bdf57ec16846400f742eed7df9645`（本地原件，2026-11-16 核验）；按 Saber 指示统一命名（回传原名 `FUTI_16BODY.LIS`，zip 传输） |
+| `futi_16body.zip`（内含下两行文件） | 194,391,226 B | 更正 W6 BEMIO 产出的打包件（Saber 2026-11-16 上传），存于 Release `16-output` 的附件：https://github.com/Saber0606/bishe/releases/tag/16-output ；SHA-256 `6eeab5943af3822c7293e29d92d04ce064e1074ebfdfacf33a89c21d38b88497`，与 GitHub 记录的附件摘要一致（2026-11-16 助理下载实测核验）；该 Release 页面说明为空，校验依据以本节登记为准 |
+| └ `futi_16body.h5` | 115,902,180 B | 上行 ZIP 内文件：BEMIO 生成的 16 体水动力数据库（WEC-Sim 输入）；SHA-256 `ceb2231f98df83b1d5a72280f3b8eb09154189be04864036af436d27bc859b7c`（解压后核验，大小与运行日志记录一致）；GATE-B 复核已通过（见 `03-multibody-16body/gate-b-verification/`） |
+| └ `futi_16body_hydro.mat` | 98,007,095 B | 上行 ZIP 内文件：同一次运行的完整 MATLAB hydro 结构体；SHA-256 `fe2e7ecbbac7bed6694afe164fa57ad9b180bdbad124d96600afed08720c2ce4`（解压后核验） |
 
 ## 未单独入仓的副本
 
