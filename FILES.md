@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 90 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 101 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -114,6 +114,17 @@
 | `03-multibody-16body/gate-b-verification/gate-b-check-16body.py` | GATE-B 复核脚本：结构项 + 逐体激励逆约定比对 + corr+ 合成对锚（全谱与低频带）+ A/B 对 AH1 + Ainf 三项（可重复运行；内部路径为执行时本地路径） |
 | `03-multibody-16body/gate-b-verification/gate-b-results-16body.json` | GATE-B 复核结果数据（结构项、逐体/合成激励统计、A/B 最差值、Ainf 对表 4 逐项偏差） |
 | `03-multibody-16body/gate-b-verification/gate-b-synthesis-16body.npz` | GATE-B 合成数据（h5 口径合成阵 Fsyn_h5 + 逆变换逐体阵 Frec，25 浪向 × 47 频 × 6 自由度）：二进制，**待网页上传入仓本目录** |
+| `03-multibody-16body/w7-wecsim-assembly/w7-damping-decision-annex-16body.md` | W7 前置决策附件（16 体，2026-11-17，**待拍板、非已定口径**）：导师置零建议（选项 D，Saber 转述）与前提核查（分布不可核验成立 / 整体可核验不成立，附 GATE-A 与 GATE-C 证据）；共振量级实算（ζ_rad 垂荡 0.012% / 纵摇 0.087% vs 表 5 ζ_visc 2.16% / 1.02%，置零峰值高估约 ×186 / ×12.7）；选项 A 的 16 体投影面积份额与逐体 Bq（方法经 19 体备案复现验证）；四选项对照与待定事项 |
+| `03-multibody-16body/w7-wecsim-assembly/area-shares-16body.py` | 选项 A 的 16 体逐体投影面积份额计算脚本：与 19 体备案同一方法，先以 5 段几何复现备案全部公布值验证，再算 4 段 16 体（可重复运行） |
+| `03-multibody-16body/w7-wecsim-assembly/area-shares-16body.json` | 同上结果数据：三向总账（2,160.81 / 2,138.32 / 1,916.13 m²）、浮筒占比（53.72% / 53.23% / 74.38%）、16 体逐体 Bq（三向加总与表 5 精确一致） |
+| `03-multibody-16body/w7-wecsim-assembly/zeta-rad-visc-16body.py` | 共振阻尼比量级计算脚本：实跑 AH1 的 DAMPING/ADDEDMASS 全耦合块刚体合成至整体重心，在垂荡/纵摇固有频率处插值算 ζ_rad，并与表 5 等效线性 ζ_visc 对比（可重复运行；内部路径为执行时本地路径） |
+| `03-multibody-16body/w7-wecsim-assembly/zeta-rad-visc-16body.json` | 同上结果数据（ζ_rad、临界阻尼、逐幅值 ζ_visc 与置零峰值高估倍数） |
+| `03-multibody-16body/w7-wecsim-assembly/w7-damping-ab-test-note.md` | W7 决策支持 #2（2026-11-17，**非已定口径**）：粘性阻尼加/不加的整体刚体频域 A/B 对比——细化网格共振峰比 ×43（垂荡）/×36（纵摇）/×42（横摇）；JONSWAP（Hs=3）RMS 比：Tp ≤ 8 s 时 ≤×1.1、Tp ≥ 10 s 纵摇 ×4.5–7.0、Tp=20 s 垂荡 ×4.0；结论「置零影响不大」仅短周期海况成立；含粗网格分辨率伪影警告（粗网格峰值比 ×1.1–1.2 不得引用）与垂荡激励相消凹陷的单体 LIS 回查证据 |
+| `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab-refined.py` | A/B 对比细化网格脚本：A/B/F 样条插值至 Δω=0.0005 求峰、复合网格谱积分、等效线性化自洽迭代（可重复运行；内部路径为执行时本地路径） |
+| `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab-refined-results.json` | 同上结果数据（细化峰值与逐 Tp 的 RMS 对比） |
+| `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab-test.py` | A/B 对比粗网格版脚本（AQWA 原网格）：其峰值/RMS 因共振带宽不可分辨而系统性低估，**仅留存备查、数字不得引用**（见试验说明 §1/§5） |
+| `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab-results.json` | 粗网格版结果数据（留存备查，不得引用） |
+| `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab.csv` | 粗网格版 RAO 表（0°/90° 浪向，垂荡/纵摇/横摇，两工况；留存备查） |
 
 ## references（参考文献与规范原件）
 
