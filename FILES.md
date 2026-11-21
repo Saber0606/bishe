@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 101 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 105 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -114,7 +114,7 @@
 | `03-multibody-16body/gate-b-verification/gate-b-check-16body.py` | GATE-B 复核脚本：结构项 + 逐体激励逆约定比对 + corr+ 合成对锚（全谱与低频带）+ A/B 对 AH1 + Ainf 三项（可重复运行；内部路径为执行时本地路径） |
 | `03-multibody-16body/gate-b-verification/gate-b-results-16body.json` | GATE-B 复核结果数据（结构项、逐体/合成激励统计、A/B 最差值、Ainf 对表 4 逐项偏差） |
 | `03-multibody-16body/gate-b-verification/gate-b-synthesis-16body.npz` | GATE-B 合成数据（h5 口径合成阵 Fsyn_h5 + 逆变换逐体阵 Frec，25 浪向 × 47 频 × 6 自由度）：二进制，**待网页上传入仓本目录** |
-| `03-multibody-16body/w7-wecsim-assembly/w7-damping-decision-annex-16body.md` | W7 前置决策附件（16 体，2026-11-17，**待拍板、非已定口径**）：导师置零建议（选项 D，Saber 转述）与前提核查（分布不可核验成立 / 整体可核验不成立，附 GATE-A 与 GATE-C 证据）；共振量级实算（ζ_rad 垂荡 0.012% / 纵摇 0.087% vs 表 5 ζ_visc 2.16% / 1.02%，置零峰值高估约 ×186 / ×12.7）；选项 A 的 16 体投影面积份额与逐体 Bq（方法经 19 体备案复现验证）；四选项对照与待定事项 |
+| `03-multibody-16body/w7-wecsim-assembly/w7-damping-decision-annex-16body.md` | W7 前置决策附件（16 体，2026-11-17，决策过程记录；**口径已于 2026-11-21 定案**，见阻尼方案三行）：导师置零建议（选项 D，Saber 转述）与前提核查（分布不可核验成立 / 整体可核验不成立，附 GATE-A 与 GATE-C 证据）；共振量级实算（ζ_rad 垂荡 0.012% / 纵摇 0.087% vs 表 5 ζ_visc 2.16% / 1.02%，置零峰值高估约 ×186 / ×12.7）；选项 A 的 16 体投影面积份额与逐体 Bq（方法经 19 体备案复现验证）；四选项对照与待定事项 |
 | `03-multibody-16body/w7-wecsim-assembly/area-shares-16body.py` | 选项 A 的 16 体逐体投影面积份额计算脚本：与 19 体备案同一方法，先以 5 段几何复现备案全部公布值验证，再算 4 段 16 体（可重复运行） |
 | `03-multibody-16body/w7-wecsim-assembly/area-shares-16body.json` | 同上结果数据：三向总账（2,160.81 / 2,138.32 / 1,916.13 m²）、浮筒占比（53.72% / 53.23% / 74.38%）、16 体逐体 Bq（三向加总与表 5 精确一致） |
 | `03-multibody-16body/w7-wecsim-assembly/zeta-rad-visc-16body.py` | 共振阻尼比量级计算脚本：实跑 AH1 的 DAMPING/ADDEDMASS 全耦合块刚体合成至整体重心，在垂荡/纵摇固有频率处插值算 ζ_rad，并与表 5 等效线性 ζ_visc 对比（可重复运行；内部路径为执行时本地路径） |
@@ -125,6 +125,10 @@
 | `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab-test.py` | A/B 对比粗网格版脚本（AQWA 原网格）：其峰值/RMS 因共振带宽不可分辨而系统性低估，**仅留存备查、数字不得引用**（见试验说明 §1/§5） |
 | `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab-results.json` | 粗网格版结果数据（留存备查，不得引用） |
 | `03-multibody-16body/w7-wecsim-assembly/rao-damping-ab.csv` | 粗网格版 RAO 表（0°/90° 浪向，垂荡/纵摇/横摇，两工况；留存备查） |
+| `03-multibody-16body/w7-wecsim-assembly/w7-viscous-damping-brief-report.md` | 粘性阻尼简要报告（2026-11-18，按 Saber 要求汇编，简明排版）：粘性阻尼的重要性（表 5 出处与共振阻尼比量级）、加/不加粘性阻尼的初步验算对比（细化网格 A/B 试验：共振峰比值与逐 Tp 的 RMS 比值）、四种备选处理方式（置零/整体施加/投影面积拆分/Morison 标定）；数据均引自本节决策附件与 A/B 试验说明（阻尼口径已于 2026-11-21 定案，见阻尼方案） |
+| `03-multibody-16body/w7-wecsim-assembly/w7-damping-scheme-16body.md` | **W7 阻尼方案（16 体，2026-11-21 定案，W7 装配执行口径）**：主版 S1 = Cd 加权面积分配（水平 Cd 先验 DNV-RP-C205 立柱 1.2 / 浮筒段 2.0；垂向面积分配 × 径向标定权重，β*=16.77，使装配纵摇涌现二次阻尼对齐表 5——未标定时涌现为表 5 的 2.88 倍）+ 置零版 Z 作 GATE-C 对照（同装配并行衰减/RAO，预期被证伪留档）；装配对账预测（平动总量精确、横摇涌现 +3.1%、艏摇 −14.6%、交叉项 +48%～+53% 为模型形式局限并附下限论证）；敏感性版 S2/S3 与阶段 4 不确定性带安排；两版对比的步骤与基准（衰减对论文、RAO 对 AQWA、截面力只互比） |
+| `03-multibody-16body/w7-wecsim-assembly/cd-weighted-damping-16body.py` | 阻尼方案计算脚本：Cd 加权分配（含 S2/S3 变体）+ 装配涌现对账（转动/交叉项公式见脚本头注）+ β 二分求解；自检 = 比例 1、β=0 时复现 `area-shares-16body.json` 逐体值（最大相对偏差 5.5×10⁻¹⁶）（可重复运行） |
+| `03-multibody-16body/w7-wecsim-assembly/cd-weighted-damping-16body.json` | 同上结果数据：S1/S2/S3 三版逐体 Bq 全表、三向总量（与表 5 精确一致）与涌现对账值、β* |
 
 ## references（参考文献与规范原件）
 
@@ -143,7 +147,7 @@
 
 | 仓库路径 | 来源 / 说明 |
 |---|---|
-| `bibliography/reading-list.md` | 参考文献阅读清单（2026-11-16 编制，同日补充后共 21 篇）：按"年份由老到新（1950–2025）+ 内容由广入深"的单一阅读顺序编排，分六个阅读阶段，每篇附定位说明与对应课题环节；出版信息逐条经公开检索核对，DOI 仅标注已核实者。其中 [14] Gaertner et al. 2020（NREL/TP-5000-75698）与 [15] Allen et al. 2020（NREL/TP-5000-76773）原件已在 `references/`，本目录只存清单、不重复存原件 |
+| `bibliography/reading-list.md` | 参考文献阅读清单（2026-11-16 编制，同日补充后共 21 篇；2026-11-21 增补 Souza et al. 2024 为 [20] 后共 22 篇，原 [20] Xu、[21] Gu 顺延为 [21]、[22]，Gu 原文 PDF 文件名仍为 `21-` 前缀、待 Saber 确认后改名）：按"年份由老到新（1950–2025）+ 内容由广入深"的单一阅读顺序编排，分六个阅读阶段，每篇附定位说明与对应课题环节；出版信息逐条经公开检索核对，DOI 仅标注已核实者。其中 [14] Gaertner et al. 2020（NREL/TP-5000-75698）与 [15] Allen et al. 2020（NREL/TP-5000-76773）原件已在 `references/`，本目录只存清单、不重复存原件 |
 | `bibliography/09-jonkman-2009-5mw-reference-turbine.pdf` | 清单 [9] 原文（852,209 B，75 页）：NREL/TP-500-38060 公开报告，经 NREL 官方 FAST 仓库镜像取得，2026-11-16 网页上传入仓（提交 949c32c） |
 | `bibliography/11-yu-2014-wec-sim-tool.pdf` | 清单 [11] 原文（903,883 B，8 页）：WEC-Sim METS 2014 论文，OSTI 公开件 SAND2014-3013C，同上入仓 |
 | `bibliography/13-perez-collazo-2015-combined-wave-wind-review.pdf` | 清单 [13] 原文（1,807,816 B，39 页含仓储封面）：风浪联合开发综述，普利茅斯大学 PEARL 仓储作者接受稿，2026-11-16 经浏览器通道下载、网页上传补入（提交 003af7a） |

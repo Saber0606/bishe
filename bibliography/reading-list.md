@@ -1,6 +1,6 @@
 # 参考文献阅读清单（按阅读顺序编排）
 
-> 课题：《基于阻抗控制的风浪融合机组互馈增益研究》。本清单共 21 篇，2026-11-16 编制，同日按 Saber 要求补充 2020 年以来前沿文献 3 篇（[17][18][20]）。
+> 课题：《基于阻抗控制的风浪融合机组互馈增益研究》。本清单共 22 篇，2026-11-16 编制，同日按 Saber 要求补充 2020 年以来前沿文献 3 篇；2026-11-21 按 Saber 要求增补 [20] Souza 等 2024（分组给 Cd 做法的旁证，非 W7 方法依据——见 [20] 条定位），原 [20] Xu、[21] Gu 顺延为 [21]、[22]。
 > 每条的出版信息（作者、题名、刊名/出版者、年份、卷期页码）均经公开检索逐条核对；DOI 只标注已核实者，未标注不等于不存在（专著与早期文献本无 DOI 或未逐字核到）。条目格式按 GB/T 7714 风格书写，可直接改编进论文参考文献表。
 
 ## 编排原则（为什么是这个顺序）
@@ -14,9 +14,9 @@
 5. 再落到本课题的两份基准定义（2020）；
 6. 最后是与本课题几乎同题的最新工作（同平台、同方法、同"发电+减载互馈"命题），读它们是为了对照与找差异，不是为了模仿。
 
-换序即乱的检验：把 [21] 提到最前面，读者没有阻抗最优的概念，无法判断其 PTO 设置的依据；把 [7] 放在 [3] 之前，最优吸收的效率上限从哪来就没有出处。按本顺序读，每一篇用到的概念都在前一篇里出现过。
+换序即乱的检验：把 [22] 提到最前面，读者没有阻抗最优的概念，无法判断其 PTO 设置的依据；把 [7] 放在 [3] 之前，最优吸收的效率上限从哪来就没有出处。按本顺序读，每一篇用到的概念都在前一篇里出现过。
 
-时间分布：1950s 1 篇、1970s 3 篇、1980s 1 篇、1990s 1 篇、2000s 3 篇、2010s 4 篇、2020s 8 篇。前 13 篇（1950–2015）是经典与方法论骨架，分布均匀；2020s 的 8 篇里 2 篇是本课题基准定义（不可替换）、6 篇是前沿对照——这一段偏密是领域事实：半潜平台风浪混合的一体化研究本身主要出现在 2020 年以后，骨架段不受影响。
+时间分布：1950s 1 篇、1970s 3 篇、1980s 1 篇、1990s 1 篇、2000s 3 篇、2010s 4 篇、2020s 9 篇。前 13 篇（1950–2015）是经典与方法论骨架，分布均匀；2020s 的 9 篇里 2 篇是本课题基准定义（不可替换）、7 篇是前沿对照与方法依据——这一段偏密是领域事实：半潜平台风浪混合的一体化研究本身主要出现在 2020 年以后，骨架段不受影响。
 
 ---
 
@@ -89,10 +89,13 @@
 **[19]** CHEN Z, SUN J, YANG J, et al. Experimental and numerical analysis of power take-off control effects on the dynamic performance of a floating wind-wave combined system[J]. Renewable Energy, 2024, 226: 120353. DOI: 10.1016/j.renene.2024.120353
 > 定位：与本课题核心命题最接近的实证工作：半潜浮式风机集成 3 个垂荡 WEC，系统研究 PTO 控制参数对动力性能的影响，结论是恰当控制下发电增益、运动抑制与塔基载荷降低可以同时取得——正是本课题"互馈增益"要量化论证的三维指标。阶段 5 的对照与差异讨论以它为第一参照。
 
-**[20]** XU S, JI B, XU F, et al. Dynamic response and power performance of a combined semi-submersible floating wind turbine and point absorber wave energy converter array[J]. Renewable Energy, 2024, 237: 121903. DOI: 10.1016/j.renene.2024.121903
+**[20]** SOUZA C E, FONSECA N, BERTHELSEN P A. Combination of potential theory and Morison-like viscous drag terms in the hydrodynamic model of a 12 MW semi-submersible floating wind turbine[C]//Proceedings of the ASME 2024 43rd International Conference on Ocean, Offshore and Arctic Engineering (OMAE 2024): Volume 7: Ocean Renewable Energy. ASME, 2024: V007T09A030. DOI: 10.1115/OMAE2024-125799
+> 定位：分组给 Cd 做法的旁证，**不是**本课题 W7 粘性阻尼建模的方法依据（2026-11-21 按 Saber 要求增补，同日 Saber 裁定：该文与本课题方法完全不同，最多作"分组给 Cd 是常见做法"的旁证）：SINTEF Ocean 对 12 MW 半潜平台以势流 + Morison 型二次拖曳补粘性，拖曳系数按构件（立柱/浮筒）、按方向分组，立柱再按深度分段，并给出基于模型试验的序贯标定流程（先定浮筒系数←垂荡/纵摇运动，再调立柱上部←纵荡低频粘性激励，最后调立柱底部←阻尼水平）。与本课题拟用方法的差别：其拖曳用相对速度（含波浪质点速度，同一组系数兼管粘性激励与阻尼）、标定数据为模型试验；本课题锚定的是表 5 静水口径的纯阻尼总量（CFD 矩阵），且平台须切成 16 体刚接以提取截面反力，为其所无。原文为 ASME 会议论文（付费），未入仓。
+
+**[21]** XU S, JI B, XU F, et al. Dynamic response and power performance of a combined semi-submersible floating wind turbine and point absorber wave energy converter array[J]. Renewable Energy, 2024, 237: 121903. DOI: 10.1016/j.renene.2024.121903
 > 定位：半潜平台+6 个环式点吸收 WEC 阵列，三维势流计算，系统考察 PTO 阻尼、WEC 浮子形状与季节变化（总功率较原系统高 2.5%–6.5%，PTO 阻尼主要影响垂荡与平均功率峰位）。与 [19] 互补：[19] 偏控制参数的影响，本篇偏阵列构型与阻尼的参数规律；本课题外柱多 WEC 布置与阻尼扫描可参照其参数组织。
 
-**[21]** GU X, LIN F, JIANG W, et al. Power performance and dynamic characteristics of a 15 MW floating wind turbine with wave energy converter combined concept[J]. Sustainable Horizons, 2025, 13: 100125. DOI: 10.1016/j.horiz.2024.100125
+**[22]** GU X, LIN F, JIANG W, et al. Power performance and dynamic characteristics of a 15 MW floating wind turbine with wave energy converter combined concept[J]. Sustainable Horizons, 2025, 13: 100125. DOI: 10.1016/j.horiz.2024.100125
 > 定位：最新且平台完全相同的工作：UMaine VolturnUS-S + IEA 15 MW 平台立柱集成 4 个环式垂荡 WEC，全耦合时域分析（额定工况纵摇幅值降低 31.5%、波浪能约占年发电量 11.4%）。作为全表收尾：读完它，本课题与当前前沿的差距与差异点（本课题走 AQWA 多体截面力+阻抗控制路线、且关注横撑截面载荷）应当能自己说清。**原文 PDF 已入仓**：本目录 `21-gu-2025-15mw-fowt-wec-combined.pdf`（CC 许可开放获取）。
 
 ---
@@ -100,5 +103,5 @@
 ## 使用说明
 
 1. 论文参考文献表若采用顺序编码制，编号顺序应与正文首次引用顺序一致；本清单的顺序是**阅读顺序**，写正文时让引用大体沿此顺序首次出现，即可两用。
-2. [14][15] 原件已在仓库 `references/`；[9][11][13][16][17][21] 六篇的开放获取原文 PDF 已入仓本目录（文件名以条目编号为前缀，见各条标注，其中 [13] 为作者接受稿）；其余付费期刊文献按 DOI 或报告号经学校图书馆/数据库获取；[4][6][7] 为专著，走图书馆渠道。
+2. [14][15] 原件已在仓库 `references/`；[9][11][13][16][17][22] 六篇的开放获取原文 PDF 已入仓本目录（文件名以条目编号为前缀，见各条标注，其中 [13] 为作者接受稿）；其余付费期刊/会议文献（含 [20] Souza 2024）按 DOI 或报告号经学校图书馆/数据库获取；[4][6][7] 为专著，走图书馆渠道。
 3. 本清单是"应读且可引"的精选，不是穷举。后续阶段（尤其阶段 5 动笔前）如需补控制理论或截面结构校核方向的文献，另行增补并在本文件留痕，不改动现有编号顺序。
