@@ -1,6 +1,6 @@
 # 毕业设计：基于阻抗控制的风浪融合机组互馈增益研究
 
-> 私有仓库，仅用于毕业设计进度与成果的同步存档。
+> 公开仓库，用于毕业设计进度与成果的同步存档（2026-11-22 起由私有改为公开）。
 >
 > **接入本仓库的 AI / 协作者请先读 [`AGENTS.md`](AGENTS.md)**：项目说明、当前进度快照、文件分类说明、下一步工作与口径红线都在该文件里，读完再看其他文件。
 
@@ -76,7 +76,7 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 1. Allen et al., *Definition of the UMaine VolturnUS-S Reference Platform for IEA Wind 15-MW Offshore Reference Wind Turbine*, NREL/TP-5000-76773, July 2020.
 2. Gaertner et al., *Definition of the IEA Wind 15-MW Offshore Reference Wind Turbine*, NREL/TP-5000-75698, March 2020.
 
-注：以上为公开的 NREL 技术报告；其 PDF 原件已存入本仓库 `references/` 目录（私有仓内查阅用），《中国海洋大学本科毕业论文（设计）撰写规范》原件同在该目录。
+注：以上为公开的 NREL 技术报告；其 PDF 原件已存入本仓库 `references/` 目录（仓内查阅用），《中国海洋大学本科毕业论文（设计）撰写规范》原件同在该目录。
 
 ## 文件说明
 
