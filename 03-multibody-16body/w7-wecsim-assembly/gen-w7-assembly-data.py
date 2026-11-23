@@ -25,6 +25,13 @@ names = [b['name'] for b in pb]
 mass_t = [b['mass_ah1_t'] for b in pb]
 cg = [b['cog_ah1'] for b in pb]
 idiag = [b['Idiag_ah1'] for b in pb]
+# 惯量积: AH1 记录含 Ixy (60 度链段 +2.289e6, 300 度链段 -2.289e6, 其余 0);
+# Ixz/Iyz AH1 未列, 按各体关于过质心水平面的对称性为 0。
+ixy = [b['Ixy_ah1'] for b in pb]
+for i, v in enumerate(ixy, start=1):
+    expect = 2289000.0 if 7 <= i <= 10 else (-2289000.0 if 12 <= i <= 15 else 0.0)
+    assert v == expect, (i, v, expect)
+print('[check] Ixy pattern OK: bodies 7-10 +2.289e6, 12-15 -2.289e6, others 0')
 print(f'[check] total mass AH1 = {sum(mass_t):.2f} t (GATE-A synthesis 17854.16)')
 
 def bq_table(scheme_json, key=None):
@@ -71,8 +78,14 @@ L.append('%   质量/质心/惯量: GATE-A AH1 实跑三笔账 (ah1-three-accoun
 L.append('%   阻尼 S1/S2/S3: cd-weighted-damping-16body.json; S0: area-shares-16body.json')
 L.append('%   约束位置: W1 §3 段界半径 x 链方向, z=-16.5 (浮筒轴线高)')
 L.append('% 口径: 装配时质量特性以 .h5 内置为准, 用本表逐项核对; 不一致以 AH1 值为准排查。')
-L.append('% 阻尼挂法: body(i).quadDrag.drag = quadDragS1(i,:) (WEC-Sim 原生逐体二次拖曳,')
-L.append('%   按体自身速度计, 静水口径); Z 对照版同位置填 quadDragZ (全零)。')
+L.append('% 阻尼挂法: body(i).quadDrag.drag = diag(quadDragS1(i,:)) (WEC-Sim 原生逐体二次拖曳,')
+L.append('%   按体自身速度计, 静水口径); Z 对照版同位置填 diag(quadDragZ(i,:)) (全零)。')
+L.append('%   注: WEC-Sim v7.1.0 bodyClass.checkInputs 要求 quadDrag.drag 为 6x6 矩阵')
+L.append('%   (v7.1.0 bodyClass.m 第 173 行断言), 故用 diag() 由 1x6 对角系数展开;')
+L.append('%   2026-11-22 首版注释写的 1x6 直接赋值在该版本下会触发断言失败, 已更正。')
+L.append('% 惯量积更正 (2026-11-22): 首版漏记 Ixy — 60 度链段 +2.289e6, 300 度链段')
+L.append('%   -2.289e6 (AH1 实跑值), 其余体为 0; Ixz/Iyz 按对称性为 0。装配时以')
+L.append('%   body(i).inertiaProducts = bodyInertiaProducts(i,:) 赋值, 不得只赋对角。')
 L.append('')
 L.append('% ---- 体编号与名称 (顺序同 .h5 / AH1) ----')
 L.append('bodyName = {' + ', '.join(f"'{n}'" for n in names) + "};")
@@ -84,6 +97,10 @@ L.append(fmt_mat(cg, '{:.3f}'))
 L.append('];')
 L.append('bodyInertiaDiag = [')
 L.append(fmt_mat(idiag, '{:.4e}'))
+L.append('];')
+L.append('% ---- 惯量积 (kg*m^2, 绕各自质心, 全局系): 列 = [Ixy Ixz Iyz] ----')
+L.append('bodyInertiaProducts = [')
+L.append(fmt_mat([[v, 0.0, 0.0] for v in ixy], '{:.4e}'))
 L.append('];')
 L.append('')
 L.append('% ---- 逐体二次阻尼 (N*s^2/m^2): 列 = [surge sway heave roll pitch yaw], 转动列恒 0 (涌现) ----')
