@@ -13,7 +13,7 @@
 | 逐体质量/重心/惯量 | `gate-a-verification/ah1-three-accounts-results.json`（`per_body`，AH1 实跑值） | 见 §1 表；不得用 W2 设计值代替（设计值与实跑值在 GATE-A 三笔账内一致，但赋值以实跑值为准） |
 | 逐体阻尼 | `w7-wecsim-assembly/cd-weighted-damping-16body.json`（`schemes.S1_main` 全表） | 见 §3 表；S2/S3 见同一 JSON，S0 见 `area-shares-16body.json` |
 | 频段 | 0.02–2.10 rad/s，47 频点，25 浪向（BEMIO 运行口径） | 扩频到 3.00 前须先细化网格（路线备忘） |
-| MATLAB | R2025a Update 1（25.1.0.2973910，GATE-B 运行实测） | 许可证约 2026-11-30 到期（推算，未经 License Center 核对）；装配与 GATE-C 仿真排在到期前，或先确认续证 |
+| MATLAB | R2025a Update 1（25.1.0.2973910，GATE-B 运行实测） | 许可证问题已解决（2026-11-25 Saber 确认） |
 
 ## 1. 16 个体：编号、质量、重心、惯量（AH1 实跑值）
 
@@ -101,7 +101,9 @@ GATE-C 判据（路线 §五）：刚接多体模型 6-DOF 运动与单刚体模
 
 ## 7. 待办与提醒
 
+- [x] `wecSimInputFile_16body.m` 补齐 `Constraint16`（`Floating 6DOF`）与 15 界面局部 `orientation`，通过 `build_SModel_16body.m` 搭建 `SModel_16body.slx` 并跑通 `noWave` 10 s 首跑（2026-11-25）。
+- [ ] **拍板纯浮体静浮重差平衡方式（2026-11-25 首跑新增前置）**：`.h5` 排水质量 `20,661.78 t` vs 纯浮体 `17,854.16 t`（净向上 `+27.54 MN`，10 s 末上浮 `z = +5.6066 m`、平衡约 `+6.175 m`），进 GATE-C 前须在「**方案 1**：施加等效静态垂向平衡外力 `-27.54 MN`（零质量，稳在 `z = 0` 且保住 `0.3143/0.4624 rad/s` 频率）」与「**方案 2**：无外力以 `+6.175 m` 上浮平衡态为基准」中二选一（详见路线 V2.6 §5.3）。
 - [ ] 阻尼挂法确定后，补记到 `w7-damping-scheme-16body.md` §六，并用 §4 单位运动试验验证。
-- [ ] 报告图 13–16 的模型口径核对（§5 第 1 步前置）。
-- [ ] MATLAB 许可证约 2026-11-30 到期：先做 Help → Licensing → Update Current Licenses 并重启，看提示是否消失；若学校未续，W7 改在学院机房或导师组授权机器上跑（h5/mat 文件可移植，已生成文件不受过期影响）。
+- [ ] 报告图 13–16 的模型口径核对（§5 第 1 步前置：已核对为含系泊全系统口径，GATE-C 仅比对阻尼比量级）。
+- [x] MATLAB 许可证问题已解决（2026-11-25 Saber 确认，不再阻塞 W7）。
 - [ ] 本清单执行中发现的偏差，按仓库规则记入 PROGRESS.md；口径变更不改写历史证据文件正文，另起记录。

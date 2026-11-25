@@ -11,7 +11,7 @@
 
 AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横撑截面内力 → 外柱 WEC 阻抗控制与风浪互馈增益（阶段 5，核心章）
 
-详细执行路线见 [`00-route/technical-route-v2.5.md`](00-route/technical-route-v2.5.md)（技术路线 V2.5，2026-11-09）。
+详细执行路线见 [`00-route/technical-route-v2.5.md`](00-route/technical-route-v2.5.md)（现已升级为技术路线 V2.6，2026-11-25）。
 
 ## 仓库结构
 
@@ -67,7 +67,7 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
   - W1 分段方案与 W2 质量分账已复原入仓（`design-basis-w1-w2/`，原件遗失后据实跑数据复原）
   - W6 已完成（2026-11-15）：BEMIO 生成 `futi_19body.h5`（存于 Release `W6-output` 的 ZIP 内），**GATE-B 复核通过**——合成激励力对 corr+ 锚幅值最大偏差 0.357%、相位最大 0.168°（判据 <1% / <1°），Ainf 处理与 body 顺序确认，详见 `03-multibody-19body/gate-b-verification/gate-b-verification-record.md`
   - **16 体更正链已接棒为现行执行口径（2026-11-16）**：与导师商定每筒改 4 段（浮筒 1/2 截面落在界面上可验证）；W1/W2 以整体单体 dat 独立重做、W3 实跑定版（Argon 修复版）、W4 核查通过、**GATE-A 关门**（corr+ 全谱合成中位 0.104%）、**GATE-B 关门**（BEMIO 合成对锚幅值 max 0.386% / 相位 max 0.187°，低频残差带不复现），详见 `03-multibody-16body/gate-a-verification/` 与 `03-multibody-16body/gate-b-verification/`
-  - 下一步（W7）：表 5 粘性阻尼拆分口径由 Saber 拍板后，按 16 体做 WEC-Sim 刚接装配与 GATE-C
+  - 下一步（W7）：阻尼口径 S1/Z 已定案（2026-11-21）；2026-11-25 已补齐接地约束与局部坐标系、完成 `build_SModel_16body.m` 自动建模及 `noWave` 10 s 刚接首跑验证，待拍板纯浮体静浮重差平衡方案（方案 1 / 方案 2）后推进 GATE-C 与阶段 4/5
 
 全程进度与待办见 [`PROGRESS.md`](PROGRESS.md)。
 

@@ -1,5 +1,7 @@
 %% wecSimInputFile_16body.m
-% W7 16 体纯浮体 (状态 A) WEC-Sim 输入文件, 2026-11-22 初版。
+% W7 16 体纯浮体 (纯浮体状态 B) WEC-Sim 输入文件, 2026-11-22 初版;
+%   2026-11-25 修订 (按技术路线 V2.6 §5.2): 补齐根体 Floating (6DOF) 接地对象
+%   Constraint16 与 15 道界面局部坐标系 orientation (各链局部 x' 沿径向向外, z' 竖直向上)。
 % 模板来源: WEC-Sim_Applications / MOST 的 wecSimInputFile.m (commit d53d4d4),
 %   只沿用 simu / waves / body / constraint 四段的写法与参数名;
 %   wind / windTurbine / mooring 三段整段删除 — W7/GATE-C 口径为纯浮体
@@ -67,8 +69,21 @@ for i = 1:16
     % Z 对照版: 同一文件仅把上一行换成 diag(quadDragZ(i,:)), 其余全不动。
 end
 
-%% Constraint class (15 道体-体刚接, 体对与位置见 constraintPair)
+%% Constraint class
+% 1) Constraint1..15: 15 道体-体界面连接 (Simulink 刚接版用 Fixed, 柔性版用 Spherical PTO)
+%    局部系约定: x' 沿各自浮筒链径向向外, z'=[0 0 1] 竖直向上, y'=z' x x' (右手系);
+%    WEC-Sim 由 orientation.z 与 orientation.y 自动正交确定局部 x' 轴。
+chainAzimuthDeg = [repmat(180, 1, 5), repmat(60, 1, 5), repmat(300, 1, 5)];
 for i = 1:15
+    phi = chainAzimuthDeg(i);
     constraint(i) = constraintClass(['Constraint' num2str(i)]); %#ok<SAGROW> % Initialize constraintClass
-    constraint(i).location = constraintPair(i, 3:5); % Constraint Location [m] (全局系, 界面点)
+    constraint(i).location = constraintPair(i, 3:5);             % Constraint Location [m] (全局系, 界面点)
+    constraint(i).orientation.z = [0 0 1];                       % 局部 Z' 竖直向上
+    constraint(i).orientation.y = [-sind(phi) cosd(phi) 0];      % 局部 Y' (使 X'=Y'xZ' 沿链径向向外)
 end
+
+% 2) Constraint16: 根体接地 Floating (6DOF) (Global Reference Frame -> body(1) 中央柱 CEN)
+%    提供多体树世界坐标参考系且不限制任何自由度 (严禁误用 Fixed 或 Floating (3DOF));
+%    location 置于静水面塔轴原点 [0 0 0] (表 5/表 11 参考点; Simulink 块名须为 Constraint16)。
+constraint(16) = constraintClass('Constraint16');
+constraint(16).location = [0 0 0];
