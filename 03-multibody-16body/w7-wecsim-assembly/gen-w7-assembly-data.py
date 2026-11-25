@@ -18,6 +18,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ga = json.load(open(os.path.join(SYNC, 'gate-a-verification', 'ah1-three-accounts-results.json')))
 cd = json.load(open(os.path.join(SYNC, 'w7-wecsim-assembly', 'cd-weighted-damping-16body.json')))
 s0 = json.load(open(os.path.join(SYNC, 'w7-wecsim-assembly', 'area-shares-16body.json')))
+kk = json.load(open(os.path.join(SYNC, 'w7-wecsim-assembly', 'custom-coefficient-damping-16body.json')))
 
 pb = ga['per_body']
 assert len(pb) == 16
@@ -40,9 +41,10 @@ def bq_table(scheme_json, key=None):
     return [[r['Bq_surge'], r['Bq_sway'], r['Bq_heave']] for r in rows]
 
 qS1 = bq_table(cd, 'S1_main'); qS2 = bq_table(cd, 'S2_ratio2.5'); qS3 = bq_table(cd, 'S3_no_radial_cal')
+qK1 = bq_table(kk, 'K1_main')
 assert [r['body'].split()[0] for r in s0['bodies']] == [str(i) for i in range(1, 17)]
 qS0 = [[r['Bq_surge'], r['Bq_sway'], r['Bq_heave']] for r in s0['bodies']]
-for tag, q in (('S1', qS1), ('S2', qS2), ('S3', qS3), ('S0', qS0)):
+for tag, q in (('S1', qS1), ('S2', qS2), ('S3', qS3), ('S0', qS0), ('K1', qK1)):
     tot = [sum(r[d] for r in q) for d in range(3)]
     print(f'[check] {tag} totals = {tot[0]:.1f}/{tot[1]:.1f}/{tot[2]:.1f} (Table5 922500/922500/2296000)')
     assert all(abs(t - T) < 1.0 for t, T in zip(tot, (922500, 922500, 2296000)))
@@ -75,7 +77,10 @@ L.append('% w7-assembly-data-16body.m')
 L.append('% W7 WEC-Sim 装配数据 (16 体): 质量/质心/惯量 + 逐体二次阻尼 + 约束体对与位置')
 L.append('% 生成: 2026-11-22, 由 gen-w7-assembly-data.py 从下列已核记录自动生成, 勿手改数值')
 L.append('%   质量/质心/惯量: GATE-A AH1 实跑三笔账 (ah1-three-accounts-results.json)')
-L.append('%   阻尼 S1/S2/S3: cd-weighted-damping-16body.json; S0: area-shares-16body.json')
+L.append('%   阻尼 S1/S2/S3: cd-weighted-damping-16body.json; S0: area-shares-16body.json;')
+L.append('%   K1: custom-coefficient-damping-16body.json (自定义系数比 1.0 + 垂向径向标定 beta=15.9886)')
+L.append('% 运行版本 (2026-11-25 Saber 定, 三版并行对比): 5/3 版 = quadDragS1, 1.0 版 = quadDragK1,')
+L.append('%   置零版 = quadDragZ; GATE-C 同一装配三版各跑衰减/RAO 后定主版。S0/S2/S3 为敏感性存档。')
 L.append('%   约束位置: W1 §3 段界半径 x 链方向, z=-16.5 (浮筒轴线高)')
 L.append('% 口径: 装配时质量特性以 .h5 内置为准, 用本表逐项核对; 不一致以 AH1 值为准排查。')
 L.append('% 阻尼挂法: body(i).quadDrag.drag = diag(quadDragS1(i,:)) (WEC-Sim 原生逐体二次拖曳,')
@@ -104,7 +109,7 @@ L.append(fmt_mat([[v, 0.0, 0.0] for v in ixy], '{:.4e}'))
 L.append('];')
 L.append('')
 L.append('% ---- 逐体二次阻尼 (N*s^2/m^2): 列 = [surge sway heave roll pitch yaw], 转动列恒 0 (涌现) ----')
-for tag, q in (('S1', qS1), ('S2', qS2), ('S3', qS3), ('S0', qS0)):
+for tag, q in (('S1', qS1), ('K1', qK1), ('S2', qS2), ('S3', qS3), ('S0', qS0)):
     var = 'quadDrag' + tag
     L.append(f'{var} = [')
     L.append('\n'.join('    ' + ' '.join(f'{v:.1f}' for v in r) + ' 0 0 0;' for r in q))
@@ -122,6 +127,12 @@ L.append(f"% Bq55 pitch emergent = {em['Bq55']:.4e}  (Table5 1.676e10, 标定对
 L.append(f"% Bq44 roll  emergent = {em['Bq44']:.4e}  (Table5 1.676e10, +3.1%)")
 L.append(f"% Bq66 yaw   emergent = {em['Bq66']:.4e}  (Table5 4.798e10, -14.6%)")
 L.append(f"% cross surge-pitch    = {em['cross_cg']:.4e} (质心约定) / {em['cross_drag']:.4e} (形心约定), Table5 8.918e6")
+emk = kk['schemes']['K1_main']['emergent']
+L.append('% ---- GATE-C 单位运动试验涌现预测 (K1, 自定义系数比 1.0 + 垂向标定) ----')
+L.append(f"% Bq55 pitch emergent = {emk['Bq55']:.4e}  (Table5 1.676e10, 标定对齐)")
+L.append(f"% Bq44 roll  emergent = {emk['Bq44']:.4e}  (Table5 1.676e10, +3.1%)")
+L.append(f"% Bq66 yaw   emergent = {emk['Bq66']:.4e}  (Table5 4.798e10, +1.1%)")
+L.append(f"% cross surge-pitch    = {emk['cross_cg']:.4e} (质心约定) / {emk['cross_drag']:.4e} (形心约定), Table5 8.918e6")
 out = '\n'.join(L) + '\n'
 path = os.path.join(HERE, 'w7-assembly-data-16body.m')
 with open(path, 'w') as f:

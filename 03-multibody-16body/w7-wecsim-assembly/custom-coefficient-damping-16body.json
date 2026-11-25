@@ -1,0 +1,480 @@
+{
+ "meta": {
+  "date": "2026-11-22",
+  "status": "DRAFT - not yet in repo, pending Saber confirmation",
+  "method": "Custom-coefficient projected-area distribution of NREL Table 5 quadratic damping over 16 bodies (supervisor guidance 2026-11-22: Morison equation not applicable to this non-slender structure; allocation coefficient k is custom-defined, NOT a Morison drag coefficient Cd; no DNV-RP-C205 prior). Main K1: k ratio seg/col = 1.0 (pure area) horizontally; heave pure area x radial calibration weight, beta solved so assembled emergent pitch quadratic damping equals Table 5; rotational/cross emergent.",
+  "table5": {
+   "diag": {
+    "surge": 922500.0,
+    "sway": 922500.0,
+    "heave": 2296000.0
+   },
+   "roll_pitch": 16760000000.0,
+   "yaw": 47980000000.0,
+   "cross_abs": 8918000.0
+  },
+  "reference_point": "SWL tower-axis point (Table 5 reference)",
+  "check1_repro_oldS1_max_rel_dev": 1.3488852653306763e-06,
+  "check2_repro_oldS0_max_rel_dev": 5.453689678309357e-16,
+  "beta_K1": 15.988640169692147,
+  "beta_oldS1": 16.771662007409127
+ },
+ "schemes": {
+  "K1_main": {
+   "k_ratio_horizontal": 1.0,
+   "beta": 15.988640169692147,
+   "totals": {
+    "surge": 922500.0,
+    "sway": 922500.0,
+    "heave": 2296000.0
+   },
+   "emergent": {
+    "Bq44": 17284832102.35708,
+    "Bq55": 16760000000.000004,
+    "Bq66": 48519414412.18324,
+    "cross_cg": 13023342.836417818,
+    "cross_drag": 12446249.45354554
+   },
+   "per_body": [
+    {
+     "body": "1 CEN",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 389447.5
+    },
+    {
+     "body": "2 180 S1",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 312168.5
+    },
+    {
+     "body": "3 180 S2",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 173483.7
+    },
+    {
+     "body": "4 180 S3",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 83921.3
+    },
+    {
+     "body": "5 180 S4",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 43038.2
+    },
+    {
+     "body": "6 180 COL",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 22902.7
+    },
+    {
+     "body": "7 60 S1",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 312178.4
+    },
+    {
+     "body": "8 60 S2",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 173482.0
+    },
+    {
+     "body": "9 60 S3",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 83919.4
+    },
+    {
+     "body": "10 60 S4",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 43037.3
+    },
+    {
+     "body": "11 60 COL",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 22901.9
+    },
+    {
+     "body": "12 300 S1",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 312178.4
+    },
+    {
+     "body": "13 300 S2",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 173482.0
+    },
+    {
+     "body": "14 300 S3",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 83919.4
+    },
+    {
+     "body": "15 300 S4",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 43037.3
+    },
+    {
+     "body": "16 300 COL",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 22901.9
+    }
+   ]
+  },
+  "K_sens1667_oldS1": {
+   "k_ratio_horizontal": 1.6666666666666667,
+   "beta": 16.771662007409127,
+   "totals": {
+    "surge": 922500.0,
+    "sway": 922500.0,
+    "heave": 2295999.9999999995
+   },
+   "emergent": {
+    "Bq44": 17274978165.200054,
+    "Bq55": 16760000000.0,
+    "Bq66": 40965197645.11584,
+    "cross_cg": 13602929.027574664,
+    "cross_drag": 13178014.663572151
+   },
+   "per_body": [
+    {
+     "body": "1 CEN",
+     "Bq_surge": 78586.0,
+     "Bq_sway": 79602.9,
+     "Bq_heave": 396149.7
+    },
+    {
+     "body": "2 180 S1",
+     "Bq_surge": 45841.8,
+     "Bq_sway": 35297.1,
+     "Bq_heave": 314891.4
+    },
+    {
+     "body": "3 180 S2",
+     "Bq_surge": 45841.8,
+     "Bq_sway": 35297.1,
+     "Bq_heave": 171924.8
+    },
+    {
+     "body": "4 180 S3",
+     "Bq_surge": 45841.8,
+     "Bq_sway": 35297.1,
+     "Bq_heave": 82234.8
+    },
+    {
+     "body": "5 180 S4",
+     "Bq_surge": 45841.8,
+     "Bq_sway": 35297.1,
+     "Bq_heave": 41958.6
+    },
+    {
+     "body": "6 180 COL",
+     "Bq_surge": 78586.0,
+     "Bq_sway": 79602.9,
+     "Bq_heave": 22270.4
+    },
+    {
+     "body": "7 60 S1",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 314901.8
+    },
+    {
+     "body": "8 60 S2",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 171923.0
+    },
+    {
+     "body": "9 60 S3",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 82233.0
+    },
+    {
+     "body": "10 60 S4",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 41957.7
+    },
+    {
+     "body": "11 60 COL",
+     "Bq_surge": 78586.0,
+     "Bq_sway": 79602.9,
+     "Bq_heave": 22269.6
+    },
+    {
+     "body": "12 300 S1",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 314901.8
+    },
+    {
+     "body": "13 300 S2",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 171923.0
+    },
+    {
+     "body": "14 300 S3",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 82233.0
+    },
+    {
+     "body": "15 300 S4",
+     "Bq_surge": 53098.6,
+     "Bq_sway": 57862.5,
+     "Bq_heave": 41957.7
+    },
+    {
+     "body": "16 300 COL",
+     "Bq_surge": 78586.0,
+     "Bq_sway": 79602.9,
+     "Bq_heave": 22269.6
+    }
+   ]
+  },
+  "K_sens250_oldS2": {
+   "k_ratio_horizontal": 2.5,
+   "beta": 16.771662007409127,
+   "totals": {
+    "surge": 922500.0,
+    "sway": 922500.0,
+    "heave": 2295999.9999999995
+   },
+   "emergent": {
+    "Bq44": 17468843832.026535,
+    "Bq55": 16952358270.117085,
+    "Bq66": 35725204628.35111,
+    "cross_cg": 14004123.135719597,
+    "cross_drag": 13684548.282363402
+   },
+   "per_body": [
+    {
+     "body": "1 CEN",
+     "Bq_surge": 59103.9,
+     "Bq_sway": 59968.2,
+     "Bq_heave": 396149.7
+    },
+    {
+     "body": "2 180 S1",
+     "Bq_surge": 51715.9,
+     "Bq_sway": 39886.2,
+     "Bq_heave": 314891.4
+    },
+    {
+     "body": "3 180 S2",
+     "Bq_surge": 51715.9,
+     "Bq_sway": 39886.2,
+     "Bq_heave": 171924.8
+    },
+    {
+     "body": "4 180 S3",
+     "Bq_surge": 51715.9,
+     "Bq_sway": 39886.2,
+     "Bq_heave": 82234.8
+    },
+    {
+     "body": "5 180 S4",
+     "Bq_surge": 51715.9,
+     "Bq_sway": 39886.2,
+     "Bq_heave": 41958.6
+    },
+    {
+     "body": "6 180 COL",
+     "Bq_surge": 59103.9,
+     "Bq_sway": 59968.2,
+     "Bq_heave": 22270.4
+    },
+    {
+     "body": "7 60 S1",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 314901.8
+    },
+    {
+     "body": "8 60 S2",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 171923.0
+    },
+    {
+     "body": "9 60 S3",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 82233.0
+    },
+    {
+     "body": "10 60 S4",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 41957.7
+    },
+    {
+     "body": "11 60 COL",
+     "Bq_surge": 59103.9,
+     "Bq_sway": 59968.2,
+     "Bq_heave": 22269.6
+    },
+    {
+     "body": "12 300 S1",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 314901.8
+    },
+    {
+     "body": "13 300 S2",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 171923.0
+    },
+    {
+     "body": "14 300 S3",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 82233.0
+    },
+    {
+     "body": "15 300 S4",
+     "Bq_surge": 59902.6,
+     "Bq_sway": 65385.3,
+     "Bq_heave": 41957.7
+    },
+    {
+     "body": "16 300 COL",
+     "Bq_surge": 59103.9,
+     "Bq_sway": 59968.2,
+     "Bq_heave": 22269.6
+    }
+   ]
+  },
+  "K_nocal_oldS0": {
+   "k_ratio_horizontal": 1.0,
+   "beta": 0.0,
+   "totals": {
+    "surge": 922500.0,
+    "sway": 922500.0,
+    "heave": 2296000.0000000005
+   },
+   "emergent": {
+    "Bq44": 49818074032.71704,
+    "Bq55": 48064494789.699135,
+    "Bq66": 48519414412.18324,
+    "cross_cg": 13023342.836417818,
+    "cross_drag": 12446249.45354554
+   },
+   "per_body": [
+    {
+     "body": "1 CEN",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 147046.7
+    },
+    {
+     "body": "2 180 S1",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "3 180 S2",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "4 180 S3",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "5 180 S4",
+     "Bq_surge": 37355.8,
+     "Bq_sway": 28694.3,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "6 180 COL",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 147046.7
+    },
+    {
+     "body": "7 60 S1",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "8 60 S2",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "9 60 S3",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "10 60 S4",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "11 60 COL",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 147046.7
+    },
+    {
+     "body": "12 300 S1",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "13 300 S2",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "14 300 S3",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "15 300 S4",
+     "Bq_surge": 43269.2,
+     "Bq_sway": 47038.5,
+     "Bq_heave": 142317.8
+    },
+    {
+     "body": "16 300 COL",
+     "Bq_surge": 106730.8,
+     "Bq_sway": 107853.6,
+     "Bq_heave": 147046.7
+    }
+   ]
+  }
+ }
+}

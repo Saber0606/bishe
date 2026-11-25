@@ -8,7 +8,8 @@
 %   (无系泊、无风机), 基准 (衰减周期 0.316/0.474 rad/s、整体单体 AQWA RAO)
 %   同为纯浮体口径, 状态 A/B 不混用 (仓库 AGENTS.md 第 5 节红线 3)。
 % 数据来源: 同目录 w7-assembly-data-16body.m (质量/惯量/惯量积 = AH1 实跑值,
-%   阻尼 = S1 定案, 约束 = W1 段界), 运行前先由本文件自动载入。
+%   阻尼 = 三版并行 (见下方 body 段的版本切换注, 2026-11-25 Saber 定), 约束 = W1 段界),
+%   运行前先由本文件自动载入。
 % 与 MOST 模板的关键差异 (逐项有据, 不是笔误):
 %   1) simu.b2b = 1: 16 体在 AQWA 中同属一个相互作用组, .h5 的附加质量/
 %      辐射阻尼矩阵是 96x96 全耦合矩阵; b2b=0 时 WEC-Sim 只取每体自身
@@ -63,10 +64,14 @@ for i = 1:16
     body(i).mass = bodyMass(i);                     % User-defined mass [kg] (AH1 实跑值)
     body(i).inertia = bodyInertiaDiag(i,:);         % Moments of inertia, diagonal [kg-m2]
     body(i).inertiaProducts = bodyInertiaProducts(i,:); % [Ixy Ixz Iyz] [kg-m2], 见头部差异 5
-    body(i).quadDrag.drag = diag(quadDragS1(i,:));  % 主版 S1 逐体二次阻尼 [6x6 对角], 见头部差异 4
+    body(i).quadDrag.drag = diag(quadDragS1(i,:));  % 阻尼版本在此切换 [6x6 对角], 见头部差异 4
     % 注: 质心/浮心/排水量由 .h5 内置值给出 (hydro body 不在输入文件赋 CG);
     %     装配核对时以 bodyCG 表逐项对 .h5 内置值, 不一致以 AH1 值为准排查。
-    % Z 对照版: 同一文件仅把上一行换成 diag(quadDragZ(i,:)), 其余全不动。
+    % 阻尼三版 (2026-11-25 Saber 定, 同一装配并行对比, GATE-C 后定主版):
+    %   5/3 版: diag(quadDragS1(i,:)) — Cd 加权 (立柱 1.2 / 浮筒段 2.0) + 垂向径向标定 beta=16.77;
+    %   1.0 版: diag(quadDragK1(i,:)) — 自定义系数比 1.0 (纯面积份额) + 垂向径向标定 beta=15.9886;
+    %   置零版: diag(quadDragZ(i,:))  — 粘性阻尼全置零 (对照)。
+    %   切换只改本行指向的数组名, 其余全不动; 每版跑前在运行记录中注明版本。
 end
 
 %% Constraint class
