@@ -1,0 +1,163 @@
+WEC-Sim: An open-source code for simulating wave energy converters
+Version: 7.1.0
+
+Initializing the Simulation Class...
+	Case Dir: E:\S\科研\毕设\model\16\wecsim 
+
+WEC-Sim Pre-processing ...   
+历时 0.309476 秒。
+
+WEC-Sim Simulation Settings:
+	Start Time                     (sec) = 0
+	End Time                       (sec) = 30
+	Time Step Size                 (sec) = 0.01
+	Ramp Function Time             (sec) = 0
+	 Number of Time Steps     = 3000 
+
+Wave Environment: 
+	Wave Type                            = No Wave (Constant Hydrodynamic Coefficients)
+	Hydro Data Wave Period, period (sec)    	= 6.28319
+
+List of Body:
+ 
+Number of Hydro Bodies = 16 
+
+	***** Body Number 1, Name: body1 *****
+	Body CG                          (m) = [0,0,-3.731]
+	Body Mass                       (kg) = 1.1201E+06 
+	Body Moments of Inertia       (kgm2) = [1.554E+08,1.554E+08,2.55E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+	***** Body Number 2, Name: body2 *****
+	Body CG                          (m) = [-12.16,0,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.645E+07,1.116E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+	***** Body Number 3, Name: body3 *****
+	Body CG                          (m) = [-21.662,0,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.645E+07,1.116E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+	***** Body Number 4, Name: body4 *****
+	Body CG                          (m) = [-31.163,0,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.645E+07,1.116E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+	***** Body Number 5, Name: body5 *****
+	Body CG                          (m) = [-40.665,0,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.645E+07,1.116E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+	***** Body Number 6, Name: body6 *****
+	Body CG                          (m) = [-51.767,0,-13.892]
+	Body Mass                       (kg) = 1.7319E+06 
+	Body Moments of Inertia       (kgm2) = [1.547E+08,1.547E+08,4.413E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+	***** Body Number 7, Name: body7 *****
+	Body CG                          (m) = [6.08,10.53,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [2.289E+06,0,0]
+
+	***** Body Number 8, Name: body8 *****
+	Body CG                          (m) = [10.831,18.76,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [2.289E+06,0,0]
+
+	***** Body Number 9, Name: body9 *****
+	Body CG                          (m) = [15.582,26.988,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [2.289E+06,0,0]
+
+	***** Body Number 10, Name: body10 *****
+	Body CG                          (m) = [20.333,35.217,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [2.289E+06,0,0]
+
+	***** Body Number 11, Name: body11 *****
+	Body CG                          (m) = [25.884,44.832,-13.892]
+	Body Mass                       (kg) = 1.7319E+06 
+	Body Moments of Inertia       (kgm2) = [1.547E+08,1.547E+08,4.413E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+	***** Body Number 12, Name: body12 *****
+	Body CG                          (m) = [6.08,-10.53,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [-2.289E+06,0,0]
+
+	***** Body Number 13, Name: body13 *****
+	Body CG                          (m) = [10.831,-18.76,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [-2.289E+06,0,0]
+
+	***** Body Number 14, Name: body14 *****
+	Body CG                          (m) = [15.582,-26.988,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [-2.289E+06,0,0]
+
+	***** Body Number 15, Name: body15 *****
+	Body CG                          (m) = [20.333,-35.217,-16.5]
+	Body Mass                       (kg) = 961530 
+	Body Moments of Inertia       (kgm2) = [1.248E+07,1.512E+07,1.975E+07]
+	Body Products of Inertia      (kgm2) = [-2.289E+06,0,0]
+
+	***** Body Number 16, Name: body16 *****
+	Body CG                          (m) = [25.884,-44.832,-13.892]
+	Body Mass                       (kg) = 1.7319E+06 
+	Body Moments of Inertia       (kgm2) = [1.547E+08,1.547E+08,4.413E+07]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+List of PTO(s): No PTO in the system
+
+List of Constraint(s): Number of Constraints = 16 
+
+	***** Constraint Name: Constraint1 *****
+
+	***** Constraint Name: Constraint2 *****
+
+	***** Constraint Name: Constraint3 *****
+
+	***** Constraint Name: Constraint4 *****
+
+	***** Constraint Name: Constraint5 *****
+
+	***** Constraint Name: Constraint6 *****
+
+	***** Constraint Name: Constraint7 *****
+
+	***** Constraint Name: Constraint8 *****
+
+	***** Constraint Name: Constraint9 *****
+
+	***** Constraint Name: Constraint10 *****
+
+	***** Constraint Name: Constraint11 *****
+
+	***** Constraint Name: Constraint12 *****
+
+	***** Constraint Name: Constraint13 *****
+
+	***** Constraint Name: Constraint14 *****
+
+	***** Constraint Name: Constraint15 *****
+
+	***** Constraint Name: Constraint16 *****
+
+历时 0.115627 秒。
+
+Simulating the WEC device defined in the SimMechanics model E:\S\科研\毕设\model\16\wecsim\SModel_16body.slx...   
+历时 61.874325 秒。
+
+Post-processing and saving...   
+历时 0.304049 秒。

@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 112 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 115 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -18,7 +18,7 @@
 
 | 仓库路径 | 来源 / 说明 |
 |---|---|
-| `00-route/technical-route-v2.5.md` | 技术路线（现行版 **V2.6**，2026-11-25 覆盖更新：对齐 16 体主线、修复 W7 装配/阻尼/步长口径，补全阶段 4 应力校核与阶段 5 WEC 阻抗控制及互馈增益框架，含 §九柔性铰方案；沿用原路径防断链） |
+| `00-route/technical-route-v2.5.md` | 技术路线（现行版 **V2.7**，2026-11-25 覆盖更新：对齐 16 体主线、W7 直连 `MOST` 全系统合并 GATE 1B、阶段 4 并入 `Baseline 0`、阶段 5 定型为外柱干舱内置惯性式 WEC/馈能 TMD `nonHydro=1` 免重跑 AQWA；含 §九可选柔性铰；沿用原路径防断链） |
 
 ## 01-single-body-validation（阶段 1：整体纯浮体验证）
 
@@ -136,6 +136,9 @@
 | `03-multibody-16body/w7-wecsim-assembly/gen-w7-assembly-data.py` | 上一行的生成脚本：读 GATE-A 三笔账与 Cd 加权分配结果 JSON 生成 .m 数据文件，内嵌自检（总质量 17,854.16 t、四版阻尼三向总量与表 5 一致、段质心半径与 W1 段界中点吻合 <0.01 m）（可重复运行；2026-11-22 晚已按惯量积更正修订） |
 | `03-multibody-16body/w7-wecsim-assembly/wecSimInputFile_16body.m` | **16 体 WEC-Sim 输入文件（2026-11-22 初版；2026-11-25 修订）**：按 MOST 模板口径改写——删 wind/windTurbine/mooring 三段（纯浮体状态 B）；16 个 body 引 `futi_16body.h5` 与装配数据脚本；`simu.b2b=1`、gravity=9.81、rho=1025、`explorer='off'`、逐体二次阻尼 `diag(quadDragS1(i,:))`；**2026-11-25 补齐根体 `Floating (6DOF)` 接地对象 `Constraint16`（`location=[0 0 0]`）及 15 道界面局部 `orientation.z/y`**，同日 Saber 实机跑通输入变量核对 |
 | `03-multibody-16body/w7-wecsim-assembly/build_SModel_16body.m` | **16 体 Simulink 自动建模脚本（2026-11-25 新增）**：依据 Saber 上传的官方模板 `SModel_16body.slx` 解析出本机库路径与端口结构后编写；支持备份原模板并清空旧风机/系泊块（保留官方 Simscape Multibody 配置），一键自动生成 `Global Reference Frame` + `Constraint16`（`Floating 6DOF`）+ 16 个 `Rigid Body` + 15 个 `Fixed` 约束的完整无闭环树形拓扑 |
+| `03-multibody-16body/w7-wecsim-assembly/build_SModel_16body_full.m` | **16 体 + MOST 全系统自动建模脚本（2026-11-26 新增，V2.7 主线）**：在 `build_SModel_16body.m` 基础上保留纯浮体备份 `SModel_16body_pure_backup.slx`，自动接入 `MOST_Lib/Wind turbine`（`IEA15MW`）与 `WECSim_Lib_Moorings/MooringNLStatic` 并连线至 `Body1`（共 35 个模块） |
+| `03-multibody-16body/w7-wecsim-assembly/wecSimInputFile_16body_full.m` | **16 体 + MOST 全系统输入文件（2026-11-26 新增，V2.7 主线）**：16 体 `.h5` + `quadDragK1`（1.0 版）+ `MOST` `wind`/`windTurbine`（8 m/s `WIND_8mps.mat`）+ `MooringNLStatic`（3 根 850 m 悬链线）；保留 `b2b=1`、`gravity=9.81`、`rho=1025`、`inertiaProducts`；已在 R2025a/v7.1.0 跑通 30 s `noWave` 静水+风首跑（工作机运行时改名为 `wecSimInputFile.m`） |
+| `03-multibody-16body/w7-wecsim-assembly/output/simulation_16body_full_30s.log` | **全系统 30 s 首跑控制台日志（2026-11-26 归档，6,077 B）**：16 体质量/CG/惯量积 + 16 约束全数正确读入，`noWave` + `8 m/s` 风 61.87 s 零报错跑完；实测 `body(1)` CG 垂向坐标均值 `−4.1920 m`（相对初值 `−3.7310 m` 净下沉 `Δz = −0.4610 m`）、系泊垂向力 `−6.021 MN`、塔基垂向力 `−23.83 MN` |
 
 ## references（参考文献与规范原件）
 
