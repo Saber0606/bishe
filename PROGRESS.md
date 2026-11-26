@@ -258,3 +258,8 @@ V2.5 时点（2026-11-09）总体约 30%，当时处于阶段 3 入口。
 
 - **口径确认（Saber 定）**：① `Body1` 保持 `1,120.10 t`（总平台 `17,854.16 t`）不扣减 `100 t` 接口质量，以维持与 `futi_16body.h5` CG 及 W2/GATE-A/GATE-B 的严格一致；② 取消原 `5/3` 版（`quadDragS1`），W7 / GATE 1B 仅运行 **1.0 版（`quadDragK1`）与置零版（`quadDragZ`）**两版对比（4 自由度衰减 × 2 版 + 规则波 × 2 版 = 10 工况）。
 - **批处理脚本入仓**：新增 `wecSimInputFile_16body_case.m` 与 `run_w7_gate1b_suite.m`（`w7_damping_list = {'K1', 'Z'}`），同步更新路线 V2.7 §5.1/§5.3、阻尼方案 §八、`AGENTS.md`、`FILES.md` 与本文件；待工作机运行输出 `gate1b_verification_summary.txt` / `gate1b_summary.json` 后关门 W7 / GATE 1B。
+
+## 2026-11-27：入仓交互式技术路线进度看板与明确阶段 4 系泊分拆口径
+
+- **进度看板入仓**：按 Saber 指示制作并入仓交互式技术路线进度图 `thesis-roadmap.html`（浅色科研简约排版，对应 V2.7 + 仅跑 `K1` 阻尼口径，支持点击切换任务状态、浏览器 `localStorage` 自动保存与 JSON 导入导出）。
+- **阶段 4 系泊分拆确认**：W7 / GATE 1B 刚接整体验收期间保持 `MooringNLStatic` 挂接 `Body1` 不变；进入阶段 4 提取下浮筒 15 截面内力前，将 3 根悬链线拆分为 3 个单线模块精准挂回外柱 `Body 6/11/16`（`r = 58.0 m, z = -14.0 m`），以消除浮筒端部垂向剪力/弯矩及水平张力轴向传递的偏差。
