@@ -1,12 +1,12 @@
 %% run_w7_gate1b_suite.m
 % V2.7 W7 / GATE 1B 全系统总验收批处理脚本 (Windows MATLAB R2025a / WEC-Sim v7.1.0)
 %
-% 功能 (按 V2.7 §五 순서):
+% 功能 (按 V2.7 §五顺序):
 %   1) 单位运动 quadDrag 涌现代数自检 + 仿真力矢量 (forceMorisonAndViscous) 实测核对;
 %   2) 全系统自由衰减 (纵荡 / 垂荡 / 纵摇 / 艏摇, 关风/静风口径, noWaveCIC),
 %      对比 NREL/TP-5000-76773 表 11 固有频率 (0.007 / 0.049 / 0.036 / 0.011 Hz)
-%      与图 13-16 阻尼比随幅值变化趋势, 并行对比 quadDragK1 (1.0 版)、
-%      quadDragS1 (5/3 版) 与 quadDragZ (置零);
+%      与图 13-16 阻尼比随幅值变化趋势, 并行对比 quadDragK1 (1.0 版) 与 quadDragZ (置零);
+%      (2026-11-26 Saber 定: 取消原 5/3 版 quadDragS1, 仅跑 K1 与 Z 两版)
 %   3) 典型风浪规则波基准 (0° 定常额定风 10.59 m/s + 规则波 H=2 m, T=10 s),
 %      提取 6-DOF RAO、Constraint16 零反力、15 截面内力及 60°/300° 链对称性。
 %
@@ -24,7 +24,7 @@ w7_run_free_decay     = true;
 w7_run_reg_wave       = true;
 
 w7_deduct_100t  = false;                 % false = 17,854.16 t 原口径; true = 扣减 Body1 100 t 接口占位
-w7_damping_list = {'K1', 'S1', 'Z'};     % 并行对比三版: 1.0 版 K1 / 5/3 版 S1 / 置零 Z
+w7_damping_list = {'K1', 'Z'};           % 仅对比两版: 1.0 版 K1 / 置零 Z (已取消 5/3 版 S1)
 w7_decay_dofs   = {'heave', 'pitch', 'surge', 'yaw'};
 
 % 静水平衡预测吃水偏移 (m), 用于 surge/pitch/yaw 衰减预置平、抑制伴生垂荡瞬态
