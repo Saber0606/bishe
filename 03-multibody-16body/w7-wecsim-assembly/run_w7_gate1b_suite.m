@@ -96,6 +96,7 @@ if w7_run_unit_algebraic
             w7_ver, w7_em.sumSurge, w7_em.sumSway, w7_em.sumHeave, w7_em.Bq44, w7_em.Bq55, w7_em.Bq66, w7_em.crossCG);
     end
     w7_summary.unitAlgebraic = w7_unit_alg;
+    w7_flush_reports(w7_res_dir, w7_log_lines, w7_summary);
 end
 
 %% ==================== 3. Part B: 全系统自由衰减 (静风口径, noWaveCIC) ====================
@@ -182,15 +183,16 @@ if w7_run_free_decay
                 'metrics', w7_met, 'liveDrag', w7_live_err, 'cfg', cfg); %#ok<NASGU>
             save(w7_out_mat, '-struct', 'w7_save_case');
 
-            w7_line = sprintf('  %-6s %-4s | %8.4f %8.4f %+6.2f%% | %9.3f%% %10.4f | %10.2e | obs=%.2f %s (C16=%.1e)', ...
+            w7_line = sprintf('  %-6s %-4s | %8.4f %8.4f %+6.2f%% | %9.3f%% %10.4f | %10.2e | obs=%.2f %s (C16=%.1e) [%.1fs]', ...
                 w7_dof, w7_ver, w7_met.fnHz, w7_sp.refHz, w7_met.freqErrPct, ...
                 w7_met.zeta0Pct, w7_met.zetaSlopePerUnit, w7_live_err.maxRelErr, ...
-                w7_init_obs, w7_sp.unit, w7_met.constraint16Max);
+                w7_init_obs, w7_sp.unit, w7_met.constraint16Max, w7_elapsed);
             w7_log_lines{end+1} = w7_line;
-            fprintf('%s\n', w7_line);
+            fprintf('[%s] %s\n', datestr(now, 'HH:MM:SS'), w7_line);
+            w7_summary.freeDecay = w7_decay_results;
+            w7_flush_reports(w7_res_dir, w7_log_lines, w7_summary);
         end
     end
-    w7_summary.freeDecay = w7_decay_results;
 end
 
 %% ==================== 4. Part C: 典型风浪规则波基准 (0° 对称性 + 15 截面反力) ====================
@@ -245,32 +247,41 @@ if w7_run_reg_wave
             'metrics', w7_rm, 'cfg', cfg); %#ok<NASGU>
         save(w7_out_mat, '-struct', 'w7_save_reg');
 
-        w7_line = sprintf('  [%s] SurgeRAO=%.3f m/m | HeaveRAO=%.3f m/m | PitchRAO=%.3f deg/m | MeanHeave=%.4f m | C16max=%.1e | SymMaxRel=%.3f%%', ...
+        w7_line = sprintf('  [%s] SurgeRAO=%.3f m/m | HeaveRAO=%.3f m/m | PitchRAO=%.3f deg/m | MeanHeave=%.4f m | C16max=%.1e | SymMaxRel=%.3f%% [%.1fs]', ...
             w7_ver, w7_rm.surgeRAO, w7_rm.heaveRAO, w7_rm.pitchRAO_degPerM, ...
-            w7_rm.meanHeaveOffset, w7_rm.constraint16Max, w7_rm.sym60vs300MaxRelPct);
+            w7_rm.meanHeaveOffset, w7_rm.constraint16Max, w7_rm.sym60vs300MaxRelPct, w7_elapsed);
         w7_log_lines{end+1} = w7_line;
-        fprintf('%s\n', w7_line);
+        fprintf('[%s] %s\n', datestr(now, 'HH:MM:SS'), w7_line);
+        w7_summary.regularWave = w7_reg_results;
+        w7_flush_reports(w7_res_dir, w7_log_lines, w7_summary);
     end
-    w7_summary.regularWave = w7_reg_results;
 end
 
-%% ==================== 5. 写出汇总报告与 JSON ====================
-w7_txt_path  = fullfile(w7_res_dir, 'gate1b_verification_summary.txt');
-w7_json_path = fullfile(w7_res_dir, 'gate1b_summary.json');
-
-w7_fid = fopen(w7_txt_path, 'w');
-for w7_il = 1:numel(w7_log_lines)
-    fprintf(w7_fid, '%s\n', w7_log_lines{w7_il});
-end
-fclose(w7_fid);
-
-w7_fid_j = fopen(w7_json_path, 'w');
-fprintf(w7_fid_j, '%s\n', jsonencode(w7_summary, 'PrettyPrint', true));
-fclose(w7_fid_j);
+%% ==================== 5. 最终写出汇总报告与 JSON ====================
+[w7_txt_path, w7_json_path] = w7_flush_reports(w7_res_dir, w7_log_lines, w7_summary);
 
 fprintf('\n[DONE] GATE 1B 批处理完成! 汇总见:\n  %s\n  %s\n', w7_txt_path, w7_json_path);
 
 %% ==================== 本地辅助函数 ====================
+function [txtPath, jsonPath] = w7_flush_reports(resDir, logLines, summaryStruct)
+    txtPath  = fullfile(resDir, 'gate1b_verification_summary.txt');
+    jsonPath = fullfile(resDir, 'gate1b_summary.json');
+
+    fid = fopen(txtPath, 'w');
+    if fid ~= -1
+        for il = 1:numel(logLines)
+            fprintf(fid, '%s\n', logLines{il});
+        end
+        fclose(fid);
+    end
+
+    fidJ = fopen(jsonPath, 'w');
+    if fidJ ~= -1
+        fprintf(fidJ, '%s\n', jsonencode(summaryStruct, 'PrettyPrint', true));
+        fclose(fidJ);
+    end
+end
+
 function w7_restore_env(bakFile)
     if bdIsLoaded('SModel_16body_decay')
         close_system('SModel_16body_decay', 0);
@@ -397,10 +408,15 @@ function met = w7_extract_decay_metrics(t, sig, unitStr, refHz)
     minDistIdx = max(2, round(0.55 / refHz / dtSig));
 
     % 用正负峰包络中点估计静平衡点 (最小峰距 0.55*Tn 过滤耦合高频涟漪)
-    [~, locPos0] = w7_find_local_peaks(y, minDistIdx);
+    [pksPos0, locPos0] = w7_find_local_peaks(y, minDistIdx);
     [~, locNeg0] = w7_find_local_peaks(-y, minDistIdx);
-    if y(1) > mean(y) && (isempty(locPos0) || locPos0(1) > minDistIdx)
-        locPos0 = [1; locPos0(:)];
+    if y(1) > mean(y)
+        inInit0 = locPos0 <= minDistIdx;
+        if ~any(inInit0)
+            locPos0 = [1; locPos0(:)];
+        elseif y(1) >= max(pksPos0(inInit0))
+            locPos0 = [1; locPos0(~inInit0)];
+        end
     end
     nPair = min(numel(locPos0), numel(locNeg0));
     if nPair >= 2
@@ -509,7 +525,7 @@ function res = w7_check_quadDrag_live(output, dampingVer, dofCol)
 end
 
 function rm = w7_extract_reg_wave_metrics(output, spec)
-    t   = output.bodies(1).time;
+    t   = output.bodies(1).time(:);
     pos = output.bodies(1).position;
     cgZ = -3.731;
     if (isstruct(output.bodies(1)) && isfield(output.bodies(1), 'centerGravity')) || ...
@@ -520,13 +536,27 @@ function rm = w7_extract_reg_wave_metrics(output, spec)
     end
     pos(:,3) = pos(:,3) - cgZ;
 
-    % 取最后 5 个完整波周期作稳态统计
+    % 取最后 5 个完整波周期作稳态统计; 用波频一阶谐波回归剥离慢漂移瞬态
     tWin = t >= (spec.endTime - 5 * spec.wavePeriod);
+    if ~any(tWin)
+        tWin = true(size(t));
+    end
+    tSeg = t(tWin) - t(find(tWin, 1, 'first'));
+    tSeg = tSeg(:);
+    wWave = 2 * pi / spec.wavePeriod;
+    Xreg = [ones(numel(tSeg), 1), tSeg, cos(wWave * tSeg), sin(wWave * tSeg)];
     A_wave = spec.waveHeight / 2.0;
 
-    sAmp = 0.5 * (max(pos(tWin, 1)) - min(pos(tWin, 1)));
-    hAmp = 0.5 * (max(pos(tWin, 3)) - min(pos(tWin, 3)));
-    pAmp = 0.5 * (max(pos(tWin, 5)) - min(pos(tWin, 5)));
+    cSurge = Xreg \ pos(tWin, 1);
+    cHeave = Xreg \ pos(tWin, 3);
+    cPitch = Xreg \ pos(tWin, 5);
+    sAmp = hypot(cSurge(3), cSurge(4));
+    hAmp = hypot(cHeave(3), cHeave(4));
+    pAmp = hypot(cPitch(3), cPitch(4));
+
+    sAmpRaw = 0.5 * (max(pos(tWin, 1)) - min(pos(tWin, 1)));
+    hAmpRaw = 0.5 * (max(pos(tWin, 3)) - min(pos(tWin, 3)));
+    pAmpRaw = 0.5 * (max(pos(tWin, 5)) - min(pos(tWin, 5)));
 
     % 校核 60° (Constraint6..10) 与 300° (Constraint11..15) 对称性
     symMaxRel = 0.0;
@@ -549,6 +579,9 @@ function rm = w7_extract_reg_wave_metrics(output, spec)
     rm.surgeRAO = sAmp / A_wave;
     rm.heaveRAO = hAmp / A_wave;
     rm.pitchRAO_degPerM = rad2deg(pAmp) / A_wave;
+    rm.surgeRAORaw = sAmpRaw / A_wave;
+    rm.heaveRAORaw = hAmpRaw / A_wave;
+    rm.pitchRAORaw_degPerM = rad2deg(pAmpRaw) / A_wave;
     rm.meanSurge = mean(pos(tWin, 1));
     rm.meanHeaveOffset = mean(pos(tWin, 3));
     rm.meanPitchDeg = rad2deg(mean(pos(tWin, 5)));
