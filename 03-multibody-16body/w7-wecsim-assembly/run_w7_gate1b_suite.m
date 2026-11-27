@@ -16,8 +16,9 @@
 %   注:
 %     - 脚本自动备份已有 wecSimInputFile.m 并在结束或报错时恢复。
 %     - 若目录内仅有仓库原名 w7-assembly-data-16body.m, 亦兼容自动读取(免重命名)。
-%   输出: output/gate1b_<case>.mat, output/gate1b_summary.json,
-%         output/gate1b_verification_summary.txt
+%   输出 (存于 gate1b_results/, 避免每次 wecSim 清空 output/ 覆盖前序工况):
+%         gate1b_results/gate1b_<case>.mat, gate1b_results/gate1b_summary.json,
+%         gate1b_results/gate1b_verification_summary.txt
 
 %% ==================== 0. 运行开关与工况参数 (可按需调整) ====================
 w7_run_unit_algebraic = true;
@@ -53,8 +54,9 @@ assert(isfile('w7.m') || isfile('w7-assembly-data-16body.m'), '缺少 w7.m (或 
 assert(isfile('wecSimInputFile_16body_case.m'), '缺少 wecSimInputFile_16body_case.m');
 assert(isfolder('mostData'), '缺少 mostData/ 文件夹');
 
-if ~isfolder('output')
-    mkdir('output');
+w7_res_dir = 'gate1b_results';
+if ~isfolder(w7_res_dir)
+    mkdir(w7_res_dir);
 end
 
 w7_orig_input_bak = '';
@@ -120,7 +122,9 @@ if w7_run_free_decay
             cfg.rampTime      = 0;
             cfg.dt            = 0.01;
             cfg.dtOut         = 0.1;
+            cfg.cicDt         = 0.1;  % 对齐 .h5 IRF 原生 0.1 s 采样, 提速约百倍
             cfg.cicEndTime    = 60;
+            cfg.saveWorkspace = 0;
             cfg.waveType      = 'noWaveCIC';
             cfg.waveHeight    = 0;
             cfg.wavePeriod    = 10.0;
@@ -170,8 +174,8 @@ if w7_run_free_decay
 
             w7_decay_results.(w7_dof).(w7_ver) = w7_met;
 
-            % 保存精简时程文件
-            w7_out_mat = fullfile('output', sprintf('gate1b_decay_%s_%s.mat', w7_dof, w7_ver));
+            % 保存精简时程文件 (存于 gate1b_results/, 避开 wecSim 清空 output/)
+            w7_out_mat = fullfile(w7_res_dir, sprintf('gate1b_decay_%s_%s.mat', w7_dof, w7_ver));
             w7_save_case = struct('t', w7_t, 'pos', w7_pos, 'vel', output.bodies(1).velocity, ...
                 'mooringForce', output.mooring(1).forceMooring, ...
                 'towerBaseLoad', output.windTurbine(1).towerBaseLoad, ...
@@ -204,7 +208,9 @@ if w7_run_reg_wave
         cfg.rampTime      = w7_reg_spec.rampTime;
         cfg.dt            = 0.01;
         cfg.dtOut         = 0.1;
+        cfg.cicDt         = 0.1;
         cfg.cicEndTime    = 60;
+        cfg.saveWorkspace = 0;
         cfg.waveType      = 'regular';
         cfg.waveHeight    = w7_reg_spec.waveHeight;
         cfg.wavePeriod    = w7_reg_spec.wavePeriod;
@@ -231,7 +237,7 @@ if w7_run_reg_wave
         for w7_ic = 1:16
             w7_con_forces(:,:,w7_ic) = output.constraints(w7_ic).forceConstraint;
         end
-        w7_out_mat = fullfile('output', sprintf('gate1b_regwave_%s.mat', w7_ver));
+        w7_out_mat = fullfile(w7_res_dir, sprintf('gate1b_regwave_%s.mat', w7_ver));
         w7_save_reg = struct('t', output.bodies(1).time, 'pos1', output.bodies(1).position, ...
             'constraintForces', w7_con_forces, 'mooringForce', output.mooring(1).forceMooring, ...
             'towerBaseLoad', output.windTurbine(1).towerBaseLoad, ...
@@ -249,8 +255,8 @@ if w7_run_reg_wave
 end
 
 %% ==================== 5. 写出汇总报告与 JSON ====================
-w7_txt_path  = fullfile('output', 'gate1b_verification_summary.txt');
-w7_json_path = fullfile('output', 'gate1b_summary.json');
+w7_txt_path  = fullfile(w7_res_dir, 'gate1b_verification_summary.txt');
+w7_json_path = fullfile(w7_res_dir, 'gate1b_summary.json');
 
 w7_fid = fopen(w7_txt_path, 'w');
 for w7_il = 1:numel(w7_log_lines)

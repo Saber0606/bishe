@@ -29,7 +29,9 @@ cfg.endTime      = 30;
 cfg.rampTime     = 0;
 cfg.dt           = 0.01;
 cfg.dtOut        = 0.1;
+cfg.cicDt        = 0.1;          % 与 .h5 IRF 原生 0.1 s 分辨率一致 (避免 0.01 s 100倍冗余卷积)
 cfg.cicEndTime   = 60;
+cfg.saveWorkspace = 0;           % 批处理由主脚本保存精简 .mat, 跳过巨型工作区转存
 cfg.waveType     = 'noWave';     % 'noWave' | 'noWaveCIC' | 'regular'
 cfg.waveHeight   = 2.0;          % [m] regular 时有效
 cfg.wavePeriod   = 10.0;         % [s] regular / noWave 时有效
@@ -63,10 +65,12 @@ simu.solver = 'ode4';
 simu.dt = cfg.dt;
 simu.stateSpace = 0;
 simu.domainSize = 300;
+simu.cicDt = cfg.cicDt;
 simu.cicEndTime = cfg.cicEndTime;
 simu.gravity = 9.81;
 simu.b2b = 1;
 simu.dtOut = cfg.dtOut;
+simu.saveWorkspace = cfg.saveWorkspace;
 
 %% Wave class
 waves = waveClass(cfg.waveType);
