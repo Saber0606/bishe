@@ -25,9 +25,10 @@ w7_run_unit_algebraic = true;
 w7_run_free_decay     = true;
 w7_run_reg_wave       = true;
 
-w7_deduct_100t  = false;                 % false = 17,854.16 t 原口径; true = 扣减 Body1 100 t 接口占位
-w7_damping_list = {'K1'};                % 默认仅跑 1.0 版 K1 (按需可追加 'Z' 或 'S1')
-w7_decay_dofs   = {'heave', 'pitch', 'surge', 'yaw'};
+w7_deduct_100t        = false;           % false = 17,854.16 t 原口径; true = 扣减 Body1 100 t 接口占位
+w7_park_aero_in_decay = true;            % true = 静风自由衰减置零气动载荷 F_aero (对齐 NREL §3.2 顺桨停机口径, 防轮毂相对风泵能)
+w7_damping_list       = {'K1'};          % 默认仅跑 1.0 版 K1 (按需可追加 'Z' 或 'S1')
+w7_decay_dofs         = {'heave', 'pitch', 'surge', 'yaw'};
 
 % 静水平衡预测吃水偏移 (m), 用于 surge/pitch/yaw 衰减预置平、抑制伴生垂荡瞬态
 if w7_deduct_100t
@@ -57,6 +58,23 @@ assert(isfolder('mostData'), '缺少 mostData/ 文件夹');
 w7_res_dir = 'gate1b_results';
 if ~isfolder(w7_res_dir)
     mkdir(w7_res_dir);
+end
+
+w7_decay_aero_mat = fullfile('mostData', 'windTurbine', 'aeroloads', 'Aeroloads_IEA15MW.mat');
+if w7_park_aero_in_decay
+    w7_decay_aero_mat = fullfile(w7_res_dir, 'Aeroloads_IEA15MW_parked.mat');
+    if ~isfile(w7_decay_aero_mat)
+        w7_aero_tmp = load(fullfile('mostData', 'windTurbine', 'aeroloads', 'Aeroloads_IEA15MW.mat'));
+        aeroloads = w7_aero_tmp.aeroloads;
+        if isfield(aeroloads, 'ROSCO') && isfield(aeroloads.ROSCO, 'F_aero')
+            aeroloads.ROSCO.F_aero(:) = 0;
+        end
+        if isfield(aeroloads, 'Baseline') && isfield(aeroloads.Baseline, 'F_aero')
+            aeroloads.Baseline.F_aero(:) = 0;
+        end
+        save(w7_decay_aero_mat, 'aeroloads');
+        clear w7_aero_tmp aeroloads;
+    end
 end
 
 w7_orig_input_bak = '';
@@ -135,6 +153,7 @@ if w7_run_free_decay
             cfg.windMode      = 'still';
             cfg.windSpeed     = 0;
             cfg.aeroLoadsType = 0; % 静风 0 m/s 用 LUT 避免 BEM 0/0
+            cfg.aeroLoadsName = w7_decay_aero_mat;
             save('w7_case_cfg.mat', 'cfg');
 
             fprintf('\n[GATE 1B Decay] Running DOF=%s, Damping=%s (endTime=%ds)...\n', w7_dof, w7_ver, w7_sp.endTime);
@@ -247,9 +266,10 @@ if w7_run_reg_wave
             'metrics', w7_rm, 'cfg', cfg); %#ok<NASGU>
         save(w7_out_mat, '-struct', 'w7_save_reg');
 
-        w7_line = sprintf('  [%s] SurgeRAO=%.3f m/m | HeaveRAO=%.3f m/m | PitchRAO=%.3f deg/m | MeanHeave=%.4f m | C16max=%.1e | SymMaxRel=%.3f%% [%.1fs]', ...
+        w7_line = sprintf('  [%s] SurgeRAO=%.3f m/m | HeaveRAO=%.3f m/m | PitchRAO=%.3f deg/m | MeanHeave=%.4f m | Roll=%.3f deg | Yaw=%.3f deg | C16max=%.1e | SymMaxRel=%.3f%% [%.1fs]', ...
             w7_ver, w7_rm.surgeRAO, w7_rm.heaveRAO, w7_rm.pitchRAO_degPerM, ...
-            w7_rm.meanHeaveOffset, w7_rm.constraint16Max, w7_rm.sym60vs300MaxRelPct, w7_elapsed);
+            w7_rm.meanHeaveOffset, w7_rm.meanRollDeg, w7_rm.meanYawDeg, ...
+            w7_rm.constraint16Max, w7_rm.sym60vs300MaxRelPct, w7_elapsed);
         w7_log_lines{end+1} = w7_line;
         fprintf('[%s] %s\n', datestr(now, 'HH:MM:SS'), w7_line);
         w7_summary.regularWave = w7_reg_results;
@@ -584,7 +604,9 @@ function rm = w7_extract_reg_wave_metrics(output, spec)
     rm.pitchRAORaw_degPerM = rad2deg(pAmpRaw) / A_wave;
     rm.meanSurge = mean(pos(tWin, 1));
     rm.meanHeaveOffset = mean(pos(tWin, 3));
+    rm.meanRollDeg = rad2deg(mean(pos(tWin, 4)));
     rm.meanPitchDeg = rad2deg(mean(pos(tWin, 5)));
+    rm.meanYawDeg = rad2deg(mean(pos(tWin, 6)));
     rm.constraint16Max = max(abs(output.constraints(16).forceConstraint(:)));
     rm.sym60vs300MaxRelPct = symMaxRel;
 end

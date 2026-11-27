@@ -41,6 +41,7 @@ cfg.deduct100t   = false;        % 是否从 Body1 扣减 W2 100 t 塔架接口�
 cfg.windMode     = 'turbulent';  % 'still' | 'constant' | 'turbulent'
 cfg.windSpeed    = 8.0;          % [m/s]
 cfg.aeroLoadsType = 1;           % 0 = LUT (静风安全), 1 = BEM
+cfg.aeroLoadsName = fullfile('mostData', 'windTurbine', 'aeroloads', 'Aeroloads_IEA15MW.mat');
 
 if isfile('w7_case_cfg.mat')
     loadedCfg = load('w7_case_cfg.mat');
@@ -149,7 +150,7 @@ else
     windTurbine(1).bladepitch0 = interp1(SteadyStates.ROSCO.SS.WINDSPEED, SteadyStates.ROSCO.SS.BLADEPITCH, cfg.windSpeed);
     windTurbine(1).GenTorque0 = interp1(SteadyStates.ROSCO.SS.WINDSPEED, SteadyStates.ROSCO.SS.TORQUE, cfg.windSpeed);
 end
-windTurbine(1).aeroLoadsName = fullfile('mostData', 'windTurbine', 'aeroloads', 'Aeroloads_IEA15MW.mat');
+windTurbine(1).aeroLoadsName = cfg.aeroLoadsName;
 windTurbine(1).turbineName   = fullfile('mostData', 'windTurbine', 'turbine_properties', 'Properties_IEA15MW.mat');
 windTurbine(1).bladeDataName = fullfile('mostData', 'windTurbine', 'turbine_properties', 'Bladedata_IEA15MW.mat');
 windTurbine(1).controlName   = fullfile('mostData', 'windTurbine', 'control', 'Control_IEA15MW.mat');
