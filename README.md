@@ -54,20 +54,15 @@ AQWA 整体纯浮体 → 多体切分 → BEMIO → WEC-Sim 约束建模 → 横
 
 2026-11-13 之前的旧路径与新路径的对照表见 `FILES.md` 的「结构整理」一节。
 
-## 当前进度（截至 2026-11-16）
+## 当前进度（截至 2026-11-27）
 
 - 阶段 0：已完成
 - 阶段 1A：已通过（GATE 1A）
 - 阶段 2：一级验收已通过（2026-11-09，合成偏差 ≤0.6%，多数 ≤0.002%）；多体 `.AH1` 已用 AHD1 补跑并通过 BEMIO 数据块核对
-- 阶段 3：进行中
-  - 19 体 AQWA 仿真已完成（2026-11-11 运行，AQWA-Line 2022 R1）
-  - 19 体合成验证已通过一级验收口径（2026-11-13）：总质量 17,854.1 t、排水量 20,157.9 m³、DIFF 面元合计 5,454 与整体模型一致、K33 +0.01%、垂荡固有频率 0.3143 rad/s（-0.2%）、纵摇/横摇 0.4622 rad/s（-0.8%），各项偏差均 <2%。详见 [`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`](03-multibody-19body/gate-a-verification/19body-synthesis-verification.md)
-  - `.MES` 报错清点完成：1,265 条消息全部为 WARNING，ERROR / FATAL 为 0；去重后 6 类，均为切分模型的预期警告
-  - 激励力相位修正符号已裁决（2026-11-13）：以整体单体实跑 LIS 为外部基准全谱比对，corr+（计划书公式）中位误差 0.102%、corr− 96.6%，**corr+ 正确，GATE-A 已正式关门**，详见 `03-multibody-19body/gate-a-verification/sign-adjudication-record.md`
-  - W1 分段方案与 W2 质量分账已复原入仓（`design-basis-w1-w2/`，原件遗失后据实跑数据复原）
-  - W6 已完成（2026-11-15）：BEMIO 生成 `futi_19body.h5`（存于 Release `W6-output` 的 ZIP 内），**GATE-B 复核通过**——合成激励力对 corr+ 锚幅值最大偏差 0.357%、相位最大 0.168°（判据 <1% / <1°），Ainf 处理与 body 顺序确认，详见 `03-multibody-19body/gate-b-verification/gate-b-verification-record.md`
-  - **16 体更正链已接棒为现行执行口径（2026-11-16）**：与导师商定每筒改 4 段（浮筒 1/2 截面落在界面上可验证）；W1/W2 以整体单体 dat 独立重做、W3 实跑定版（Argon 修复版）、W4 核查通过、**GATE-A 关门**（corr+ 全谱合成中位 0.104%）、**GATE-B 关门**（BEMIO 合成对锚幅值 max 0.386% / 相位 max 0.187°，低频残差带不复现），详见 `03-multibody-16body/gate-a-verification/` 与 `03-multibody-16body/gate-b-verification/`
-  - 下一步（W7）：阻尼口径 S1/Z 已定案（2026-11-21）；2026-11-25 已补齐接地约束与局部坐标系、完成 `build_SModel_16body.m` 自动建模及 `noWave` 10 s 刚接首跑验证，待拍板纯浮体静浮重差平衡方案（方案 1 / 方案 2）后推进 GATE-C 与阶段 4/5
+- 阶段 3：**16 体主线已全部关门（2026-11-27）**
+  - 19 体口径（W1–W6、GATE-A/GATE-B）保留为历史执行证据（见 `03-multibody-19body/`）；
+  - **16 体现行主线（W1–W7）全部完成**：W1–W6（AQWA + BEMIO，GATE-A 0.104% / GATE-B ≤0.386%）已关门；**W7 / GATE 1B**（16 体 + `MOST` IEA 15 MW + `MooringNLStatic`）已于 2026-11-27 完成 `quadDragK1` 全套自由衰减（表 11 频率偏差：垂荡 `+0.10%`、纵摇 `-0.54%`、纵荡 `+3.82%`、艏摇 `+1.50%`；`liveDragErr ≤ 1.99e-16`）与规则波基准验收，正式关门并锁定 `quadDragK1`（见 `03-multibody-16body/w7-wecsim-assembly/w7-gate1b-verification-record-16body.md`）。
+- **下一步（阶段 4 + 阶段 5）**：拍板三轴 `Gimbal` 柔性铰结构阻尼并实施阶段 4 前置改造（3 线系泊分拆精准挂回外柱 `Body 6/11/16` + 15 界面换装三轴柔性铰 `dt ≤ 0.001 s` + `k×1000` 回归），在状态 A `Baseline 0` 提取 15 截面内力与应力校核，随后进入阶段 5 外柱干舱内置惯性式 WEC 阻抗控制与三维互馈增益研究（见 `00-route/technical-route-v2.5.md` V2.7）。
 
 全程进度与待办见 [`PROGRESS.md`](PROGRESS.md)。
 

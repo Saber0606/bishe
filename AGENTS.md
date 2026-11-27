@@ -2,7 +2,7 @@
 
 本文件是本仓库的入口说明：项目内容、当前进度（带证据出处）、文件分类、下一步工作、口径红线、工作规则都在这里。读完本文件，再按第 0 节的顺序读其余文件，不要跳过口径部分直接引用数字。
 
-进度快照日期：2026-11-25。本文件与仓库内容冲突时，以被引用的原始记录文件为准，并把冲突报给仓库所有者 Saber，不要自行改口径。
+进度快照日期：2026-11-27。本文件与仓库内容冲突时，以被引用的原始记录文件为准，并把冲突报给仓库所有者 Saber，不要自行改口径。
 
 ## 0. 阅读顺序
 
@@ -25,13 +25,13 @@
 
 阶段地图（全程 14 周计划，技术路线 V2.7，文件仍为 `00-route/technical-route-v2.5.md`）：
 
-| 阶段 | 内容 | 状态（2026-11-25） |
+| 阶段 | 内容 | 状态（2026-11-27） |
 |---|---|---|
 | 0 | 准备与基准确立 | 已完成 |
 | 1（1A） | AQWA 整体纯浮体建模与验证（GATE 1A） | 已通过 |
 | 2 | 180° 浮筒二体切分，一级验收 | 已通过一级 |
-| 3 | 多体链路：AQWA 多体 → BEMIO → WEC-Sim（W1–W7，GATE-A/B + 全系统总验收） | 进行中：19 体 GATE-A、GATE-B 已关门；2026-11-16 更正为 16 体（每筒 4 段），W1–W6（GATE-A/B）均已关门；现正推进 W7（2026-11-25 V2.7 定为直连 `MOST` 全系统；2026-11-26 已用 `quadDragK1` 跑通 16 体 + `MOST` 风机/系泊 30 s 首跑，`Δz ≈ −0.46 m` 重浮闭合，待自由衰减对标表 11 关门 W7/GATE 1B，见第 2 节） |
-| 4 | 下浮筒截面内力提取与校核 | 已并入状态 A 全系统 `Baseline 0`（W7 总验收后执行） |
+| 3 | 多体链路：AQWA 多体 → BEMIO → WEC-Sim（W1–W7，GATE-A/B + 全系统总验收） | **已全部关门（2026-11-27）**：16 体 W1–W6（GATE-A/B）与 **W7 / GATE 1B 全系统总验收**均已通过，正式锁定 `quadDragK1`（1.0 版）为主版；4 自由度衰减频率对 NREL 表 11 偏差 `-0.54% ~ +3.82%`（垂荡 `+0.10%`、纵摇 `-0.54%`）、`liveDragErr ≤ 1.99e-16`、`Constraint16 = 0`，详见 `03-multibody-16body/w7-wecsim-assembly/w7-gate1b-verification-record-16body.md` |
+| 4 | 下浮筒截面内力提取与校核（`Baseline 0`） | **待启动（当前第一顺位）**：先将系泊分拆精准挂回外柱 `Body 6/11/16` 并把 15 道界面换装三轴 `Gimbal` 柔性铰（`dt ≤ 0.001 s`）+ `k×1000` 回归校验，再提取 15 截面内力与 Von Mises 应力 |
 | 5 | 外柱干舱内置惯性式 WEC 阻抗控制与互馈增益（**正式题目的核心章**） | 未开始（V2.7 定型为 `nonHydro=1` 压载切分内置振子，免重跑 AQWA） |
 
 ## 2. 当前进度快照（每条附证据出处）
@@ -54,7 +54,7 @@
 | W4 AQWA 求解 | 已完成 | 2026-11-11 20:32–20:49 跑完，正常结束；`.MES` 1,265 条消息已清点：全部 WARNING，0 ERROR/FATAL，去重 6 类，均已判定为预期警告（验证记录附节） |
 | W5 / GATE-A | **已正式关门（2026-11-13）** | 合成指标全过（下表）；相位修正符号已由外部基准裁决：整体单体 LIS（2026-11-13 补交入仓）全谱比对，corr+ 中位复数误差 0.102%、corr− 96.6%——**corr+（计划书公式）正确，corr− 排除**，激励力全谱复核以 corr+ 通过。附遗留观察项：ω ≤ 0.15 低频力矩残差带（≤峰值约 5%，变体无关），W6 同频段复查、论文局限性注明。证据：`03-multibody-19body/gate-a-verification/sign-adjudication-record.md` |
 | W6 / GATE-B | **已通过（2026-11-15）** | REV 1 于 2026-11-15 14:27 跑通（readAQWA 255.6 s、radiationIRF 96.9 s、excitationIRF 32.5 s、writeBEMIOH5 13.5 s），产出 `futi_19body.h5`（155,612,740 B）与完整 hydro.mat，两者打包为 `futi_19body.zip` 存于 Release `W6-output`（SHA-256 登记见 FILES.md 末节）。复核结论：合成激励力对 corr+ 锚幅值最大偏差 0.357%、相位最大 0.168°（判据 <1% / <1°）；A/B 矩阵与 AH1 逐元素一致；Ainf 由 radiationIRF 重算确认、对 NREL 表 4 偏差 ≤2.24%；body 顺序与 cg 逐位一致；GATE-A 低频残差带在 .h5 侧不复现（源于分体口径）。注意 `.h5` 激励力是 BEMIO 约定（共轭 + 相位参考点换算），与 FORCERAO 直接比对前须逆变换。证据：`03-multibody-19body/gate-b-verification/gate-b-verification-record.md` |
-| W7 / 全系统总验收 | 进行中（16 体链路，2026-11-26 全系统 `MOST` 首跑通过，待自由衰减对标表 11 关门） | 已定仅跑 `K1`（1.0 版）与 `Z`（置零）两版对照（取消原 `5/3` 版）；纯浮体 `SModel_16body.slx` 首跑验证拓扑与反力自洽后，按 V2.7 新增 `build_SModel_16body_full.m` 与 `wecSimInputFile_16body_full.m` 接回 `MOST` IEA 15 MW 风机 + `MooringNLStatic`，于 2026-11-26 零报错跑通 30 s `noWave` + `8 m/s` 风（日志 `output/simulation_16body_full_30s.log`）：`Constraint16` 零反力、纵荡 `+3.91 m` / 纵摇 `+0.0289 rad`、系泊 `Fz = −6.021 MN`、塔基 `Fz = −23.83 MN`、`body(1)` CG 均值 `−4.1920 m`（相对初值 `−3.7310 m` 净下沉 `Δz = −0.4610 m`，重浮自洽）；下一步运行 `run_w7_gate1b_suite.m` 完成全系统自由衰减（表 11 / 图 13–16 对标 & 规则波）关门 W7/GATE 1B。文件见 `03-multibody-16body/w7-wecsim-assembly/` |
+| W7 / 全系统总验收 | **已正式关门（2026-11-27）** | 单跑 `quadDragK1` 完成 GATE 1B 全套 5 工况实跑（`gate1b_summary.json`）：① `liveDragErr = 1.51e-16~1.99e-16`、`Constraint16 = 0`；② 全系统停机静风自由衰减对表 11（垂荡 `0.04905 Hz` / `+0.10%`、纵摇 `0.03581 Hz` / `-0.54%`、纵荡 `0.00727 Hz` / `+3.82%`、艏摇 `0.01116 Hz` / `+1.50%`），4 自由度全呈正斜率二次阻尼衰减（`+1.777 %/m`、`+0.201 %/deg`、`+0.779 %/m`、`+0.532 %/deg`）；③ `10.59 m/s` 规则波 `SurgeRAO = 0.358 m/m` / `HeaveRAO = 0.377 m/m` / `PitchRAO = 0.251 deg/m`，因转子气动反扭矩致稳态 `Roll = +0.448°` / `Yaw = +0.302°` 而打破 60°/300° 对称（实证须三臂分别统计）。正式锁定 `quadDragK1` 为阶段 4/5 主版，详见 `03-multibody-16body/w7-wecsim-assembly/w7-gate1b-verification-record-16body.md` |
 | 更正 W1/W2（16 体） | **设计完成（2026-11-16，同日晚按 Saber 指示换依据重做）** | 更正动因：19 体每筒 5 段时浮筒 1/2 截面（径向 26.4125 m）落在段内、无界面不可验证，Saber 与导师商定改每筒 4 段（段长 9.50175 m，中点恰为段界），16 体 / 15 道界面 / 96 自由度。**现行推导依据（取代同日早版的 19 体重叠重组，早版未入仓）**：W1/W2 以整体单体 dat `futi_lowfreq.dat` 独立推导、不参照 19 体实跑结果——W1 几何量由整体网格实测（浮筒逐片精确裁切：12 段体积同为 831.40 m³，总量对该 dat 的 LIS 吻合）；W2 锚定 dat 的 Deck 03/04 与 NREL 表 2 构成，按构件规则分配 + 三笔账最小修正闭合，独立核查 Ixx/Iyy +0.68%/+0.72%。逐体设计值：段 962.3 t、外柱 1,730.5 t、中央柱 1,115.3 t，设计值待实跑。证据：`03-multibody-16body/design-basis-w1-w2/`（W1/W2 方案 + 两支推导脚本与结果）。同日晚 **W1/W2 出 v2 修订**（面积改精确裁切、W2 重解：段 961.5 t / 外柱 1,731.9 t / 中央柱 1,120.1 t、Ixx/Iyy +0.70%）；**W3 v2 已组装并核查通过（2026-11-16 晚）**：整体单体 dat 切分 + I-1/I-3 六平面面元劈分，逐体体积对 W1 精确值 ≤0.69%（v1 整元版 ±8.3%），同日晚 **W3 关闭、W4 完成**：v2/v3 两版试运行均死于 Deck 8 读入 EOF，Argon 修复版于 2026-11-16 20:33 实跑成功并经 as-run Deck 核查与 MES/LIS 核查（Σ 排水 20,157.83 m³ 对单体基准 20,157.80、逐体 DIFF 计数 16/16 一致、0 ERROR/FATAL），实跑 dat 入仓 `w3-dat-assembly/output/futi_16body.dat`；**W5/GATE-A 已关门（2026-11-16 晚）**：AH1 三笔账通过（合成 Ixx/Iyy 独立核查 +0.698%）、corr+ 全谱合成对整体单体基准中位复数误差 0.104% / 相位中位 0.004°（corr−/naive 排除）、LIS 印刷版核查 0.172%、低频残差带同量级复现（≤6.04×10⁶ N·m/m、约峰值 5.4%，随 GATE-B 复查）；**W6/GATE-B 已关门（2026-11-16 深夜）**：BEMIO 运行完成（.h5 + hydro.mat 打包存 Release `16-output`，下载验哈希一致）；合成对 corr+ 锚幅值 max 0.386% / 相位 max 0.187°，低频带幅值 max 0.0018%（GATE-A 残差带不复现、判读闭环），Ainf 对表 4 ±2.24% 内，cg 逐位一致。16 体仅剩 W7（表 5 阻尼口径已于 2026-11-21 定案，装配待启动）。证据：`03-multibody-16body/w3-dat-assembly/`（记录 §6 附记）、`03-multibody-16body/w4-aqwa-run/`、`03-multibody-16body/gate-a-verification/`、`03-multibody-16body/gate-b-verification/` |
 
 19 体合成验证核心结果（证据：`03-multibody-19body/gate-a-verification/19body-synthesis-verification.md`，脚本与结果同目录）：
@@ -112,8 +112,8 @@
 3. ~~**W6：BEMIO 生成 .h5 + GATE-B 复核**~~ **已完成（2026-11-15）：GATE-B 通过，W6 关闭**。产出 `.h5` 与 hydro.mat 打包存于 Release `W6-output`；复核证据见 `03-multibody-19body/gate-b-verification/`（含 BEMIO 激励力约定说明：与 FORCERAO 比对前须做共轭 + 相位参考点逆变换）。
 4. **16 体更正链（当前第一顺位）**：W3 已关闭、W4 已完成（实跑定版为 Argon 修复版：v2/v3 两版死于 Deck 8 读入 EOF，修复版 2026-11-16 实跑成功、MES/LIS 核查通过，见 `03-multibody-16body/w4-aqwa-run/`）→ **W5/GATE-A 已关门（2026-11-16）**（AH1 三笔账 + corr+ 全谱合成 0.104%，见 `03-multibody-16body/gate-a-verification/`）→ **W6/GATE-B 已关门（2026-11-16）**（合成 0.386%/0.187°、低频带不复现，见 `03-multibody-16body/gate-b-verification/`）→ W7/GATE-C（阻尼口径已定案 2026-11-21，装配待启动）。另有 `.AH1` 与两个 `.npz` 网页上传、`.LIS` Release 上传三项存放动作待执行（校验值已登记 `FILES.md`）。**按本节原定规则，16 体 GATE-B 已通过，16 体方案自此取代 19 体成为阶段 3 执行口径；19 体全部记录保留为历史证据，不删除、不回改。**
 5. **拍板表 5 粘性阻尼拆分口径（W7 前置决策）**：论文表 5 是整体口径，拆到 **16 体**的方式须先定并记录（计划书建议按各体迎流投影面积与运动方向拆分、总量守恒，拆后整体等效须与表 5 对上）。此项由 Saber 拍板，不要自行选定后直接执行。依据：计划书 W7、决策点清单。**三选项已于 2026-11-15 整理备案入仓**（`03-multibody-19body/w7-wecsim-assembly/w7-damping-split-options-pending.md`：A 面积拆分 / B 整体等效 / C Morison 标定，含逐体定量表——逐体份额为 19 体口径，采用时须按 16 体重算），Saber 决定暂缓拍板；拍板时点顺延至 16 体 GATE-B 通过后。**2026-11-17 补充**：导师新增「置零」建议（选项 D），决策支持附件已入仓 `03-multibody-16body/w7-wecsim-assembly/`（含前提核查、共振阻尼比量级实算、选项 A 的 16 体逐体份额）；现为 D/A/B/C 四选项待 Saber 拍板，仍不得自行选定。**2026-11-21 定案（本项关闭）**：Saber 采纳助理推荐方案——主版 S1 = Cd 加权面积分配（水平 Cd 先验 DNV-RP-C205 立柱 1.2 / 浮筒段 2.0；垂向面积分配 × 径向标定权重，β*=16.77，使装配纵摇涌现二次阻尼对齐表 5），置零（选项 D）降为 GATE-C 对照版；方案与逐体表入仓 `03-multibody-16body/w7-wecsim-assembly/w7-damping-scheme-16body.md`、`cd-weighted-damping-16body.py/.json`。W7 入口条件自此全部满足。
-6. **W7：WEC-Sim 刚接装配与直连全系统总验收（16 体链路，V2.7 口径）**：纯浮体 `SModel_16body.slx` 已于 2026-11-25 跑通 `noWave` 10 s 拓扑与对称性核查；按 V2.7 直接将 16 体浮体接回本地 `MOST` 风机+系泊模块，以全系统 GATE 1B（表 11 / 图 13–20 对标，运行 `1.0` 版 `quadDragK1` 与置零 `quadDragZ` 两版对照，已取消 `5/3` 版）作合并总验收，产出 **15 个截面**约束反力时程接口（纯浮体版本仅作排错兜底）。
-7. **阶段 4 / 5**：合并在状态 A 全系统下执行（`Baseline 0` 15 截面内力校核 → 外柱干舱内置 `nonHydro=1` 惯性式 WEC/馈能 TMD 阻抗控制与互馈增益对比），详见路线 V2.7（`00-route/technical-route-v2.5.md`）。
+6. ~~**W7：WEC-Sim 刚接装配与直连全系统总验收（16 体链路，V2.7 口径）**~~ **已关门（2026-11-27）**：`SModel_16body.slx`（16 体 + `MOST` 风机 + `MooringNLStatic`）已完成 `quadDragK1` 全套自由衰减与规则波总验收（`w7-gate1b-verification-record-16body.md`），正式锁定 `quadDragK1` 为阶段 4/5 主版。
+7. **阶段 4 / 5（当前第一顺位）**：先拍板三轴 `Gimbal Joint` 柔性铰结构阻尼并实施阶段 4 两项前置改造（3 线 `MooringNLStatic` 分拆精准挂回外柱 `Body 6/11/16`；15 道界面换装三轴 `Gimbal` 柔性铰、`dt ≤ 0.001 s` + `k×1000` 刚接回归校验）→ 状态 A 全系统 `Baseline 0` 下提取 15 截面内力与 Von Mises 应力（`t_eq=37.6 mm` / `t=30 mm`）→ 外柱干舱内置 `nonHydro=1` 惯性式 WEC/馈能 TMD 阻抗控制与四档剥离三维互馈增益对比（详见 `00-route/technical-route-v2.5.md`）。
 8. 远期备忘（非当前阻塞项）：频段仍为 0.02–2.10 rad/s，网格可用上限约 2.158 rad/s，扩频到 3.00 前须先细化网格；“相互作用结构上限 20/组”已于 2026-11-16 查到手册出处（见第 5 节第 1 条），仅剩 2022 R1 版本原文待 Saber 在本地帮助文档中对齐引用。
 
 ## 5. 口径红线（引用数字前逐条核对）

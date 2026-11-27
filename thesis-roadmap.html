@@ -893,7 +893,7 @@
 </main>
 
 <script>
-const STORAGE_KEY = 'bishe_roadmap_v27_20261127';
+const STORAGE_KEY = 'bishe_roadmap_v27_gate1b_20261127';
 
 const DEFAULT_DATA = [
   {
@@ -924,22 +924,22 @@ const DEFAULT_DATA = [
     id: 'stage3b',
     shortName: 'W7 全系统总验收',
     title: '阶段 3 后半 · W7 刚接全系统装配与 GATE 1B 总验收',
-    note: '当前所在环节',
+    note: 'GATE 1B 已关门',
     nodes: [
       { id: '3-6', code: 'W7.0', text: '纯浮体 16 体刚接拓扑 noWave 10 s 首跑自洽', tag: 'SModel_16body', status: 'done' },
       { id: '3-7', code: 'W7.1a', text: '接回 MOST 风机+系泊，30 s 静水首跑通过（Δz −0.46 m）', tag: 'MOST 全系统', status: 'done' },
       { id: '3-8', code: 'W7.1b', text: '确认 Body1 保持 1,120.10 t 不扣减，单跑 K1 阻尼', tag: '口径确认', status: 'done' },
-      { id: '3-9', code: 'W7.2a', text: 'Windows 仅用 K1 运行 4 自由度自由衰减 + 规则波（5 工况）', tag: 'run_w7_gate1b_suite', status: 'wip' },
-      { id: '3-10', code: 'W7.2b', text: '对标表 11 频率、图 13–16 阻尼比与 quadDrag 涌现，GATE 1B 关门', tag: 'GATE 1B', status: 'todo' }
+      { id: '3-9', code: 'W7.2a', text: 'Windows 仅用 K1 运行 4 自由度自由衰减 + 规则波（5 工况）', tag: '实跑耗时 9.1 min', status: 'done' },
+      { id: '3-10', code: 'W7.2b', text: '对标表 11 频率（±3.8%内）、图 13–16 阻尼比与 quadDrag 涌现，GATE 1B 关门', tag: '已关门 2026-11-27', status: 'done' }
     ]
   },
   {
     id: 'stage4',
     shortName: '柔性铰与截面应力',
     title: '阶段 4 · 三轴柔性铰改造与下浮筒 15 截面内力校核（Baseline 0）',
-    note: '锁 3 平动 + 放 3 转动',
+    note: '当前所在环节',
     nodes: [
-      { id: '4-1', code: '4.1', text: '将 3 根悬链线 MooringNLStatic 分拆精准挂回外柱 Body 6/11/16', tag: '外柱导缆孔', status: 'todo' },
+      { id: '4-1', code: '4.1', text: '将 3 根悬链线 MooringNLStatic 分拆精准挂回外柱 Body 6/11/16', tag: '外柱导缆孔', status: 'wip' },
       { id: '4-2', code: '4.2', text: '15 道界面换装三轴 Gimbal 柔性铰（3.04/3.54/8.53e11）+ 阻尼', tag: 'dt ≤ 0.001 s', status: 'todo' },
       { id: '4-3', code: '4.3', text: '完成柔性铰 k×1000 刚接回归校验，验证弯矩/扭矩输出', tag: '回归自检', status: 'todo' },
       { id: '4-4', code: '4.4', text: '状态 A 全系统工况下提取下浮筒 15 截面轴力/剪力/弯矩/扭矩', tag: 'Baseline 0', status: 'todo' },

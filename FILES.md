@@ -1,6 +1,6 @@
 # 文件清单
 
-仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 118 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
+仓库按阶段编号组织（结构图见 `README.md` 的「仓库结构」一节）。本表按当前路径登记仓库文件树内的全部 121 个文件（另有 16 体 `.AH1` 一个文件待网页上传入仓，见 03-multibody-16body 节），另有 3 组大文件以 Release 附件存放（见文末）。
 
 入仓通道说明（2026-11-13 起，Saber 定：毕设相关文件一律入仓）：文本文件走连接器快照推送；二进制文件 ≤25 MB 走 GitHub 网页上传；超过 25 MB 的走 Release 附件。原先因文本通道限制未入仓的二进制文件已于 2026-11-13 全部补齐。
 
@@ -141,7 +141,10 @@
 | `03-multibody-16body/w7-wecsim-assembly/wecSimInputFile_16body_full.m` | **16 体 + MOST 全系统输入文件（2026-11-26 新增，V2.7 主线）**：16 体 `.h5` + `quadDragK1`（1.0 版）+ `MOST` `wind`/`windTurbine`（8 m/s `WIND_8mps.mat`）+ `MooringNLStatic`（3 根 850 m 悬链线）；保留 `b2b=1`、`gravity=9.81`、`rho=1025`、`inertiaProducts`；已在 R2025a/v7.1.0 跑通 30 s `noWave` 静水+风首跑（工作机运行时改名为 `wecSimInputFile.m`） |
 | `03-multibody-16body/w7-wecsim-assembly/output/simulation_16body_full_30s.log` | **全系统 30 s 首跑控制台日志（2026-11-26 归档，6,077 B）**：16 体质量/CG/惯量积 + 16 约束全数正确读入，`noWave` + `8 m/s` 风 61.87 s 零报错跑完；实测 `body(1)` CG 垂向坐标均值 `−4.1920 m`（相对初值 `−3.7310 m` 净下沉 `Δz = −0.4610 m`）、系泊垂向力 `−6.021 MN`、塔基垂向力 `−23.83 MN` |
 | `03-multibody-16body/w7-wecsim-assembly/wecSimInputFile_16body_case.m` | **全系统参数化工况输入驱动（2026-11-26 新增，V2.7 W7/GATE 1B）**：读取 `w7_case_cfg.mat` 动态切换 `noWaveCIC`（自由衰减）/ `regular` / `noWave`、风况（`still` 0 m/s LUT 停机 / `constant` / `turbulent`）、阻尼三版（`K1`/`S1`/`Z`）与 `deduct100t` 开关；保留全部 V2.7 红线设置 |
-| `03-multibody-16body/w7-wecsim-assembly/run_w7_gate1b_suite.m` | **W7 / GATE 1B 总验收批处理脚本（2026-11-26 新增，V2.7 主线）**：在工作机上顺序执行单位运动 `quadDrag` 代数自检、静风 4 自由度（垂荡/纵摇/纵荡/艏摇）× 两版阻尼（`K1`/`Z`，已取消 `5/3` 版 `S1`）全系统自由衰减（借 `SModel_16body_decay.slx` 中 `Constraint16` `Bushing Joint` PositionTarget 整体施加初位移并实机复核 `forceMorisonAndViscous`）、以及 `0°` 对称风浪规则波校核（RAO + 60°/300° 对称性 + 15 截面反力），输出 `output/gate1b_verification_summary.txt` 与 `output/gate1b_summary.json` |
+| `03-multibody-16body/w7-wecsim-assembly/run_w7_gate1b_suite.m` | **W7 / GATE 1B 总验收批处理脚本（2026-11-26 新增；2026-11-27 修订定版）**：在工作机上顺序执行单位运动 `quadDrag` 代数自检、静风 4 自由度自由衰减（`noWaveCIC`、`cicDt=0.1`、停桨去气动 `Aeroloads_IEA15MW_parked.mat`、借 `SModel_16body_decay.slx` 中 `Constraint16` `Bushing Joint` 施加初位移并实机复核 `forceMorisonAndViscous`）、以及 `0°` 规则波+额定风基准（谐波回归 RAO + 60°/300° 截面比较），输出至 `gate1b_results/`，现已仅用 `K1` 完成实跑关门 |
+| `03-multibody-16body/w7-wecsim-assembly/w7-gate1b-verification-record-16body.md` | **W7 / GATE 1B 总验收与关门记录（2026-11-27 新增）**：记录 `K1` 全套 5 工况实跑结果——`liveDragErr ≤ 1.99e-16`、`Constraint16 = 0`、表 11 频率（垂荡 `+0.10%`、纵摇 `-0.54%`、纵荡 `+3.82%`、艏摇 `+1.50%`）、4 自由度正斜率二次阻尼衰减、及 `10.59 m/s` 规则波下转子反扭矩导致 `+0.448°` 横倾并打破 60°/300° 对称的实证；正式锁定 `quadDragK1` 并关门阶段 3 |
+| `03-multibody-16body/w7-wecsim-assembly/output/gate1b_verification_summary.txt` | **W7 / GATE 1B 实跑文本汇总原件（2026-11-27 归档，15 行）**：MATLAB R2025a / WEC-Sim v7.1.0 全套 `K1` 验收控制台汇总（SHA-256 `b8c4eea8…`） |
+| `03-multibody-16body/w7-wecsim-assembly/output/gate1b_summary.json` | **W7 / GATE 1B 实跑结构化数据原件（2026-11-27 归档）**：含 `unitAlgebraic`、4 自由度衰减全部峰值/周期/阻尼比/瞬时力误差与 `regularWave` RAO/均值/对称度（SHA-256 `ecac5af3…`） |
 
 ## references（参考文献与规范原件）
 
