@@ -31,7 +31,15 @@
 %   GATE-C 的衰减与 RAO 工况按清单第 5 节逐工况改, 不在本文件预设。
 
 %% 装配数据载入 (质量/质心/惯量/惯量积/阻尼/约束体对)
-run(fullfile(fileparts(mfilename('fullpath')), 'w7-assembly-data-16body.m'));
+w7_dir = fileparts(mfilename('fullpath'));
+if isfile(fullfile(w7_dir, 'w7.m'))
+    run(fullfile(w7_dir, 'w7.m'));
+elseif isfile(fullfile(w7_dir, 'w7-assembly-data-16body.m'))
+    eval(fileread(fullfile(w7_dir, 'w7-assembly-data-16body.m')));
+else
+    error('未找到 w7.m (或 w7-assembly-data-16body.m)');
+end
+clear w7_dir;
 
 %% Simulation class
 simu = simulationClass();                           % Initialize Simulation Class

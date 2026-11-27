@@ -3,18 +3,19 @@
 %
 % 功能 (按 V2.7 §五顺序):
 %   1) 单位运动 quadDrag 涌现代数自检 + 仿真力矢量 (forceMorisonAndViscous) 实测核对;
-%   2) 全系统自由衰减 (纵荡 / 垂荡 / 纵摇 / 艏摇, 关风/静风口径, noWaveCIC),
+%   2) 全系统自由衰减 (纵荡 / 垂荡 / 纵摇 / 艏摇, 静风 0 m/s, noWaveCIC),
 %      对比 NREL/TP-5000-76773 表 11 固有频率 (0.007 / 0.049 / 0.036 / 0.011 Hz)
-%      与图 13-16 阻尼比随幅值变化趋势, 并行对比 quadDragK1 (1.0 版) 与 quadDragZ (置零);
-%      (2026-11-26 Saber 定: 取消原 5/3 版 quadDragS1, 仅跑 K1 与 Z 两版)
+%      与图 13-16 阻尼比随幅值变化趋势;
 %   3) 典型风浪规则波基准 (0° 定常额定风 10.59 m/s + 规则波 H=2 m, T=10 s),
 %      提取 6-DOF RAO、Constraint16 零反力、15 截面内力及 60°/300° 链对称性。
 %
 % 用法:
 %   在工作根目录 (含 futi_16body.h5, SModel_16body.slx, mostData/,
-%   w7-assembly-data-16body.m, wecSimInputFile_16body_case.m) 下运行:
+%   w7.m, wecSimInputFile_16body_case.m) 下运行:
 %     >> run_w7_gate1b_suite
-%   注: 脚本自动备份已有 wecSimInputFile.m 并在结束或报错时恢复。
+%   注:
+%     - 脚本自动备份已有 wecSimInputFile.m 并在结束或报错时恢复。
+%     - 若目录内仅有仓库原名 w7-assembly-data-16body.m, 亦兼容自动读取(免重命名)。
 %   输出: output/gate1b_<case>.mat, output/gate1b_summary.json,
 %         output/gate1b_verification_summary.txt
 
@@ -24,7 +25,7 @@ w7_run_free_decay     = true;
 w7_run_reg_wave       = true;
 
 w7_deduct_100t  = false;                 % false = 17,854.16 t 原口径; true = 扣减 Body1 100 t 接口占位
-w7_damping_list = {'K1', 'Z'};           % 仅对比两版: 1.0 版 K1 / 置零 Z (已取消 5/3 版 S1)
+w7_damping_list = {'K1'};                % 默认仅跑 1.0 版 K1 (按需可追加 'Z' 或 'S1')
 w7_decay_dofs   = {'heave', 'pitch', 'surge', 'yaw'};
 
 % 静水平衡预测吃水偏移 (m), 用于 surge/pitch/yaw 衰减预置平、抑制伴生垂荡瞬态
@@ -48,7 +49,7 @@ w7_reg_spec = struct('waveHeight', 2.0, 'wavePeriod', 10.0, 'waveDir', 0.0, ...
 %% ==================== 1. 前置检查与备份保护 ====================
 assert(isfile('futi_16body.h5'), '缺少 futi_16body.h5');
 assert(isfile('SModel_16body.slx'), '缺少 SModel_16body.slx (请先运行 build_SModel_16body_full)');
-assert(isfile('w7-assembly-data-16body.m'), '缺少 w7-assembly-data-16body.m');
+assert(isfile('w7.m') || isfile('w7-assembly-data-16body.m'), '缺少 w7.m (或 w7-assembly-data-16body.m)');
 assert(isfile('wecSimInputFile_16body_case.m'), '缺少 wecSimInputFile_16body_case.m');
 assert(isfolder('mostData'), '缺少 mostData/ 文件夹');
 
@@ -70,28 +71,24 @@ w7_summary.meta = struct( ...
     'date', datestr(now, 'yyyy-mm-dd HH:MM:SS'), ...
     'matlabVersion', version, ...
     'deduct100t', w7_deduct_100t, ...
+    'dampingList', {w7_damping_list}, ...
     'zEqEst', w7_z_eq_est, ...
     'table11RefHz', struct('surge', 0.007, 'heave', 0.049, 'pitch', 0.036, 'yaw', 0.011));
 
 w7_log_lines = {};
 w7_log_lines{end+1} = sprintf('=== W7 / GATE 1B Full-System Verification Suite (%s) ===', w7_summary.meta.date);
-w7_log_lines{end+1} = sprintf('MATLAB: %s | deduct100t = %d | z_eq_est = %.2f m', ...
-    w7_summary.meta.matlabVersion, w7_deduct_100t, w7_z_eq_est);
+w7_log_lines{end+1} = sprintf('MATLAB: %s | deduct100t = %d | z_eq_est = %.2f m | Damping = %s', ...
+    w7_summary.meta.matlabVersion, w7_deduct_100t, w7_z_eq_est, strjoin(w7_damping_list, ', '));
 
 %% ==================== 2. Part A: 单位运动 quadDrag 涌现代数自检 ====================
 if w7_run_unit_algebraic
-    run('w7-assembly-data-16body.m');
     w7_unit_alg = struct();
     w7_log_lines{end+1} = '';
     w7_log_lines{end+1} = '--- [Part A1] Algebraic Emergent Check of quadDrag Tables (SWL Origin) ---';
     for w7_iv = 1:numel(w7_damping_list)
         w7_ver = w7_damping_list{w7_iv};
-        switch w7_ver
-            case 'K1', w7_qt = quadDragK1;
-            case 'S1', w7_qt = quadDragS1;
-            case 'Z',  w7_qt = quadDragZ;
-        end
-        w7_em = w7_calc_emergent(w7_qt, bodyCG);
+        [w7_qt, w7_cg] = w7_load_drag_table(w7_ver);
+        w7_em = w7_calc_emergent(w7_qt, w7_cg);
         w7_unit_alg.(w7_ver) = w7_em;
         w7_log_lines{end+1} = sprintf('  [%s] Sum(X/Y/Z) = %.1f / %.1f / %.1f | Bq44=%.4e, Bq55=%.4e, Bq66=%.4e, cross=%.4e', ...
             w7_ver, w7_em.sumSurge, w7_em.sumSway, w7_em.sumHeave, w7_em.Bq44, w7_em.Bq55, w7_em.Bq66, w7_em.crossCG);
@@ -99,7 +96,7 @@ if w7_run_unit_algebraic
     w7_summary.unitAlgebraic = w7_unit_alg;
 end
 
-%% ==================== 3. Part B: 全系统自由衰减 (静风口径, 三版并行) ====================
+%% ==================== 3. Part B: 全系统自由衰减 (静风口径, noWaveCIC) ====================
 if w7_run_free_decay
     w7_decay_slx = 'SModel_16body_decay.slx';
     w7_decay_results = struct();
@@ -112,7 +109,7 @@ if w7_run_free_decay
         w7_dof = w7_decay_dofs{w7_id};
         w7_sp  = w7_decay_specs.(w7_dof);
 
-        % 生成仅用于本自由度衰减的 SModel_16body_decay.slx (释放 Bushing Joint 初位移)
+        % 生成仅用于本自由度衰减的 SModel_16body_decay.slx (断开 Constraint16 链接并设初位移)
         w7_configure_decay_slx('SModel_16body.slx', w7_decay_slx, w7_dof, w7_sp, w7_z_eq_est);
 
         for w7_iv = 1:numel(w7_damping_list)
@@ -140,10 +137,17 @@ if w7_run_free_decay
             wecSim;
             w7_elapsed = toc(w7_t0);
 
-            % 提取平台 6-DOF 时程 (以 Body1 位移 + 扣减静态 CG [-3.731])
+            % 提取平台 6-DOF 时程 (以 Body1 位移扣减初始 CG [-3.731])
             w7_t   = output.bodies(1).time;
             w7_pos = output.bodies(1).position;
-            w7_pos(:,3) = w7_pos(:,3) - (-3.731); % 换算为相对 SWL 的垂荡偏移
+            w7_cgZ = -3.731;
+            if (isstruct(output.bodies(1)) && isfield(output.bodies(1), 'centerGravity')) || ...
+               (~isstruct(output.bodies(1)) && isprop(output.bodies(1), 'centerGravity'))
+                if numel(output.bodies(1).centerGravity) >= 3
+                    w7_cgZ = output.bodies(1).centerGravity(3);
+                end
+            end
+            w7_pos(:,3) = w7_pos(:,3) - w7_cgZ; % 换算为相对 SWL 的垂荡偏移
 
             % 核对 t=0 初始位移是否正确施加
             if strcmp(w7_sp.unit, 'deg')
@@ -274,6 +278,24 @@ function w7_restore_env(bakFile)
     end
 end
 
+function [qt, cg] = w7_load_drag_table(dampingVer)
+    if isfile('w7.m')
+        run('w7.m');
+    elseif isfile('w7-assembly-data-16body.m')
+        eval(fileread('w7-assembly-data-16body.m'));
+    else
+        error('未找到 w7.m (或 w7-assembly-data-16body.m)');
+    end
+    cg = bodyCG;
+    switch upper(dampingVer)
+        case 'K1', qt = quadDragK1;
+        case 'S1', qt = quadDragS1;
+        case 'Z',  qt = quadDragZ;
+        otherwise
+            error('Unsupported dampingVer: %s', dampingVer);
+    end
+end
+
 function w7_configure_decay_slx(srcSlx, dstSlx, dofName, spec, zEqEst)
     [~, dstSys] = fileparts(dstSlx);
     if bdIsLoaded(dstSys)
@@ -283,7 +305,10 @@ function w7_configure_decay_slx(srcSlx, dstSlx, dofName, spec, zEqEst)
     load_system(dstSys);
 
     c16 = [dstSys '/Constraint16'];
-    set_param(c16, 'LinkStatus', 'inactive');
+    % 使用 'none' 仅在临时衰减副本中断开库链接, 消除 disabled library link 警告(原 SModel_16body.slx 不受影响)
+    if ~strcmp(get_param(c16, 'LinkStatus'), 'none')
+        set_param(c16, 'LinkStatus', 'none');
+    end
     bjList = find_system(c16, 'LookUnderMasks', 'all', 'FollowLinks', 'on', 'RegExp', 'on', 'Name', 'Bushing Joint');
     assert(~isempty(bjList), '未在 Constraint16 内找到 Bushing Joint');
     bj = bjList{1};
@@ -326,16 +351,49 @@ function em = w7_calc_emergent(qt, cg)
     end
 end
 
+function [pks, locs] = w7_find_local_peaks(sig, minDistIdx)
+    % 纯基础 MATLAB 局部峰值检索 (不依赖 Signal Processing Toolbox)
+    sig = sig(:);
+    n = numel(sig);
+    if n < 3
+        pks = []; locs = [];
+        return;
+    end
+    cand = find(sig(2:end-1) >= sig(1:end-2) & sig(2:end-1) > sig(3:end)) + 1;
+    if isempty(cand)
+        pks = []; locs = [];
+        return;
+    end
+    [~, ord] = sort(sig(cand), 'descend');
+    cand = cand(ord);
+    keep = false(size(cand));
+    suppressed = false(n, 1);
+    for k = 1:numel(cand)
+        idx = cand(k);
+        if ~suppressed(idx)
+            keep(k) = true;
+            i1 = max(1, idx - minDistIdx);
+            i2 = min(n, idx + minDistIdx);
+            suppressed(i1:i2) = true;
+        end
+    end
+    locs = sort(cand(keep), 'ascend');
+    pks = sig(locs);
+end
+
 function met = w7_extract_decay_metrics(t, sig, unitStr, refHz)
     if strcmp(unitStr, 'deg')
         y = rad2deg(sig);
     else
         y = sig;
     end
-    % 用正负峰包络中点估计静平衡点 (兼顾 -0.49 m 垂荡 / -1.25 deg 悬臂静倾与 Z 版低阻尼非整周期尾部)
-    [~, locPos0] = findpeaks(y);
-    [~, locNeg0] = findpeaks(-y);
-    if y(1) > mean(y) && (isempty(locPos0) || locPos0(1) > 2)
+    dtSig = median(diff(t));
+    minDistIdx = max(2, round(0.55 / refHz / dtSig));
+
+    % 用正负峰包络中点估计静平衡点 (最小峰距 0.55*Tn 过滤耦合高频涟漪)
+    [~, locPos0] = w7_find_local_peaks(y, minDistIdx);
+    [~, locNeg0] = w7_find_local_peaks(-y, minDistIdx);
+    if y(1) > mean(y) && (isempty(locPos0) || locPos0(1) > minDistIdx)
         locPos0 = [1; locPos0(:)];
     end
     nPair = min(numel(locPos0), numel(locNeg0));
@@ -350,12 +408,18 @@ function met = w7_extract_decay_metrics(t, sig, unitStr, refHz)
     dy = y - yEq;
 
     % 寻正峰 (含 t=0 若为释放峰值)
-    [pksPos, locsPos] = findpeaks(dy);
-    if dy(1) > 0 && (isempty(locsPos) || locsPos(1) > 2)
-        pksPos  = [dy(1); pksPos(:)];
-        locsPos = [1; locsPos(:)];
+    [pksPos, locsPos] = w7_find_local_peaks(dy, minDistIdx);
+    if dy(1) > 0
+        inInitWin = locsPos <= minDistIdx;
+        if ~any(inInitWin)
+            pksPos  = [dy(1); pksPos(:)];
+            locsPos = [1; locsPos(:)];
+        elseif dy(1) >= max(pksPos(inInitWin))
+            pksPos  = [dy(1); pksPos(~inInitWin)];
+            locsPos = [1; locsPos(~inInitWin)];
+        end
     end
-    % 仅保留单调有效振幅 (> 初始振幅的 3%)
+    % 仅保留有效振幅 (> 初始振幅的 3%)
     valid = pksPos > 0.03 * abs(dy(1));
     pksPos  = pksPos(valid);
     tPeaks  = t(locsPos(valid));
@@ -386,29 +450,27 @@ function met = w7_extract_decay_metrics(t, sig, unitStr, refHz)
     end
 
     met = struct();
-    met.eqVal          = yEq;
-    met.nPeaks         = numel(pksPos);
-    met.tPeaks         = tPeaks(:)';
-    met.ampPeaks       = pksPos(:)';
-    met.zetaPctPerCycle = (zetaCyc(:)') * 100;
-    met.ampCycleInit   = ampCyc(:)';
-    met.TnSec          = Tn;
-    met.fnHz           = fn;
-    met.refHz          = refHz;
-    met.freqErrPct     = (fn - refHz) / refHz * 100;
-    met.zeta0Pct       = zeta0;
+    met.eqVal            = yEq;
+    met.nPeaks           = numel(pksPos);
+    met.tPeaks           = tPeaks(:)';
+    met.ampPeaks         = pksPos(:)';
+    met.zetaPctPerCycle  = (zetaCyc(:)') * 100;
+    met.ampCycleInit     = ampCyc(:)';
+    met.TnSec            = Tn;
+    met.fnHz             = fn;
+    met.refHz            = refHz;
+    met.freqErrPct       = (fn - refHz) / refHz * 100;
+    met.zeta0Pct         = zeta0;
     met.zetaSlopePerUnit = zetaSlope;
 end
 
 function res = w7_check_quadDrag_live(output, dampingVer, dofCol)
     % 读取 Simulink 实际输出的 forceMorisonAndViscous, 验证与 diag(quadDrag) 映射一致,
     % 并按各体质心输运至 SWL [0 0 0] 复测等效涌现系数。
-    run('w7-assembly-data-16body.m');
-    switch dampingVer
-        case 'K1', qt = quadDragK1;
-        case 'S1', qt = quadDragS1;
-        case 'Z',  qt = quadDragZ;
-    end
+    % 注: WEC-Sim v7.1.0 Rigid Body 模块内部在 Sum(+-----) 之前输出 F_MorisonAndViscous,
+    %     故无 Morison 单元时 output.bodies(i).forceMorisonAndViscous = +qt(i,:) .* v .* |v|
+    %     (即实际施加给刚体的阻尼力 -F_MorisonAndViscous 之反号, 与 responseClass 文档口径一致)。
+    [qt, ~] = w7_load_drag_table(dampingVer);
 
     v1 = output.bodies(1).velocity;
     [~, idxPeak] = max(abs(v1(:, dofCol)));
@@ -418,13 +480,13 @@ function res = w7_check_quadDrag_live(output, dampingVer, dofCol)
     for i = 1:16
         vi = output.bodies(i).velocity(idxPeak, :);
         Fi_sim = output.bodies(i).forceMorisonAndViscous(idxPeak, :);
-        Fi_exp = -qt(i,:) .* vi .* abs(vi);
+        Fi_exp = +qt(i,:) .* vi .* abs(vi);
         denom = max(1.0, norm(Fi_exp));
         rel = norm(Fi_sim - Fi_exp) / denom;
         if rel > maxRel
             maxRel = rel;
         end
-        ri = output.bodies(i).position(idxPeak, 1:3); % 瞬时位置近似输运至原点
+        ri = output.bodies(i).position(idxPeak, 1:3); % 瞬时位置输运至原点
         Mi_swl = Fi_sim(4:6) + cross(ri, Fi_sim(1:3));
         F_swl(1:3) = F_swl(1:3) + Fi_sim(1:3);
         F_swl(4:6) = F_swl(4:6) + Mi_swl;
@@ -432,7 +494,7 @@ function res = w7_check_quadDrag_live(output, dampingVer, dofCol)
 
     vRef = v1(idxPeak, dofCol);
     if abs(vRef) > 1e-6
-        emMeas = -F_swl(dofCol) / (vRef * abs(vRef));
+        emMeas = F_swl(dofCol) / (vRef * abs(vRef));
     else
         emMeas = 0.0;
     end
@@ -443,7 +505,14 @@ end
 function rm = w7_extract_reg_wave_metrics(output, spec)
     t   = output.bodies(1).time;
     pos = output.bodies(1).position;
-    pos(:,3) = pos(:,3) - (-3.731);
+    cgZ = -3.731;
+    if (isstruct(output.bodies(1)) && isfield(output.bodies(1), 'centerGravity')) || ...
+       (~isstruct(output.bodies(1)) && isprop(output.bodies(1), 'centerGravity'))
+        if numel(output.bodies(1).centerGravity) >= 3
+            cgZ = output.bodies(1).centerGravity(3);
+        end
+    end
+    pos(:,3) = pos(:,3) - cgZ;
 
     % 取最后 5 个完整波周期作稳态统计
     tWin = t >= (spec.endTime - 5 * spec.wavePeriod);

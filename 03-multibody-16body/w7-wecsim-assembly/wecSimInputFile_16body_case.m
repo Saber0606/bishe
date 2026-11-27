@@ -1,5 +1,5 @@
 %% wecSimInputFile_16body_case.m
-% V2.7 参数化全系统输入文件 (用于 W7 / GATE 1B 自由衰减、规则波与阻尼三版对比)
+% V2.7 参数化全系统输入文件 (用于 W7 / GATE 1B 自由衰减、规则波与阻尼对比)
 % 用法:
 %   1) 由 run_w7_gate1b_suite.m 自动生成 w7_case_cfg.mat 并复制为 wecSimInputFile.m 运行;
 %   2) 也可手动单独运行: 若当前目录无 w7_case_cfg.mat, 则按下方默认配置 (noWave + 8 m/s + K1) 运行。
@@ -9,9 +9,18 @@
 %   - simu.gravity = 9.81, simu.rho = 1025 (与 AQWA/BEMIO 一致)
 %   - simu.explorer = 'off'
 %   - body(i).inertiaProducts = bodyInertiaProducts(i,:) (含 60/300 度链 Ixy)
-%   - 阻尼三版: quadDragK1 (1.0 版) / quadDragS1 (5/3 版) / quadDragZ (置零)
+%   - 阻尼版本: quadDragK1 (1.0 版主用) / quadDragS1 (5/3 版) / quadDragZ (置零)
 
-run(fullfile(fileparts(mfilename('fullpath')), 'w7-assembly-data-16body.m'));
+w7_dir = fileparts(mfilename('fullpath'));
+if isfile(fullfile(w7_dir, 'w7.m'))
+    run(fullfile(w7_dir, 'w7.m'));
+elseif isfile(fullfile(w7_dir, 'w7-assembly-data-16body.m'))
+    % MATLAB run() 不允许脚本名含连字符 '-', 仓内原名通过 eval 兼容载入
+    eval(fileread(fullfile(w7_dir, 'w7-assembly-data-16body.m')));
+else
+    error('未找到 w7.m (或 w7-assembly-data-16body.m)');
+end
+clear w7_dir;
 
 %% 默认工况配置 (若存在 w7_case_cfg.mat 则覆盖)
 cfg = struct();

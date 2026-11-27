@@ -1,7 +1,15 @@
 %% wecSimInputFile_16body_full.m
 % V2.7 全系统合并版: 16 体刚接平台 (quadDragK1 1.0 版) + MOST 风机 (IEA 15 MW) + MooringNLStatic
-% 用法: 在工作目录运行 wecSim 时须另存或重命名为 wecSimInputFile.m (并确保同目录含 w7-assembly-data-16body.m 与 mostData)。
-run(fullfile(fileparts(mfilename('fullpath')), 'w7-assembly-data-16body.m'));
+% 用法: 在工作目录运行 wecSim 时须另存或重命名为 wecSimInputFile.m (并确保同目录含 w7.m 与 mostData)。
+w7_dir = fileparts(mfilename('fullpath'));
+if isfile(fullfile(w7_dir, 'w7.m'))
+    run(fullfile(w7_dir, 'w7.m'));
+elseif isfile(fullfile(w7_dir, 'w7-assembly-data-16body.m'))
+    eval(fileread(fullfile(w7_dir, 'w7-assembly-data-16body.m')));
+else
+    error('未找到 w7.m (或 w7-assembly-data-16body.m)');
+end
+clear w7_dir;
 
 %% Simulation class
 simu = simulationClass();                           % Initialize Simulation Class
