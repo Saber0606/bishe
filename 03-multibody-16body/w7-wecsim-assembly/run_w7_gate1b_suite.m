@@ -53,6 +53,10 @@ assert(isfile('futi_16body.h5'), '缺少 futi_16body.h5');
 assert(isfile('SModel_16body.slx'), '缺少 SModel_16body.slx (请先运行 build_SModel_16body_full)');
 assert(isfile('w7.m') || isfile('w7-assembly-data-16body.m'), '缺少 w7.m (或 w7-assembly-data-16body.m)');
 assert(isfile('wecSimInputFile_16body_case.m'), '缺少 wecSimInputFile_16body_case.m');
+w7_case_txt = fileread('wecSimInputFile_16body_case.m');
+assert(contains(w7_case_txt, 'cfg.cicDt') && contains(w7_case_txt, 'cfg.aeroLoadsName'), ...
+    '当前目录的 wecSimInputFile_16body_case.m 版本过旧，请与 run_w7_gate1b_suite.m 一并从最新仓库覆盖后再运行！');
+clear w7_case_txt;
 assert(isfolder('mostData'), '缺少 mostData/ 文件夹');
 
 w7_res_dir = 'gate1b_results';
